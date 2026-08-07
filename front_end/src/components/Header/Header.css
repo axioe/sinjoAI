@@ -1,0 +1,67 @@
+.header {
+  height: 80px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 0 30px;
+
+  margin-top: 20px;
+}
+
+.logo {
+  font-size: 26px;
+
+  font-weight: bold;
+
+  color: #6d4aff;
+}
+
+nav {
+  display: flex;
+
+  gap: 30px;
+}
+
+nav a {
+  text-decoration: none;
+
+  color: #444;
+}
+
+.right {
+  display: flex;
+
+  gap: 10px;
+}
+
+.right input {
+  width: 250px;
+
+  height: 40px;
+
+  border-radius: 20px;
+
+  border: 1px solid #ddd;
+
+  padding-left: 15px;
+}
+
+.right button {
+  width: 90px;
+
+  border: none;
+
+  border-radius: 15px;
+
+  background: #6d4aff;
+
+  color: white;
+}
