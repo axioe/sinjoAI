@@ -2,10 +2,13 @@ import { Routes, Route } from "react-router-dom";
 
 import Main from "./pages/Main/Main";
 import Translate from "./pages/Translate";
-import Dictionary from "./pages/Dictionary";
 import Game from "./pages/Game";
 import Community from "./pages/Community";
 import Login from "./pages/Login/Login";
+import Test from "./pages/Test";
+import Trend from "./pages/Trend";
+import TodayWord from "./pages/Todayword";
+import Dictionary from "./pages/Dictionary";
 
 function App() {
   return (
@@ -14,13 +17,15 @@ function App() {
 
       <Route path="/translate" element={<Translate />} />
 
-      <Route path="/dictionary" element={<Dictionary />} />
-
       <Route path="/game" element={<Game />} />
 
-      <Route path="/community" element={<Community />} />
+      <Route path="/test" element={<Test />} />
 
-      <Route path="/login" element={<Login />} />
+      <Route path="/trend" element={<Trend />} />
+
+      <Route path="/today" element={<TodayWord />} />
+
+      <Route path="/dictionary" element={<Dictionary />} />
     </Routes>
   );
 }

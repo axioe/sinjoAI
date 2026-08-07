@@ -1,0 +1,31 @@
+.game-page {
+  max-width: 1000px;
+  margin: auto;
+  padding: 50px;
+}
+
+.question {
+  background: white;
+
+  border-radius: 25px;
+
+  padding: 40px;
+
+  text-align: center;
+}
+
+.question button {
+  margin: 15px;
+
+  padding: 15px 40px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  background: #6d4aff;
+
+  color: white;
+
+  cursor: pointer;
+}
