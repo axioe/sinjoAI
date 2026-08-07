@@ -1,14 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
 import Main from "./pages/Main/Main";
-import Translate from "./pages/Translate";
-import Game from "./pages/Game";
-import Community from "./pages/Community";
+import Translate from "./pages/Translate/Translate";
+import Game from "./pages/Game/Game";
 import Login from "./pages/Login/Login";
-import Test from "./pages/Test";
-import Trend from "./pages/Trend";
-import TodayWord from "./pages/Todayword";
-import Dictionary from "./pages/Dictionary";
+import Test from "./pages/Test/Test";
+import Trend from "./pages/Trend/Trend";
+import TodayWord from "./pages/TodayWord/TodayWord";
+import Dictionary from "./pages/Dictionary/Dictionary";
 
 function App() {
   return (
@@ -26,6 +25,8 @@ function App() {
       <Route path="/today" element={<TodayWord />} />
 
       <Route path="/dictionary" element={<Dictionary />} />
+
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }
