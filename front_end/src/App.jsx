@@ -5,7 +5,7 @@ import Translate from "./pages/Translate";
 import Dictionary from "./pages/Dictionary";
 import Game from "./pages/Game";
 import Community from "./pages/Community";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 
 function App() {
   return (
