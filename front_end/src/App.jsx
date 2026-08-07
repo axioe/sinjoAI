@@ -4,7 +4,7 @@ import Main from "./pages/Main";
 import Translate from "./pages/Translate";
 import Game from "./pages/Game";
 // import Community from "./pages/Community";
-import Login from "./pages/Login/Login";
+import Login from "./pages/Login";
 import Test from "./pages/Test";
 import Trend from "./pages/Trend";
 import TodayWord from "./pages/TodayWord";
