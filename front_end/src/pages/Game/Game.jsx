@@ -1,4 +1,4 @@
-import Header from "../components/Header/Header";
+import Header from "../../components/Header/Header";
 import "./Game.css";
 
 function Game() {
@@ -7,7 +7,7 @@ function Game() {
       <Header />
 
       <div className="game-page">
-        <h1>🎮 세대 맞추기 게임</h1>
+        <h1>🎮 신조어 게임</h1>
 
         <div className="question">
           <h2>"억까"는 어느 세대가 많이 사용할까요?</h2>

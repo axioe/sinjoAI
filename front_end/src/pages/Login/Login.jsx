@@ -61,7 +61,7 @@ function Login() {
               setPassword(e.target.value);
               setErrors((prev) => ({ ...prev, password: undefined }));
             }}
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호를 입력하세요."
           />
           {errors.password && <p className="login-error">{errors.password}</p>}
         </div>
