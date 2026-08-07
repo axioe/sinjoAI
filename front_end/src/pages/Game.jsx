@@ -1,5 +1,5 @@
 import Header from "../components/Header/Header";
-import "./Game.css";
+import "../css/Game.css";
 
 function Game() {
   return (

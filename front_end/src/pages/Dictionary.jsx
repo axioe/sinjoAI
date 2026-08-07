@@ -1,5 +1,5 @@
 import Header from "../components/Header/Header";
-import "./Dictionary.css";
+import "../css/Dictionary.css";
 import { useState } from "react";
 
 function Dictionary() {

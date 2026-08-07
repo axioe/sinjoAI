@@ -1,5 +1,5 @@
 import Header from "../components/Header/Header";
-import "./TodayWord.css";
+import "../css/TodayWord.css";
 import { useState } from "react";
 import { FaSyncAlt } from "react-icons/fa";
 

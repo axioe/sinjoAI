@@ -8,7 +8,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-import "./Main.css";
+import "../css/Main.css";
 
 function Main() {
   return (

@@ -1,5 +1,5 @@
 import Header from "../components/Header/Header";
-import "./Translate.css";
+import "../css/Translate.css";
 import { useState } from "react";
 import { FaArrowRight, FaCopy } from "react-icons/fa";
 

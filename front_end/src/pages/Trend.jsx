@@ -1,5 +1,5 @@
 import Header from "../components/Header/Header";
-import "./Trend.css";
+import "../css/Trend.css";
 
 function Trend() {
   const words = [

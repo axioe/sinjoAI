@@ -1,5 +1,5 @@
 import Header from "../components/Header/Header";
-import "./Test.css"
+import "../css/Test.css"
 
 function Test() {
   return (

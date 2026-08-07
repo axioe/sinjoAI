@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
-import Main from "./pages/Main/Main";
-import Translate from "./pages/Translate/Translate";
-import Game from "./pages/Game/Game";
-import Login from "./pages/Login/Login";
-import Test from "./pages/Test/Test";
-import Trend from "./pages/Trend/Trend";
-import TodayWord from "./pages/TodayWord/TodayWord";
-import Dictionary from "./pages/Dictionary/Dictionary";
+import Main from "./pages/Main";
+import Translate from "./pages/Translate";
+import Game from "./pages/Game";
+import Login from "./pages/Login";
+import Test from "./pages/Test";
+import Trend from "./pages/Trend";
+import TodayWord from "./pages/TodayWord";
+import Dictionary from "./pages/Dictionary";
 
 function App() {
   return (
