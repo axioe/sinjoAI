@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Main from "./pages/Main/Main";
 import Translate from "./pages/Translate";
 import Game from "./pages/Game";
-import Community from "./pages/Community";
+// import Community from "./pages/Community";
 import Login from "./pages/Login/Login";
 import Test from "./pages/Test";
 import Trend from "./pages/Trend";
@@ -14,6 +14,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Main />} />
+
+      <Route path="/login" element={<Login />} />
 
       <Route path="/translate" element={<Translate />} />
 
