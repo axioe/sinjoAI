@@ -12,8 +12,8 @@ function Header() {
       <nav className="nav-menu">
         <Link to="/translate">번역</Link>
         <Link to="/dictionary">사전</Link>
-        <Link to="/game">맞추기 게임</Link>
-        <Link to="/community">커뮤니티</Link>
+        <Link to="/game">게임</Link>
+        <Link to="/trend">트렌드</Link>
       </nav>
 
       <div className="header-right">
