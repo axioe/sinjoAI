@@ -1,4 +1,4 @@
-import Header from "../../components/Header/Header";
+import Header from "../components/Header/Header";
 import { Link } from "react-router-dom";
 import {
   FaFire,
@@ -8,7 +8,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-import "./Main.css";
+import "../css/Main.css";
 
 function Main() {
   return (
@@ -52,7 +52,7 @@ function Main() {
           <div className="feature-card">
             <FaFire className="icon" />
 
-            <Link to="/trend">
+            <Link to="/trend" className="card-link">
               <h3>🔥 실시간 인기 신조어</h3>
             </Link>
 
@@ -70,7 +70,7 @@ function Main() {
           <div className="feature-card">
             <FaBook className="icon" />
 
-            <Link to="/today">
+            <Link to="/today" className="card-link">
               <h3>📖 오늘의 신조어</h3>
             </Link>
 

@@ -1,4 +1,5 @@
 import Header from "../components/Header/Header";
+import "../css/Test.css"
 
 function Test() {
   return (
