@@ -1,5 +1,13 @@
 import Header from "../../components/Header/Header";
 import { Link } from "react-router-dom";
+import {
+  FaFire,
+  FaBook,
+  FaGamepad,
+  FaBrain,
+  FaArrowRight,
+} from "react-icons/fa";
+
 import "./Main.css";
 
 function Main() {
@@ -7,66 +15,104 @@ function Main() {
     <>
       <Header />
 
-      <div className="main-container">
+      <div className="main">
         {/* Hero */}
+
         <section className="hero">
-          <div className="hero-text">
-            <h1>신조어 번역기</h1>
+          <div className="hero-left">
+            <span className="badge">🚀 AI 신조어 번역 서비스</span>
+
+            <h1>
+              신조어가 어렵다면
+              <br />
+              AI에게 맡겨보세요.
+            </h1>
 
             <p>
-              어려운 신조어를 표준어로 번역하고, 세대 맞추기 게임과 퀴즈까지
-              즐겨보세요.
+              실시간 신조어 번역부터 퀴즈, 신조어 게임까지 하나의 서비스에서
+              제공합니다.
             </p>
 
             <Link to="/translate">
-              <button className="start-btn">번역 시작하기</button>
+              <button className="start">
+                번역 시작하기
+                <FaArrowRight />
+              </button>
             </Link>
           </div>
 
-          <div className="hero-image">
-            <img src="/main.png" alt="메인 이미지" />
+          <div className="hero-right">
+            <img src="/hero.png" alt="" />
           </div>
         </section>
 
-        {/* 카드 */}
+        {/* 기능 */}
 
-        <section className="card-grid">
-          <div className="card">
-            <h2>🔥 실시간 인기 신조어</h2>
+        <section className="feature-grid">
+          <div className="feature-card">
+            <FaFire className="icon" />
+
+            <Link to="/trend">
+              <h3>🔥 실시간 인기 신조어</h3>
+            </Link>
 
             <ul>
-              <li>1. 억까</li>
+              <li>🔥 억까</li>
 
-              <li>2. 갓생</li>
+              <li>🔥 갓생</li>
 
-              <li>3. 킹받네</li>
+              <li>🔥 킹받네</li>
 
-              <li>4. 중꺾마</li>
+              <li>🔥 알잘딱깔센</li>
             </ul>
           </div>
 
-          <div className="card">
-            <h2>🎮 세대 맞추기 게임</h2>
+          <div className="feature-card">
+            <FaBook className="icon" />
 
-            <p>신조어를 보고 어느 세대가 사용하는지 맞혀보세요.</p>
+            <Link to="/today">
+              <h3>📖 오늘의 신조어</h3>
+            </Link>
+
+            <h2>알잘딱깔센</h2>
+
+            <p>알아서 잘 딱 깔끔하고 센스있게</p>
+          </div>
+
+          <div className="feature-card">
+            <FaGamepad className="icon" />
+
+            <h3>신조어 게임</h3>
+
+            <p>신조어로 재밌는 게임을 즐겨보세요.</p>
 
             <Link to="/game">
               <button>게임 시작</button>
             </Link>
           </div>
 
-          <div className="card">
-            <h2>📖 최근 번역</h2>
+          <div className="feature-card">
+            <FaBrain className="icon" />
 
-            <p>오늘 시험 억까였다</p>
+            <h3>신조어 이해도 테스트</h3>
 
-            <p>→ 오늘 시험이 unfair했다.</p>
+            <p>당신의 신조어 실력을 확인하세요.</p>
+
+            <Link to="/test">
+              <button>테스트 하기</button>
+            </Link>
           </div>
+        </section>
 
-          <div className="card">
-            <h2>📝 신조어 테스트</h2>
+        {/* 최근 번역 */}
 
-            <p>당신의 신조어 실력을 확인해보세요.</p>
+        <section className="history">
+          <h2>최근 번역</h2>
+
+          <div className="history-box">
+            <div>오늘 시험 억까였다</div>
+
+            <div>오늘 시험에서 부당한 불이익을 받았다.</div>
           </div>
         </section>
       </div>
