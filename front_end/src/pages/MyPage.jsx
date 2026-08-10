@@ -3,7 +3,7 @@ import MyPageSidebar from "../components/MyPage/MyPageSidebar";
 import ProfileCard from "../components/MyPage/ProfileCard";
 import RecentTranslations from "../components/MyPage/RecentTranslations";
 import QuickMenu from "../components/MyPage/QuickMenu";
-import ActivitySummary from "../components/MyPage/BadgePoints";
+import ActivitySummary from "../components/MyPage/ActivitySummary";
 import BadgePoints from "../components/MyPage/BadgePoints";
 import WeeklyRecord from "../components/MyPage/WeeklyRecord";
 import {
@@ -15,6 +15,7 @@ import {
   WEEKLY_RECORD,
 } from "../data/myPageSampleData";
 import "../css/MyPage.css";
+console.log("BADGES =", BADGES);
 
 /**
  * 마이페이지 (REQ-AUTH-02, REQ-MY-01)
