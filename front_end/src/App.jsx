@@ -10,6 +10,7 @@ import TodayWord from "./pages/TodayWord";
 import Test from "./pages/Test";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import MyPage from "./pages/MyPage";
 
 import QuizMain from "./pages/QuizMain";
 import MultipleChoiceQuiz from "./pages/MultipleChoiceQuiz";
@@ -32,7 +33,8 @@ function App() {
         <Route path="/today" element={<TodayWord />} />
         <Route path="/test" element={<Test />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/Signup" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/mypage" element={<MyPage />} />
 
         {/* 게임: /game 에서 종류를 고르고 각 퀴즈로 이동한다 */}
         <Route path="/game" element={<QuizMain />} />

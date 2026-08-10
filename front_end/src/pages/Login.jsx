@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../css/Login.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Auth";
+import { useAuth } from "../AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -93,7 +93,7 @@ function Login() {
         </button>
 
         <p className="login-footer">
-          아직 계정이 없으신가요? <Link to="/Signup">회원가입</Link>
+          아직 계정이 없으신가요? <Link to="/signup">회원가입</Link>
         </p>
       </form>
     </div>

@@ -1,7 +1,7 @@
 import "./Header.css";
 import { Link } from "react-router-dom";
 import { FaSearch, FaUser } from "react-icons/fa";
-import { useAuth } from "../../Auth";
+import { useAuth } from "../../AuthContext";
 
 function Header() {
   const { user, logout } = useAuth();
@@ -17,6 +17,7 @@ function Header() {
         <Link to="/dictionary">사전</Link>
         <Link to="/game">게임</Link>
         <Link to="/trend">트렌드</Link>
+        <Link to="/mypage">마이페이지</Link>
       </nav>
 
       <div className="header-right">

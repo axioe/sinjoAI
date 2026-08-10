@@ -9,7 +9,7 @@ function MultipleChoiceQuiz() {
   const [quizzes, setQuizzes] = useState([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState("");
-  const [feedback, setFeedback] = useState(null); // null | true | false
+  const [feedback, setFeedback] = useState(null); // null | { correct, correctAnswer }
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
@@ -21,9 +21,9 @@ function MultipleChoiceQuiz() {
 
   const handleSubmit = async () => {
     if (!selected) return;
-    const correct = await checkAnswer(current, selected);
-    setFeedback(correct);
-    if (correct) setScore((prev) => prev + 1);
+    const result = await checkAnswer(current, selected);
+    setFeedback(result);
+    if (result.correct) setScore((prev) => prev + 1);
   };
 
   const handleNext = () => {
@@ -72,8 +72,10 @@ function MultipleChoiceQuiz() {
         </div>
 
         {feedback !== null && (
-          <div className={`quiz-feedback ${feedback ? "correct" : "wrong"}`}>
-            {feedback ? "정답입니다!" : `아쉬워요. 정답은 '${current.answer}' 입니다.`}
+          <div className={`quiz-feedback ${feedback.correct ? "correct" : "wrong"}`}>
+            {feedback.correct
+              ? "정답입니다!"
+              : `아쉬워요. 정답은 '${feedback.correctAnswer}' 입니다.`}
           </div>
         )}
 

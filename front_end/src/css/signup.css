@@ -56,3 +56,31 @@
 .signup-form button:hover {
   background: #6b49d8;
 }
+/* 서버/검증 메시지 */
+.signup-alert {
+  padding: 12px 14px;
+  margin-bottom: 4px;
+  background: var(--c-danger-tint);
+  border-radius: 12px;
+  color: var(--c-danger);
+  font-size: 13px;
+  text-align: left;
+}
+
+.signup-error {
+  margin: -6px 0 0;
+  color: var(--c-danger);
+  font-size: 13px;
+  text-align: left;
+}
+
+.signup-footer {
+  margin-top: 8px;
+  color: var(--c-text-sub);
+  font-size: 13px;
+}
+
+.signup-footer a {
+  color: var(--c-primary);
+  font-weight: 700;
+}

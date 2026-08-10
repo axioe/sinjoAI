@@ -21,9 +21,9 @@ function InitialSoundQuiz() {
 
   const handleSubmit = async () => {
     if (!input.trim()) return;
-    const correct = await checkAnswer(current, input.trim());
-    setFeedback(correct);
-    if (correct) setScore((prev) => prev + 1);
+    const result = await checkAnswer(current, input.trim());
+    setFeedback(result);
+    if (result.correct) setScore((prev) => prev + 1);
   };
 
   const handleNext = () => {
@@ -77,8 +77,10 @@ function InitialSoundQuiz() {
         />
 
         {feedback !== null && (
-          <div className={`quiz-feedback ${feedback ? "correct" : "wrong"}`}>
-            {feedback ? "정답입니다!" : `아쉬워요. 정답은 '${current.answer}' 입니다.`}
+          <div className={`quiz-feedback ${feedback.correct ? "correct" : "wrong"}`}>
+            {feedback.correct
+              ? "정답입니다!"
+              : `아쉬워요. 정답은 '${feedback.correctAnswer}' 입니다.`}
           </div>
         )}
 

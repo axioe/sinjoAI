@@ -74,9 +74,9 @@ public class QuizService {
         String correctWord = quiz.getWord().trim().replaceAll("\\s+", "");
 
         // 사용자가 제출한 값이 정답(뜻) 혹은 신조어(단어)와 일치하는지 판별
-        boolean isCorrect = submittedAnswer.equalsIgnoreCase(correctAnswer)
+        boolean correct = submittedAnswer.equalsIgnoreCase(correctAnswer)
                 || submittedAnswer.equalsIgnoreCase(correctWord);
 
-        return new QuizDto.CheckResponse(isCorrect, quiz.getWord() + " (" + quiz.getAnswer() + ")");
+        return new QuizDto.CheckResponse(correct, quiz.getWord() + " (" + quiz.getAnswer() + ")");
     }
 }

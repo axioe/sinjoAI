@@ -1,14 +1,18 @@
 spring:
   application:
     name: sinjo
+    ai:
+      openai:
+        api-key: ${OPENAI_API_KEY:dummy-key-not-used-yet}
+      openai-sdk:
+        api-key: ${OPENAI_API_KEY:dummy-not-used-yet}
 
   datasource:
-    # PostgreSQL 및 pgvector 연결 설정 (기본 포트 5432)
-#    url: jdbc:postgresql://localhost:5432/sinjo?reWriteBatchedInserts=true
-    url: jdbc:mysql://localhost:3306/sinjo
+    # MySQL 기본 포트는 3306 이다. 5555 는 프론트(Vite) 포트라 여기 들어오면 연결이 안 된다.
+    # characterEncoding 과 시간대를 지정해야 이모지 저장과 "당일" 기준 집계가 맞는다.
+    url: jdbc:mysql://localhost:3306/sinjo?characterEncoding=UTF-8&connectionTimeZone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-#    driver-class-name: org.postgresql.Driver
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -20,8 +24,8 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
-        # PostgreSQL Dialect 설정
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # dialect 는 드라이버를 보고 자동 판별된다. 직접 지정하지 않는다.
+        # PostgreSQLDialect 가 남아 있으면 MySQL 에 맞지 않는 SQL 이 생성된다.
 
 server:
   port: 8080
@@ -31,15 +35,12 @@ server:
       cookie:
         http-only: true
         same-site: lax
-        secure: false
+        secure: false      # EC2 에 HTTPS 로 배포할 때 true
 
 app:
+  # 프론트 개발 서버 주소. vite.config.js 의 port 와 일치해야 한다.
   cors:
-    allowed-origins: http://localhost:5173
-  admin:
-    email: admin@slangs.com
-    password: ${ADMIN_PASSWORD:admin1234!}
-    nickname: 관리자
+    allowed-origins: http://localhost:5555
 
 logging:
   level:
