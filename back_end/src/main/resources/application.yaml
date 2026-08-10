@@ -4,10 +4,12 @@ spring:
 
   datasource:
     # PostgreSQL 및 pgvector 연결 설정 (기본 포트 5432)
-    url: jdbc:postgresql://localhost:5432/sinjo?reWriteBatchedInserts=true
+#    url: jdbc:postgresql://localhost:5432/sinjo?reWriteBatchedInserts=true
+    url: jdbc:mysql://localhost:3306/sinjo
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+#    driver-class-name: org.postgresql.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -19,7 +21,7 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
         # PostgreSQL Dialect 설정
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 8080

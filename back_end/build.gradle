@@ -34,6 +34,9 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // MySQL 의존성 추가
+    runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
 dependencyManagement {

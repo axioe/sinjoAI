@@ -1,10 +1,12 @@
-.login-container {
+.signup-container {
   display: flex;
   justify-content: center;
   padding: 60px 20px;
 }
 
-.login-form {
+.signup-form {
+  display: flex;
+  flex-direction: column;
   width: 400px;
   padding: 32px;
   background: #fff;
@@ -12,27 +14,15 @@
   box-shadow: 0 4px 16px rgba(58, 42, 110, 0.07);
 }
 
-.login-form h2 {
+.signup-form h2 {
   margin: 0 0 24px;
   font-size: 22px;
   color: #1f1b33;
 }
 
-.login-field {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.login-field label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #6e6885;
-}
-
-.login-field input {
+.signup-form input {
   width: 100%;
+  margin-bottom: 20px;
   padding: 16px;
   background: #f7f5fc;
   border: 1px solid transparent;
@@ -40,20 +30,18 @@
   box-sizing: border-box;
 }
 
-.login-field input:focus {
+.signup-form input:focus {
   outline: none;
   background: #fff;
   border-color: #7c5ce6;
   box-shadow: 0 0 0 4px rgba(124, 92, 230, 0.18);
 }
 
-.login-error {
-  margin: 8px 0 0;
-  font-size: 13px;
-  color: #e04a5f;
+.signup-form input::placeholder {
+  color: #9a94ad;
 }
 
-.login-submit {
+.signup-form button {
   width: 100%;
   padding: 16px;
   border: none;
@@ -62,20 +50,9 @@
   color: #fff;
   font-size: 15px;
   font-weight: 700;
+  cursor: pointer;
 }
 
-.login-submit:hover {
+.signup-form button:hover {
   background: #6b49d8;
-}
-
-.login-footer {
-  margin: 20px 0 0;
-  font-size: 13px;
-  color: #6e6885;
-}
-
-.login-footer a {
-  color: #6d3fe0;
-  font-weight: 700;
-  text-decoration: none;
 }

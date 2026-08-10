@@ -1,14 +1,21 @@
 import { useState } from "react";
 import "../css/Login.css";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // 폼 기본 동작(새로고침)을 막는다
+    e.preventDefault();
+
+    const data = {
+      email,
+      password,
+    };
 
     const found = {};
 
@@ -26,15 +33,15 @@ function Login() {
 
     if (Object.keys(found).length > 0) return;
 
-    // TODO: 서버 연동 시 여기에 로그인 요청을 넣는다
-    console.log("로그인 시도", { email, password });
-    alert("입력값 검증 통과");
+    console.log(data);
+    alert("로그인 성공!");
+    navigate("/");
   };
 
   return (
-    <div className="login-page">
-      <form className="login-card" onSubmit={handleSubmit} noValidate>
-        <h1 className="login-title">로그인</h1>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit} noValidate>
+        <h2>로그인</h2>
 
         <div className="login-field">
           <label htmlFor="email">이메일</label>
@@ -61,7 +68,6 @@ function Login() {
               setPassword(e.target.value);
               setErrors((prev) => ({ ...prev, password: undefined }));
             }}
-            placeholder="비밀번호를 입력하세요."
           />
           {errors.password && <p className="login-error">{errors.password}</p>}
         </div>
@@ -71,9 +77,8 @@ function Login() {
         </button>
 
         <p className="login-footer">
-          아직 계정이 없으신가요? <Link to="/signup">회원가입</Link>
+          아직 계정이 없으신가요? <Link to="/Signup">회원가입</Link>
         </p>
-
       </form>
     </div>
   );
