@@ -1,10 +1,8 @@
-import Header from "../components/Header/Header";
 import "../css/Test.css"
 
 function Test() {
   return (
     <>
-      <Header />
 
       <div className="test-page">
         <h1>📝 신조어 이해도 테스트</h1>

@@ -1,4 +1,3 @@
-import Header from "../components/Header/Header";
 import "../css/Dictionary.css";
 import { useState } from "react";
 
@@ -53,7 +52,6 @@ function Dictionary() {
 
   return (
     <>
-      <Header />
 
       <div className="dictionary-page">
         <h1>📖 신조어 사전</h1>

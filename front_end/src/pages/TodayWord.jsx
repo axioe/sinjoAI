@@ -1,4 +1,3 @@
-import Header from "../components/Header/Header";
 import "../css/TodayWord.css";
 import { useState } from "react";
 import { FaSyncAlt } from "react-icons/fa";
@@ -37,7 +36,6 @@ function TodayWord() {
 
   return (
     <>
-      <Header />
 
       <div className="today-page">
         <h1>📖 오늘의 신조어</h1>

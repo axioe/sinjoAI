@@ -1,4 +1,3 @@
-import Header from "../components/Header/Header";
 import "../css/Translate.css";
 import { useState } from "react";
 import { FaArrowRight, FaCopy } from "react-icons/fa";
@@ -51,7 +50,6 @@ function Translate() {
 
   return (
     <>
-      <Header />
 
       <div className="translate-page">
         <h1>✨ 신조어 번역</h1>

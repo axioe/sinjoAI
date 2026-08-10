@@ -1,51 +1,55 @@
-import React, { useState } from 'react';
-import MultipleChoiceQuiz from './MultipleChoiceQuiz';
-import InitialSoundQuiz from './InitialSoundQuiz';
-import SubjectiveQuiz from './SubjectiveQuiz';
+import { Link } from "react-router-dom";
+import "../css/Game.css";
 
-export default function QuizMain() {
-  const [mode, setMode] = useState(null); // 'MULTIPLE' | 'INITIAL' | 'SUBJECTIVE' | null
+/**
+ * 게임 종류 선택 (REQ-GAME-01)
+ * 메인의 "게임 시작" 버튼이 /game 으로 보내면 이 화면이 뜬다.
+ */
+const QUIZ_TYPES = [
+  {
+    to: "/game/multiple",
+    modifier: "multiple",
+    badge: "객관식",
+    name: "뜻 맞추기",
+    hint: "신조어를 보고 알맞은 뜻을 네 개 보기 중에서 고릅니다.",
+  },
+  {
+    to: "/game/initial",
+    modifier: "initial",
+    badge: "초성",
+    name: "단어 맞추기",
+    hint: "초성과 힌트를 보고 어떤 신조어인지 직접 입력합니다.",
+  },
+  {
+    to: "/game/subjective",
+    modifier: "subjective",
+    badge: "주관식",
+    name: "신조어 쓰기",
+    hint: "설명을 읽고 해당하는 신조어를 직접 적어봅니다.",
+  },
+];
 
-  if (!mode) {
-    return (
-      <div className="max-w-md mx-auto mt-12 p-6 bg-white rounded-xl shadow-md text-center">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">신조어 퀴즈 게임</h1>
-        <div className="space-y-4">
-          <button
-            onClick={() => setMode('MULTIPLE')}
-            className="w-full py-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition"
-          >
-            1. 객관식 퀴즈 (뜻 맞추기)
-          </button>
-          <button
-            onClick={() => setMode('INITIAL')}
-            className="w-full py-4 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition"
-          >
-            2. 초성 퀴즈 (단어 맞추기)
-          </button>
-          <button
-            onClick={() => setMode('SUBJECTIVE')}
-            className="w-full py-4 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 transition"
-          >
-            3. 주관식 퀴즈 (신조어 쓰기)
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+function QuizMain() {
   return (
-    <div className="p-4">
-      <button
-        onClick={() => setMode(null)}
-        className="mb-4 text-sm text-gray-500 hover:underline font-medium"
-      >
-        ← 메인으로 돌아가기
-      </button>
+    <div className="quiz-page">
+      <h1 className="quiz-select-title">🎮 신조어 게임</h1>
+      <p className="quiz-select-desc">해보고 싶은 게임을 골라주세요.</p>
 
-      {mode === 'MULTIPLE' && <MultipleChoiceQuiz />}
-      {mode === 'INITIAL' && <InitialSoundQuiz />}
-      {mode === 'SUBJECTIVE' && <SubjectiveQuiz />}
+      <div className="quiz-select-list">
+        {QUIZ_TYPES.map((type) => (
+          <Link
+            key={type.to}
+            to={type.to}
+            className={`quiz-select-card ${type.modifier}`}
+          >
+            <span className="quiz-select-badge">{type.badge}</span>
+            <h2 className="quiz-select-name">{type.name}</h2>
+            <p className="quiz-select-hint">{type.hint}</p>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
+
+export default QuizMain;

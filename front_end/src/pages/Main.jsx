@@ -1,4 +1,3 @@
-import Header from "../components/Header/Header";
 import { Link } from "react-router-dom";
 import {
   FaFire,
@@ -13,7 +12,6 @@ import "../css/Main.css";
 function Main() {
   return (
     <>
-      <Header />
 
       <div className="main">
         {/* Hero */}

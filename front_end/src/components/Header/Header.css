@@ -18,8 +18,10 @@
 .logo a {
   text-decoration: none;
   color: #6d4aff;
+  /* 로고는 서비스 인상을 좌우하므로 개성 있는 당당해를 쓴다. */
+  font-family: var(--font-point);
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 .nav-menu {
@@ -30,7 +32,7 @@
 .nav-menu a {
   text-decoration: none;
   color: #555;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .nav-menu a:hover {
@@ -96,7 +98,7 @@
 
   color: white;
 
-  font-weight: 600;
+  font-weight: 700;
 
   transition: 0.3s;
 }

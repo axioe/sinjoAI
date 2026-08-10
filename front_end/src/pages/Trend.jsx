@@ -1,4 +1,3 @@
-import Header from "../components/Header/Header";
 import "../css/Trend.css";
 
 function Trend() {
@@ -36,7 +35,6 @@ function Trend() {
 
   return (
     <>
-      <Header />
 
       <div className="trend-page">
         <h1>🔥 실시간 인기 신조어 TOP 5</h1>
