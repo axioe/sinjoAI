@@ -1,8 +1,11 @@
 import "./Header.css";
 import { Link } from "react-router-dom";
 import { FaSearch, FaUser } from "react-icons/fa";
+import { useAuth } from "../../Auth";
 
 function Header() {
+  const { user, logout } = useAuth();
+
   return (
     <header className="header">
       <div className="logo">
@@ -22,10 +25,19 @@ function Header() {
           <input type="text" placeholder="신조어 검색" />
         </div>
 
+        {user ? (
+          <div className="user-box">
+            <FaUser />
+            <span className="user-name">{user.email.split("@")[0]}님</span>
+            <button className="logout-btn" onClick={logout}>로그아웃</button>
+          </div>
+        ) : (
+
         <Link to="/login" className="login-btn">
           <FaUser />
           로그인
         </Link>
+        )}
       </div>
     </header>
   );

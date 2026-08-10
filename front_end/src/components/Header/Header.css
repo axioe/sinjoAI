@@ -106,3 +106,28 @@
 .login-btn:hover {
   background: #5435d1;
 }
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.logout-btn {
+  padding: 6px 12px;
+  border: 1px solid #d5cff0;
+  border-radius: 10px;
+  background: #fff;
+  color: #6e6885;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #f7f5fc;
+}

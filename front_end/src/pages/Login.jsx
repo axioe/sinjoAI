@@ -2,20 +2,17 @@ import { useState } from "react";
 import "../css/Login.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Auth";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const data = {
-      email,
-      password,
-    };
 
     const found = {};
 
@@ -33,9 +30,26 @@ function Login() {
 
     if (Object.keys(found).length > 0) return;
 
-    console.log(data);
-    alert("로그인 성공!");
-    navigate("/");
+    try {
+      const res = await fetch("http://localhost:8080/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        setErrors({ form: "이메일 또는 비밀번호가 올바르지 않습니다." });
+        return;
+      }
+
+      const data = await res.json();
+      login(data);
+      alert("로그인 성공!");
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      setErrors({ form: "서버에 연결할 수 없습니다." });
+    }
   };
 
   return (
@@ -71,6 +85,8 @@ function Login() {
           />
           {errors.password && <p className="login-error">{errors.password}</p>}
         </div>
+
+        {errors.form && <p className="login-error">{errors.form}</p>}
 
         <button type="submit" className="login-submit">
           로그인
