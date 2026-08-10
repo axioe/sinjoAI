@@ -5,6 +5,7 @@ import com.slangs.sinjo.entity.User;
 import com.slangs.sinjo.exception.DuplicateEmailException;
 import com.slangs.sinjo.exception.InvalidCredentialsException;
 import com.slangs.sinjo.repository.UserRepository;
+import com.slangs.sinjo.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public UserDto.Response signup(UserDto.SignupRequest request) {
@@ -29,13 +31,13 @@ public class UserService {
         user.setEmail(email);
         // 평문 저장 금지. 해시해서 넣는다.
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setNickname(request.nickname().trim());
 
-        User saved = userRepository.save(user);
-        return new UserDto.Response(saved.getId(), saved.getEmail());
+        return UserDto.Response.from(userRepository.save(user));
     }
 
-    @Transactional(readOnly = true)
-    public UserDto.Response login(UserDto.LoginRequest request) {
+    @Transactional
+    public UserDto.LoginResponse login(UserDto.LoginRequest request) {
         User user = userRepository.findByEmail(normalizeEmail(request.email()))
                 .orElseThrow(InvalidCredentialsException::new);
 
@@ -44,7 +46,19 @@ public class UserService {
             throw new InvalidCredentialsException();
         }
 
-        return new UserDto.Response(user.getId(), user.getEmail());
+        user.updateLastLoginAt();
+
+        String token = jwtProvider.createToken(user.getId(), user.getEmail());
+        return new UserDto.LoginResponse(token, UserDto.Response.from(user));
+    }
+
+    /** 마이페이지용. 토큰에서 꺼낸 id 로 본인 정보를 조회한다. */
+    @Transactional(readOnly = true)
+    public UserDto.Response getMyInfo(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(InvalidCredentialsException::new);
+
+        return UserDto.Response.from(user);
     }
 
     /**

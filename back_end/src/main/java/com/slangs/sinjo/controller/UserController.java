@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +22,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto.Response> login(@Valid @RequestBody UserDto.LoginRequest request) {
+    public ResponseEntity<UserDto.LoginResponse> login(@Valid @RequestBody UserDto.LoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
+    }
+
+    @GetMapping("/mypage")
+    public ResponseEntity<UserDto.Response> mypage(@AuthenticationPrincipal Long userId) {
+        return ResponseEntity.ok(userService.getMyInfo(userId));
     }
 }
