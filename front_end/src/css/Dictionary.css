@@ -82,8 +82,44 @@
   transform: translateY(-7px);
 }
 
-.word-card h2 {
+.word-card-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.word-card-header h2 {
+  margin: 0;
+
   color: #6d4aff;
+}
+
+.like-button {
+  border: none;
+
+  border-radius: 20px;
+
+  padding: 8px 14px;
+
+  background: #fff0f2;
+
+  color: #ff4d67;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.like-button:hover {
+  background: #ffe0e5;
+
+  transform: scale(1.05);
 }
 
 .word-card .meaning {

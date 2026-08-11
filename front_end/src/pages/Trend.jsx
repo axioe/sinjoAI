@@ -1,59 +1,90 @@
 import "../css/Trend.css";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const API_URL = "http://localhost:8080/api/words";
 
 function Trend() {
-  const words = [
-    {
-      rank: 1,
-      word: "억까",
-      desc: "억지로 까다",
-    },
+  const [words, setWords] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    {
-      rank: 2,
-      word: "갓생",
-      desc: "부지런하고 계획적인 삶",
-    },
+  const navigate = useNavigate();
 
-    {
-      rank: 3,
-      word: "킹받네",
-      desc: "매우 화가 난다",
-    },
+  // 좋아요가 많은 신조어 TOP 5 가져오기
+  useEffect(() => {
+    const fetchTrendingWords = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-    {
-      rank: 4,
-      word: "알잘딱깔센",
-      desc: "알아서 잘 딱 깔끔하고 센스있게",
-    },
+        const response = await fetch(`${API_URL}/trending`);
 
-    {
-      rank: 5,
-      word: "중꺾마",
-      desc: "중요한 것은 꺾이지 않는 마음",
-    },
-  ];
+        if (!response.ok) {
+          throw new Error("인기 신조어 데이터를 가져오지 못했습니다.");
+        }
 
-  return (
-    <>
+        const data = await response.json();
 
+        setWords(data);
+      } catch (error) {
+        console.error(error);
+        setError("인기 신조어 데이터를 불러오는 데 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrendingWords();
+  }, []);
+
+  // 신조어 클릭 → Dictionary로 이동
+  const goToDictionary = (word) => {
+    navigate(`/dictionary?word=${encodeURIComponent(word)}`);
+  };
+
+  if (loading) {
+    return (
       <div className="trend-page">
         <h1>🔥 실시간 인기 신조어 TOP 5</h1>
-
-        <div className="rank-container">
-          {words.map((item) => (
-            <div className="rank-card" key={item.rank}>
-              <div className="rank">{item.rank}</div>
-
-              <div className="word-info">
-                <h2>{item.word}</h2>
-
-                <p>{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <p>인기 신조어를 불러오는 중입니다...</p>
       </div>
-    </>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="trend-page">
+        <h1>🔥 실시간 인기 신조어 TOP 5</h1>
+        <p>{error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="trend-page">
+      <h1>🔥 실시간 인기 신조어 TOP 5</h1>
+
+      <div className="rank-container">
+        {words.map((item) => (
+          <div
+            className="rank-card"
+            key={item.id}
+            onClick={() => goToDictionary(item.word)}
+          >
+            <div className="rank">{item.rank}</div>
+
+            <div className="word-info">
+              <h2>{item.word}</h2>
+
+              <p>{item.meaning}</p>
+            </div>
+
+            <div className="trend-likes">❤️ {item.likes}</div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
