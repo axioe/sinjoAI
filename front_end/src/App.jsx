@@ -5,7 +5,7 @@ import Layout from "./layouts/Layout";
 import Main from "./pages/Main";
 import Translate from "./pages/Translate";
 import Dictionary from "./pages/Dictionary";
-import Trend from "./pages/Trend";
+import Trend from "./pages/Ranking";
 import TodayWord from "./pages/TodayWord";
 import Test from "./pages/Test";
 import Login from "./pages/Login";
@@ -17,6 +17,7 @@ import MultipleChoiceQuiz from "./pages/MultipleChoiceQuiz";
 import InitialSoundQuiz from "./pages/InitialSoundQuiz";
 import SubjectiveQuiz from "./pages/SubjectiveQuiz";
 import RequireAuth from "./components/RequireAuth";
+import Ranking from "./pages/Ranking";
 
 /**
  * 바깥 Route 에 Layout 을 두면 그 안의 모든 페이지가 헤더·푸터를 공유한다.
@@ -30,7 +31,7 @@ function App() {
 
         <Route path="/translate" element={<Translate />} />
         <Route path="/dictionary" element={<Dictionary />} />
-        <Route path="/trend" element={<Trend />} />
+        <Route path="/ranking" element={<Ranking />} />
         <Route path="/today" element={<TodayWord />} />
         <Route path="/test" element={<Test />} />
         <Route path="/login" element={<Login />} />

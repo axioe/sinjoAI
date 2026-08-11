@@ -59,11 +59,11 @@ public class WordController {
     /**
      * 인기 신조어 TOP 5
      * <p>
-     * GET /api/words/trending
+     * GET /api/words/ranking
      */
-    @GetMapping("/trending")
-    public List<WordResponse> getTrendingWords() {
+    @GetMapping("/ranking")
+    public List<WordResponse> getRankingWords() {
 
-        return wordService.getTrendingWords();
+        return wordService.getRankingWords();
     }
 }

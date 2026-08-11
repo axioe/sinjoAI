@@ -69,7 +69,7 @@ public class WordService {
      * 좋아요 기준 TOP 5
      */
     @Transactional(readOnly = true)
-    public List<WordResponse> getTrendingWords() {
+    public List<WordResponse> getRankingWords() {
 
         List<Word> words =
                 wordRepository.findTop5ByOrderByLikesDesc();
