@@ -4,7 +4,7 @@ const API = axios.create({
   baseURL: "http://localhost:8080/api",
 });
 
-export const getTrend = () => API.get("/trend");
+export const getRank = () => API.get("/rank");
 
 export const getTodayWord = () => API.get("/today");
 

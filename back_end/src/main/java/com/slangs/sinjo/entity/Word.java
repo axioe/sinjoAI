@@ -26,6 +26,8 @@ public class Word {
     @Column(nullable = false)
     private Long likes = 0L;
 
+    @Column(length = 100)
+    private String category;
 
     public Word(
             String word,
