@@ -1,29 +1,49 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getSubjectiveQuiz, checkAnswer } from "../api/quizApi";
+import { getSubjectiveQuiz, checkAnswer, QUIZ_TYPE } from "../api/quizApi";
 import QuizResult from "./QuizResult";
 import QuizProgress from "./QuizProgress";
 import "../css/Game.css";
 
 function SubjectiveQuiz() {
   const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
   const [input, setInput] = useState("");
   const [feedback, setFeedback] = useState(null);
+  const [checking, setChecking] = useState(false);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
   useEffect(() => {
-    getSubjectiveQuiz().then(setQuizzes);
+    let alive = true;
+
+    getSubjectiveQuiz()
+      .then((data) => {
+        if (alive) setQuizzes(data);
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const current = quizzes[index];
 
   const handleSubmit = async () => {
-    if (!input.trim()) return;
-    const result = await checkAnswer(current, input.trim());
-    setFeedback(result);
-    if (result.correct) setScore((prev) => prev + 1);
+    if (!input.trim() || checking) return;
+
+    setChecking(true);
+    try {
+      const result = await checkAnswer(current, input.trim(), QUIZ_TYPE.SUBJECTIVE);
+      setFeedback(result);
+      if (result.correct) setScore((prev) => prev + 1);
+    } finally {
+      setChecking(false);
+    }
   };
 
   const handleNext = () => {
@@ -44,13 +64,30 @@ function SubjectiveQuiz() {
     setFinished(false);
   };
 
+  // Enter 로도 진행할 수 있게 한다.
   const handleKeyDown = (e) => {
     if (e.key !== "Enter") return;
+
+    // [수정] 한글 조합 중에 눌린 Enter 는 무시한다.
+    // 없으면 "억까" 를 치는 도중 마지막 글자가 확정되기 전에 채점되어 오답이 된다.
+    if (e.nativeEvent?.isComposing) return;
+
+    e.preventDefault();
     if (feedback === null) handleSubmit();
     else handleNext();
   };
 
-  if (!quizzes.length) return <div className="quiz-loading">문제를 불러오는 중...</div>;
+  if (loading) return <div className="quiz-loading">문제를 불러오는 중...</div>;
+
+  if (!quizzes.length) {
+    return (
+      <div className="quiz-page">
+        <Link to="/game" className="quiz-back">← 게임 선택으로</Link>
+        <div className="quiz-loading">출제할 문제가 없습니다. 잠시 후 다시 시도해 주세요.</div>
+      </div>
+    );
+  }
+
   if (finished) return <QuizResult score={score} total={quizzes.length} onRetry={handleRetry} />;
 
   return (
@@ -63,7 +100,9 @@ function SubjectiveQuiz() {
 
         <h2 className="quiz-question">{current.question}</h2>
 
-        {current.description && <p className="quiz-hint">💡 힌트: {current.description}</p>}
+        {current.description && (
+          <p className="quiz-hint">💡 힌트: {current.description}</p>
+        )}
 
         <input
           className="quiz-input"
@@ -72,6 +111,7 @@ function SubjectiveQuiz() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="신조어를 입력하세요"
+          aria-label="정답 입력"
           disabled={feedback !== null}
         />
 
@@ -84,8 +124,13 @@ function SubjectiveQuiz() {
         )}
 
         {feedback === null ? (
-          <button type="button" className="quiz-submit" onClick={handleSubmit} disabled={!input.trim()}>
-            정답 확인
+          <button
+            type="button"
+            className="quiz-submit"
+            onClick={handleSubmit}
+            disabled={!input.trim() || checking}
+          >
+            {checking ? "확인 중..." : "정답 확인"}
           </button>
         ) : (
           <button type="button" className="quiz-submit" onClick={handleNext}>

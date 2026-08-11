@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +26,19 @@ public class QuizService {
         List<QuizWord> randomWords = quizRepository.findRandomQuizzes(DEFAULT_QUIZ_COUNT);
 
         return randomWords.stream().map(quiz -> {
-            // 정답 1개 + 오답 보기 3개를 합쳐 4개의 선택지 구성
-            List<String> options = new ArrayList<>(quiz.getOptions());
-            options.add(quiz.getAnswer());
+            List<String> options = new ArrayList<>(
+                    quiz.getOptions() == null ? List.of() : quiz.getOptions());
+
+            // [수정] DB 의 options 에 이미 정답이 들어 있는 경우가 있다.
+            // 그대로 add 하면 같은 보기가 두 번 나오고,
+            // 프론트가 key={option} 을 쓰기 때문에 React key 중복 경고까지 난다.
+            String answer = quiz.getAnswer();
+            boolean alreadyHasAnswer = options.stream()
+                    .anyMatch(o -> normalize(o).equals(normalize(answer)));
+            if (!alreadyHasAnswer) {
+                options.add(answer);
+            }
+
             Collections.shuffle(options); // 보기 순서 랜덤 섞기
 
             return new QuizDto.MultipleChoice(
@@ -48,7 +59,11 @@ public class QuizService {
             return new QuizDto.InitialSound(
                     quiz.getId(),
                     initialSound,
-                    quiz.getDescription() // 뜻이나 예문 등을 힌트로 활용
+                    // [수정] description 이 비어 있는 행이 있어 힌트가 아예 안 보였다.
+                    // 그럴 때는 뜻(answer)을 힌트로 쓴다.
+                    quiz.getDescription() != null && !quiz.getDescription().isBlank()
+                            ? quiz.getDescription()
+                            : quiz.getAnswer()
             );
         }).toList();
     }
@@ -64,19 +79,51 @@ public class QuizService {
         )).toList();
     }
 
-    // 4. 정답 확인 및 채점
+    /**
+     * 4. 정답 확인 및 채점
+     *
+     * [수정 1] request.answer() 가 null 이면 NPE 로 500 이 났다. normalize 에서 방어한다.
+     * [수정 2] 퀴즈 종류별로 채점 기준을 나눴다.
+     *          기존에는 "뜻" 과 "단어" 중 아무거나 맞으면 정답이었는데,
+     *          주관식은 문제 지문에 뜻이 그대로 노출되어 있어 지문을 복사하면 정답이 됐다.
+     * [수정 3] correctAnswer 도 종류에 맞게 내려준다.
+     *          객관식 오답 화면에 "억까 (억지로 까다)" 처럼 보기에 없는 문자열이 뜨던 문제 해결.
+     */
     public QuizDto.CheckResponse checkAnswer(QuizDto.CheckRequest request) {
+        if (request == null || request.quizId() == null) {
+            throw new IllegalArgumentException("퀴즈 ID가 필요합니다.");
+        }
+
         QuizWord quiz = quizRepository.findById(request.quizId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀴즈 ID입니다: " + request.quizId()));
 
-        String submittedAnswer = request.answer().trim().replaceAll("\\s+", ""); // 공백 제거
-        String correctAnswer = quiz.getAnswer().trim().replaceAll("\\s+", "");
-        String correctWord = quiz.getWord().trim().replaceAll("\\s+", "");
+        String submitted = normalize(request.answer());
+        String word = quiz.getWord();       // 신조어
+        String meaning = quiz.getAnswer();  // 뜻
 
-        // 사용자가 제출한 값이 정답(뜻) 혹은 신조어(단어)와 일치하는지 판별
-        boolean correct = submittedAnswer.equalsIgnoreCase(correctAnswer)
-                || submittedAnswer.equalsIgnoreCase(correctWord);
+        QuizDto.QuizType type = request.quizType();
 
-        return new QuizDto.CheckResponse(correct, quiz.getWord() + " (" + quiz.getAnswer() + ")");
+        boolean correct;
+        String correctAnswer;
+
+        if (type == QuizDto.QuizType.MULTIPLE_CHOICE) {
+            correct = normalize(meaning).equals(submitted);
+            correctAnswer = meaning;
+        } else if (type == QuizDto.QuizType.INITIAL_SOUND || type == QuizDto.QuizType.SUBJECTIVE) {
+            correct = normalize(word).equals(submitted);
+            correctAnswer = word;
+        } else {
+            // quizType 을 보내지 않는 예전 클라이언트를 위한 하위 호환 경로
+            correct = normalize(meaning).equals(submitted) || normalize(word).equals(submitted);
+            correctAnswer = word + " (" + meaning + ")";
+        }
+
+        return new QuizDto.CheckResponse(correct, correctAnswer);
+    }
+
+    /** 공백 제거 + 소문자 통일. null 은 빈 문자열로 취급해 NPE 를 막는다. */
+    private String normalize(String value) {
+        if (value == null) return "";
+        return value.trim().replaceAll("\\s+", "").toLowerCase(Locale.ROOT);
     }
 }

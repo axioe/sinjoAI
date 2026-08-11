@@ -3,6 +3,7 @@ import {
   FaHome, FaBookmark, FaUser, FaStar, FaClipboardList,
   FaGamepad, FaChartBar, FaBell, FaCog, FaSignOutAlt,
 } from "react-icons/fa";
+import { useAuth } from "../../AuthContext";
 
 /**
  * 마이페이지 좌측 메뉴.
@@ -23,10 +24,19 @@ const MENUS = [
 
 function MyPageSidebar({ active, onSelect }) {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
+  /**
+   * [수정] 로그아웃 버튼이 화면만 옮기고 로그인 상태는 그대로 뒀다.
+   *
+   * 그래서 로그아웃을 눌러도
+   *  - 헤더에는 여전히 "○○님 / 로그아웃" 이 떠 있고
+   *  - localStorage 의 토큰이 남아 /mypage 로 그냥 다시 들어갈 수 있었다.
+   * 공용 PC 에서 쓰면 다음 사람이 그대로 로그인된 상태가 된다.
+   */
   const handleLogout = () => {
-    // TODO: 서버 연동 시 로그아웃 요청을 보낸 뒤 이동한다.
-    navigate("/login");
+    logout();
+    navigate("/login", { replace: true });
   };
 
   return (
