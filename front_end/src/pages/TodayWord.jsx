@@ -7,7 +7,7 @@ function TodayWord() {
     {
       word: "알잘딱깔센",
       meaning: "알아서 잘 딱 깔끔하고 센스있게",
-      example: "이번 프로젝트는 알잘딱깔센하게 처리해줘.",
+      example: "이번 프로젝트는 알잘딱깔센으로 처리해줘.",
       category: "업무 / 일상",
     },
 

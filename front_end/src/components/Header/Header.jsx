@@ -16,8 +16,10 @@ function Header() {
         <Link to="/translate">번역</Link>
         <Link to="/dictionary">사전</Link>
         <Link to="/game">게임</Link>
-        <Link to="/trend">트렌드</Link>
+        <Link to="/ranking">랭킹</Link>
         <Link to="/mypage">마이페이지</Link>
+        <Link to="/today">오늘의 신조어</Link>
+        <Link to="/test">테스트</Link>
       </nav>
 
       <div className="header-right">

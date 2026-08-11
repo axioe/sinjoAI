@@ -1,4 +1,4 @@
-.trend-page {
+.ranking-page {
   max-width: 1000px;
 
   margin: auto;
@@ -6,7 +6,7 @@
   padding: 50px;
 }
 
-.trend-page h1 {
+.ranking-page h1 {
   color: #6d4aff;
 
   margin-bottom: 40px;
@@ -82,7 +82,7 @@
   color: #777;
 }
 
-.trend-likes {
+.ranking-likes {
   margin-left: auto;
 
   color: #ff4d67;
@@ -92,4 +92,16 @@
   font-weight: bold;
 
   white-space: nowrap;
+}
+
+.no-ranking {
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 40px;
+
+  text-align: center;
+
+  color: #777;
 }
