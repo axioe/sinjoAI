@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { signup } from "../api/userApi";
 import "../css/signup.css";
 
 function Signup() {
@@ -7,6 +8,7 @@ function Signup() {
     email: "",
     password: "",
     passwordConfirm: "",
+    nickname: "",
   });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -36,6 +38,13 @@ function Signup() {
       found.passwordConfirm = "비밀번호가 일치하지 않습니다.";
     }
 
+    const nickname = form.nickname.trim();
+    if (!nickname) {
+      found.nickname = "닉네임을 입력해 주세요.";
+    } else if (nickname.length < 2 || nickname.length > 30) {
+      found.nickname = "닉네임은 2자 이상 30자 이하여야 합니다.";
+    }
+
     return found;
   };
 
@@ -49,28 +58,16 @@ function Signup() {
     setSubmitting(true);
 
     try {
-      const res = await fetch("http://localhost:8080/api/users/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: form.email, password: form.password }),
+      await signup({
+        email: form.email,
+        password: form.password,
+        nickname: form.nickname,
       });
-
-      if (!res.ok) {
-        // 서버가 내려준 메시지를 그대로 보여준다.
-        // 이게 없으면 사용자는 왜 실패했는지 알 수 없다.
-        const data = await res.json().catch(() => null);
-        setErrors({
-          ...(data?.fieldErrors ?? {}),
-          form: data?.message ?? "회원가입에 실패했습니다.",
-        });
-        return;
-      }
-
       alert("회원가입이 완료되었습니다. 로그인해 주세요.");
       navigate("/login");
     } catch (err) {
-      console.error(err);
-      setErrors({ form: "서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요." });
+      // 서버가 필드별 메시지를 주면 각 입력창 아래에 붙인다.
+      setErrors({ ...err.fieldErrors, form: err.message });
     } finally {
       setSubmitting(false);
     }
@@ -91,6 +88,15 @@ function Signup() {
           autoComplete="email"
         />
         {errors.email && <p className="signup-error">{errors.email}</p>}
+
+        <input
+          type="text"
+          placeholder="닉네임 (2~30자)"
+          value={form.nickname}
+          onChange={setField("nickname")}
+          autoComplete="nickname"
+        />
+        {errors.nickname && <p className="signup-error">{errors.nickname}</p>}
 
         <input
           type="password"
