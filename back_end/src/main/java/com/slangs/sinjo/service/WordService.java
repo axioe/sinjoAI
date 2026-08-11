@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -35,33 +36,27 @@ public class WordService {
     @Transactional(readOnly = true)
     public WordResponse getWord(Long id) {
 
-        Word word = wordRepository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "신조어를 찾을 수 없습니다."
-                        )
-                );
-
-        return new WordResponse(word);
+        return new WordResponse(findWordOrThrow(id));
     }
 
 
     /**
      * 좋아요 증가
+     *
+     * [수정] DB 에서 직접 증가시킨 뒤 다시 읽어 반환한다.
+     * 기존 코드는 엔티티를 읽어 자바에서 +1 했기 때문에
+     * 두 사람이 동시에 누르면 한 번이 유실됐다.
      */
     @Transactional
     public WordResponse likeWord(Long id) {
 
-        Word word = wordRepository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "신조어를 찾을 수 없습니다."
-                        )
-                );
+        int updated = wordRepository.increaseLike(id);
 
-        word.increaseLike();
+        if (updated == 0) {
+            throw new IllegalArgumentException("신조어를 찾을 수 없습니다.");
+        }
 
-        return new WordResponse(word);
+        return new WordResponse(findWordOrThrow(id));
     }
 
 
@@ -71,10 +66,9 @@ public class WordService {
     @Transactional(readOnly = true)
     public List<WordResponse> getRankingWords() {
 
-        List<Word> words =
-                wordRepository.findTop5ByOrderByLikesDesc();
+        List<Word> words = wordRepository.findTop5ByOrderByLikesDescIdAsc();
 
-        return java.util.stream.IntStream
+        return IntStream
                 .range(0, words.size())
                 .mapToObj(index ->
                         new WordResponse(
@@ -83,5 +77,16 @@ public class WordService {
                         )
                 )
                 .toList();
+    }
+
+
+    private Word findWordOrThrow(Long id) {
+
+        return wordRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "신조어를 찾을 수 없습니다."
+                        )
+                );
     }
 }
