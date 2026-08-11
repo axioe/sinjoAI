@@ -40,7 +40,16 @@ function Main() {
           </div>
 
           <div className="hero-right">
-            <img src="/hero.png" alt="" />
+            {/* [수정] public/hero.png 가 저장소에 없어 깨진 이미지 아이콘만 떴다.
+                파일을 추가하기 전까지는 자동으로 숨긴다.
+                alt 가 빈 문자열이면 스크린리더가 그냥 건너뛴다. 설명을 넣었다. */}
+            <img
+              src="/hero.png"
+              alt="신조어를 표준어로 바꿔주는 서비스 소개 이미지"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
           </div>
         </section>
 
@@ -50,7 +59,9 @@ function Main() {
           <div className="feature-card">
             <FaFire className="icon" />
 
-            <Link to="/trend" className="card-link">
+            {/* [수정] 라우트가 /trend 에서 /ranking 으로 바뀌었는데 이 링크만 남아 있었다.
+                404 라우트도 없어서 누르면 헤더·푸터만 있는 빈 화면이 떴다. */}
+            <Link to="/ranking" className="card-link">
               <h3>🔥 실시간 인기 신조어</h3>
             </Link>
 
