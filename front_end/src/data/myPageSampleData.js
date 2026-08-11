@@ -13,15 +13,15 @@ export const USER_PROFILE = {
 export const RECENT_TRANSLATIONS = [
   {
     id: 1,
-    source: "오늘 발표 완전 럭키비키였음ㅋㅋ",
-    result: "오늘 발표는 운이 좋게 잘 풀렸어요.",
+    source: "오늘 완전 럭키비키잖아~",
+    result: "오늘 완전 운이 좋잖아~",
     createdAt: "2026.05.20 14:32",
     favorite: false,
   },
   {
     id: 2,
     source: "억까 당해서 현타 옴;;",
-    result: "부당하게 불리한 상황이어서 힘들어.",
+    result: "별다른 이유 없이 억지로 까여서 허탈함;;",
     createdAt: "2026.05.20 13:15",
     favorite: true,
   },
@@ -34,15 +34,15 @@ export const RECENT_TRANSLATIONS = [
   },
   {
     id: 4,
-    source: "긁? 그게 뭔데?",
-    result: "예민하게 반응하는 거야.",
+    source: "긁?",
+    result: "긁혔어?",
     createdAt: "2026.05.19 18:45",
     favorite: false,
   },
   {
     id: 5,
-    source: "중꺾마 정신으로 가보자고!",
-    result: "중요한 건 꺾이지 않는 마음이야.",
+    source: "중꺾마",
+    result: "중요한 건 꺾이지 않는 마음이다.",
     createdAt: "2026.05.19 09:12",
     favorite: false,
   },

@@ -34,10 +34,14 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 
   transition: 0.3s;
+
+  cursor: pointer;
 }
 
 .rank-card:hover {
   transform: translateY(-5px);
+
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
 .rank {
@@ -60,6 +64,8 @@
   font-size: 25px;
 
   font-weight: bold;
+
+  flex-shrink: 0;
 }
 
 .word-info {
@@ -74,4 +80,16 @@
 
 .word-info p {
   color: #777;
+}
+
+.trend-likes {
+  margin-left: auto;
+
+  color: #ff4d67;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  white-space: nowrap;
 }
