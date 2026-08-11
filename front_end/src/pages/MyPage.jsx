@@ -1,3 +1,4 @@
+import { useAuth } from "../AuthContext";
 import { useState } from "react";
 import MyPageSidebar from "../components/MyPage/MyPageSidebar";
 import ProfileCard from "../components/MyPage/ProfileCard";
@@ -25,6 +26,7 @@ console.log("BADGES =", BADGES);
  * 즐겨찾기 토글과 삭제는 화면에서 즉시 반영되지만 새로고침하면 되돌아간다.
  */
 function MyPage() {
+  const { user } = useAuth();
   const [activeMenu, setActiveMenu] = useState("home");
   const [translations, setTranslations] = useState(RECENT_TRANSLATIONS);
 
@@ -49,7 +51,7 @@ function MyPage() {
       <MyPageSidebar active={activeMenu} onSelect={setActiveMenu} />
 
       <div className="mypage-main">
-        <ProfileCard profile={USER_PROFILE} />
+        <ProfileCard profile={user} />
         <RecentTranslations
           items={translations}
           onToggleFavorite={handleToggleFavorite}

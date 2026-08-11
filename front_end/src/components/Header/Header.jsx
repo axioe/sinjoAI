@@ -29,7 +29,7 @@ function Header() {
         {user ? (
           <div className="user-box">
             <FaUser />
-            <span className="user-name">{user.email.split("@")[0]}님</span>
+            <span className="user-name">{user.nickname}님</span>
             <button className="logout-btn" onClick={logout}>로그아웃</button>
           </div>
         ) : (

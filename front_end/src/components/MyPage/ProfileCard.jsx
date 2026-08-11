@@ -1,5 +1,21 @@
 import { FaCamera } from "react-icons/fa";
 
+/** 서버가 주는 ISO 문자열을 "2026.03.15" 형태로 바꾼다. */
+function formatDate(value) {
+  if (!value) return "-";
+  const d = new Date(value);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+}
+
+/** 마지막 접속은 시각까지 보여준다. */
+function formatDateTime(value) {
+  if (!value) return "첫 방문이에요";
+  const d = new Date(value);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${formatDate(value)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function ProfileCard({ profile }) {
   return (
     <section className="mypage-profile">

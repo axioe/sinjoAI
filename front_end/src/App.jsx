@@ -16,6 +16,7 @@ import QuizMain from "./pages/QuizMain";
 import MultipleChoiceQuiz from "./pages/MultipleChoiceQuiz";
 import InitialSoundQuiz from "./pages/InitialSoundQuiz";
 import SubjectiveQuiz from "./pages/SubjectiveQuiz";
+import RequireAuth from "./components/RequireAuth";
 
 /**
  * 바깥 Route 에 Layout 을 두면 그 안의 모든 페이지가 헤더·푸터를 공유한다.
@@ -34,7 +35,14 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route
+          path="/mypage"
+          element={
+            <RequireAuth>
+              <MyPage />
+            </RequireAuth>
+          }
+        />
 
         {/* 게임: /game 에서 종류를 고르고 각 퀴즈로 이동한다 */}
         <Route path="/game" element={<QuizMain />} />
