@@ -18,30 +18,22 @@ function Ranking() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(
-          `${API_URL}/trending`
-        );
+        const response = await fetch(`${API_URL}/ranking`);
 
         if (!response.ok) {
-          throw new Error(
-            "인기 신조어 데이터를 가져오지 못했습니다."
-          );
+          throw new Error("인기 신조어 데이터를 가져오지 못했습니다.");
         }
 
         const data = await response.json();
 
         // 좋아요가 많은 순으로 정렬 후 TOP 5
-        const topFive = data
-          .sort((a, b) => b.likes - a.likes)
-          .slice(0, 5);
+        const topFive = data.sort((a, b) => b.likes - a.likes).slice(0, 5);
 
         setWords(topFive);
       } catch (error) {
         console.error(error);
 
-        setError(
-          "인기 신조어 데이터를 불러오는 데 실패했습니다."
-        );
+        setError("인기 신조어 데이터를 불러오는 데 실패했습니다.");
       } finally {
         setLoading(false);
       }
@@ -52,9 +44,7 @@ function Ranking() {
 
   // 신조어 클릭 → 사전으로 이동
   const goToDictionary = (word) => {
-    navigate(
-      `/dictionary?word=${encodeURIComponent(word)}`
-    );
+    navigate(`/dictionary?word=${encodeURIComponent(word)}`);
   };
 
   if (loading) {
@@ -87,13 +77,9 @@ function Ranking() {
             <div
               className="rank-card"
               key={item.id}
-              onClick={() =>
-                goToDictionary(item.word)
-              }
+              onClick={() => goToDictionary(item.word)}
             >
-              <div className="rank">
-                {index + 1}
-              </div>
+              <div className="rank">{index + 1}</div>
 
               <div className="word-info">
                 <h2>{item.word}</h2>
@@ -101,15 +87,11 @@ function Ranking() {
                 <p>{item.meaning}</p>
               </div>
 
-              <div className="ranking-likes">
-                ❤️ {item.likes}
-              </div>
+              <div className="ranking-likes">❤️ {item.likes}</div>
             </div>
           ))
         ) : (
-          <div className="no-ranking">
-            아직 등록된 신조어가 없습니다.
-          </div>
+          <div className="no-ranking">아직 등록된 신조어가 없습니다.</div>
         )}
       </div>
     </div>
