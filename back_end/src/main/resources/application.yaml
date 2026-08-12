@@ -10,15 +10,13 @@ spring:
       api-key: ${OPENAI_API_KEY:dummy-key-not-used-yet}
 
   datasource:
-    # MySQL 기본 포트는 3306 이다. 5555 는 프론트(Vite) 포트라 여기 들어오면 연결이 안 된다.
-    # characterEncoding 과 시간대를 지정해야 이모지 저장과 "당일" 기준 집계가 맞는다.
-    url: jdbc:mysql://localhost:3306/sinjo?characterEncoding=UTF-8&connectionTimeZone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:postgresql://43.201.127.52:55432/sinjodb
     # [수정] 기본값을 넣었다. 환경변수를 등록하지 않은 팀원의 IntelliJ 에서
     # "Could not resolve placeholder 'DB_USERNAME'" 으로 앱이 아예 뜨지 않던 문제를 막는다.
     # 배포 시에는 반드시 환경변수로 덮어쓸 것.
-    username: ${DB_USERNAME:root}
+    username: ${DB_USERNAME:}
     password: ${DB_PASSWORD:}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:

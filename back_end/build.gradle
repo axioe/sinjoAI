@@ -36,8 +36,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	// MySQL 의존성 추가
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	// PostgreSQL 의존성 추가
+	runtimeOnly 'org.postgresql:postgresql'
 
     // JWT (JSON Web Token)
     implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
