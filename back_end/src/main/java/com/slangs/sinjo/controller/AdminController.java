@@ -2,7 +2,7 @@ package com.slangs.sinjo.controller;
 
 import com.slangs.sinjo.dto.AdminDto;
 import com.slangs.sinjo.dto.UserDto;
-import com.slangs.sinjo.dto.WordResponse;
+import com.slangs.sinjo.dto.WordDto;
 import com.slangs.sinjo.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,18 +34,18 @@ public class AdminController {
     // ---- 용어 관리 --------------------------------------------------------
 
     @GetMapping("/words")
-    public ResponseEntity<List<WordResponse>> getWords() {
+    public ResponseEntity<List<WordDto>> getWords() {
         return ResponseEntity.ok(adminService.getWords());
     }
 
     @PostMapping("/words")
-    public ResponseEntity<WordResponse> createWord(@Valid @RequestBody AdminDto.WordRequest request) {
+    public ResponseEntity<WordDto> createWord(@Valid @RequestBody AdminDto.WordRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminService.createWord(request));
     }
 
     @PutMapping("/words/{id}")
-    public ResponseEntity<WordResponse> updateWord(@PathVariable Long id,
-                                                   @Valid @RequestBody AdminDto.WordRequest request) {
+    public ResponseEntity<WordDto> updateWord(@PathVariable Long id,
+                                              @Valid @RequestBody AdminDto.WordRequest request) {
         return ResponseEntity.ok(adminService.updateWord(id, request));
     }
 

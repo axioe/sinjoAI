@@ -2,7 +2,7 @@ package com.slangs.sinjo.service;
 
 import com.slangs.sinjo.dto.AdminDto;
 import com.slangs.sinjo.dto.UserDto;
-import com.slangs.sinjo.dto.WordResponse;
+import com.slangs.sinjo.dto.WordDto;
 import com.slangs.sinjo.entity.Word;
 import com.slangs.sinjo.exception.DuplicateWordException;
 import com.slangs.sinjo.exception.NotFoundException;
@@ -40,15 +40,15 @@ public class AdminService {
     // ---- 용어 관리 --------------------------------------------------------
 
     @Transactional(readOnly = true)
-    public List<WordResponse> getWords() {
+    public List<WordDto> getWords() {
         return wordRepository.findAllByOrderByIdDesc()
                 .stream()
-                .map(WordResponse::new)
+                .map(WordDto::new)
                 .toList();
     }
 
     @Transactional
-    public WordResponse createWord(AdminDto.WordRequest request) {
+    public WordDto createWord(AdminDto.WordRequest request) {
         String word = request.word().trim();
 
         if (wordRepository.existsByWord(word)) {
@@ -61,11 +61,11 @@ public class AdminService {
                 request.example().trim()
         ));
 
-        return new WordResponse(saved);
+        return new WordDto(saved);
     }
 
     @Transactional
-    public WordResponse updateWord(Long id, AdminDto.WordRequest request) {
+    public WordDto updateWord(Long id, AdminDto.WordRequest request) {
         Word target = wordRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 신조어를 찾을 수 없습니다."));
 
@@ -78,7 +78,7 @@ public class AdminService {
         }
 
         target.update(word, request.meaning().trim(), request.example().trim());
-        return new WordResponse(target);
+        return new WordDto(target);
     }
 
     @Transactional
