@@ -1,5 +1,6 @@
 package com.slangs.sinjo.security;
 
+import com.slangs.sinjo.entity.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -24,9 +25,6 @@ public class JwtProvider {
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration}") long expirationMillis
     ) {
-        // [추가] 짧은 시크릿을 넣었을 때 원인을 바로 알 수 있게 한다.
-        // 이게 없으면 배포 서버에서 JWT_SECRET 을 짧게 넣는 순간
-        // "WeakKeyException" 만 뜨고 무엇을 고쳐야 하는지 알기 어렵다.
         byte[] secretBytes = secret.getBytes(StandardCharsets.UTF_8);
         if (secretBytes.length < MIN_SECRET_BYTES) {
             throw new IllegalStateException(
@@ -38,48 +36,71 @@ public class JwtProvider {
         this.expirationMillis = expirationMillis;
     }
 
-    // 로그인 성공 시 토큰 만들기
-    public String createToken(Long userId, String email) {
+    /**
+     * 로그인 성공 시 토큰 만들기.
+     *
+     * role 을 함께 담는 이유:
+     * 담아두지 않으면 요청이 올 때마다 DB 를 조회해 권한을 확인해야 한다.
+     * 토큰에 있으면 서명 검증만으로 관리자인지 알 수 있다.
+     *
+     * 주의: 토큰 내용은 누구나 열어볼 수 있다(암호화가 아니라 서명이다).
+     * 그래서 role 처럼 공개돼도 되는 값만 담고, 비밀번호 같은 건 절대 담지 않는다.
+     */
+    public String createToken(Long userId, String email, Role role) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMillis);
 
         return Jwts.builder()
                 .subject(String.valueOf(userId))
                 .claim("email", email)
+                .claim("role", role.name())
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)
                 .compact();
     }
 
-    /**
-     * 토큰에서 회원 id 꺼내기.
-     *
-     * [수정] 예외를 밖으로 던지지 않고 null 을 돌려준다.
-     * subject 가 숫자가 아니거나 비어 있으면 Long.valueOf 가
-     * NumberFormatException 을 던지는데, 이게 필터 안에서 터지면
-     * 사용자에게는 원인 모를 500 이 나간다.
-     */
+    /** 토큰에서 회원 id 꺼내기. 잘못된 토큰이면 null. */
     public Long getUserId(String token) {
         try {
-            Claims claims = Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-            return Long.valueOf(claims.getSubject());
+            return Long.valueOf(parse(token).getSubject());
         } catch (JwtException | IllegalArgumentException e) {
             return null;
         }
     }
 
-    // 유효한 토큰인지 확인
+    /**
+     * 토큰에서 권한 꺼내기.
+     *
+     * role 이 없거나 알 수 없는 값이면 USER 로 본다.
+     * 관리자 기능을 붙이기 전에 발급된 옛 토큰에는 role 이 없는데,
+     * 그 경우 예외를 던지면 기존 사용자가 전부 로그인 불가가 된다.
+     * 모르면 낮은 권한으로 처리하는 쪽이 안전하다.
+     */
+    public Role getRole(String token) {
+        try {
+            String role = parse(token).get("role", String.class);
+            return role == null ? Role.USER : Role.valueOf(role);
+        } catch (JwtException | IllegalArgumentException e) {
+            return Role.USER;
+        }
+    }
+
+    /** 유효한 토큰인지 확인 */
     public boolean isValid(String token) {
         try {
-            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            parse(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
+    }
+
+    private Claims parse(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }
