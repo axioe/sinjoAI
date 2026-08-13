@@ -36,7 +36,10 @@ function Login() {
       // 서버가 { token, user } 를 돌려준다.
       const data = await loginApi({ email, password });
       login(data.token, data.user);
-      navigate("/mypage");
+      // 관리자 계정으로 로그인하면 관리자 페이지로 보낸다.
+      // 권한 판단은 서버가 내려준 role 로 한다.
+      // 이메일로 판단하면 이메일을 바꿀 때마다 프론트 코드를 고쳐야 한다.
+      navigate(data.user.role === "ADMIN" ? "/admin" : "/mypage");
     } catch (err) {
       setErrors({ form: err.message });
     } finally {
