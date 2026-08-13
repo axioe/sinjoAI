@@ -48,7 +48,7 @@ public class UserService {
 
         user.updateLastLoginAt();
 
-        String token = jwtProvider.createToken(user.getId(), user.getEmail());
+        String token = jwtProvider.createToken(user.getId(), user.getEmail(), user.getRole());
         return new UserDto.LoginResponse(token, UserDto.Response.from(user));
     }
 

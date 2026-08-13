@@ -20,6 +20,15 @@ public interface WordRepository
      */
     List<Word> findTop5ByOrderByLikesDescIdAsc();
 
+    /** 관리자 등록 시 중복 확인용. word 컬럼에 unique 제약이 걸려 있다. */
+    boolean existsByWord(String word);
+
+    /** 수정 시 자기 자신은 중복에서 제외한다. */
+    boolean existsByWordAndIdNot(String word, Long id);
+
+    /** 관리자 목록: 최근 등록순 */
+    List<Word> findAllByOrderByIdDesc();
+
     /**
      * [추가] 좋아요를 DB 에서 직접 1 증가시킨다.
      *

@@ -41,6 +41,13 @@ public class Word {
     }
 
 
+    /** 관리자 화면에서 용어를 수정할 때 쓴다. */
+    public void update(String word, String meaning, String example) {
+        this.word = word;
+        this.meaning = meaning;
+        this.example = example;
+    }
+
     public void increaseLike() {
         this.likes++;
     }

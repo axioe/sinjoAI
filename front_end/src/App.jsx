@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
 import RequireAuth from "./components/RequireAuth";
+import RequireAdmin from "./components/RequireAdmin";
 
 import Main from "./pages/Main";
 import Translate from "./pages/Translate";
@@ -12,6 +13,7 @@ import Test from "./pages/Test";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import MyPage from "./pages/MyPage";
+import AdminPage from "./pages/Admin/AdminPage";
 import NotFound from "./pages/NotFound";
 
 import QuizMain from "./pages/QuizMain";
@@ -51,6 +53,15 @@ function App() {
             <RequireAuth>
               <MyPage />
             </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <RequireAdmin>
+              <AdminPage />
+            </RequireAdmin>
           }
         />
 
