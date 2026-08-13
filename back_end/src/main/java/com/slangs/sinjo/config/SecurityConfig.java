@@ -53,15 +53,20 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         // 개발 단계라 전부 열어둔다.
                         // 배포 전에 /api/admin/** 등 보호 대상을 지정할 것.
+                        // [수정] 관리자 API 는 ADMIN 권한이 있어야만 통과한다.
+                        // 컨트롤러마다 확인하지 않고 여기 한 곳에서 막는다.
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // 나머지는 아직 개발 중이라 열어둔다.
                         .anyRequest().permitAll()
                 )
 
-        .exceptionHandling(handling -> handling
-                .authenticationEntryPoint((request, response, ex) ->
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .accessDeniedHandler((request, response, ex) ->
-                        response.sendError(HttpServletResponse.SC_FORBIDDEN))
-        )
+                .exceptionHandling(handling -> handling
+                        .authenticationEntryPoint((request, response, ex) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                        .accessDeniedHandler((request, response, ex) ->
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN))
+                )
 
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())

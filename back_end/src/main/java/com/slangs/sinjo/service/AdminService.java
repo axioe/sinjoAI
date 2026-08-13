@@ -1,0 +1,101 @@
+package com.slangs.sinjo.service;
+
+import com.slangs.sinjo.dto.AdminDto;
+import com.slangs.sinjo.dto.UserDto;
+import com.slangs.sinjo.dto.WordResponse;
+import com.slangs.sinjo.entity.Word;
+import com.slangs.sinjo.exception.DuplicateWordException;
+import com.slangs.sinjo.exception.NotFoundException;
+import com.slangs.sinjo.repository.QuizRepository;
+import com.slangs.sinjo.repository.UserRepository;
+import com.slangs.sinjo.repository.WordRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * 관리자 기능 (REQ-ADM-01)
+ * 화면구조 가이드라인 7장: 용어 관리, 회원 관리
+ */
+@Service
+@RequiredArgsConstructor
+public class AdminService {
+
+    private final WordRepository wordRepository;
+    private final UserRepository userRepository;
+    private final QuizRepository quizRepository;
+
+    /** 관리자 페이지 첫 화면의 요약 숫자 */
+    @Transactional(readOnly = true)
+    public AdminDto.Summary getSummary() {
+        return new AdminDto.Summary(
+                userRepository.count(),
+                wordRepository.count(),
+                quizRepository.count()
+        );
+    }
+
+    // ---- 용어 관리 --------------------------------------------------------
+
+    @Transactional(readOnly = true)
+    public List<WordResponse> getWords() {
+        return wordRepository.findAllByOrderByIdDesc()
+                .stream()
+                .map(WordResponse::new)
+                .toList();
+    }
+
+    @Transactional
+    public WordResponse createWord(AdminDto.WordRequest request) {
+        String word = request.word().trim();
+
+        if (wordRepository.existsByWord(word)) {
+            throw new DuplicateWordException(word);
+        }
+
+        Word saved = wordRepository.save(new Word(
+                word,
+                request.meaning().trim(),
+                request.example().trim()
+        ));
+
+        return new WordResponse(saved);
+    }
+
+    @Transactional
+    public WordResponse updateWord(Long id, AdminDto.WordRequest request) {
+        Word target = wordRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 신조어를 찾을 수 없습니다."));
+
+        String word = request.word().trim();
+
+        // 자기 자신은 중복 검사에서 빼야 한다.
+        // 빼지 않으면 뜻만 고치려 해도 "이미 등록된 신조어" 라고 막힌다.
+        if (wordRepository.existsByWordAndIdNot(word, id)) {
+            throw new DuplicateWordException(word);
+        }
+
+        target.update(word, request.meaning().trim(), request.example().trim());
+        return new WordResponse(target);
+    }
+
+    @Transactional
+    public void deleteWord(Long id) {
+        if (!wordRepository.existsById(id)) {
+            throw new NotFoundException("해당 신조어를 찾을 수 없습니다.");
+        }
+        wordRepository.deleteById(id);
+    }
+
+    // ---- 회원 관리 --------------------------------------------------------
+
+    @Transactional(readOnly = true)
+    public List<UserDto.AdminUserRow> getUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserDto.AdminUserRow::from)
+                .toList();
+    }
+}
