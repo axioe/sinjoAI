@@ -1,6 +1,6 @@
 package com.slangs.sinjo.controller;
 
-import com.slangs.sinjo.dto.WordResponse;
+import com.slangs.sinjo.dto.WordDto;
 import com.slangs.sinjo.service.WordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class WordController {
      * 읽는 사람이 헷갈리지 않도록 순서를 맞춰 둔다.
      */
     @GetMapping("/ranking")
-    public List<WordResponse> getRankingWords() {
+    public List<WordDto> getRankingWords() {
 
         return wordService.getRankingWords();
     }
@@ -46,7 +46,7 @@ public class WordController {
      * GET /api/words
      */
     @GetMapping
-    public List<WordResponse> getWords() {
+    public List<WordDto> getWords() {
 
         return wordService.getAllWords();
     }
@@ -58,7 +58,7 @@ public class WordController {
      * GET /api/words/{id}
      */
     @GetMapping("/{id}")
-    public WordResponse getWord(
+    public WordDto getWord(
             @PathVariable Long id
     ) {
 
@@ -72,7 +72,7 @@ public class WordController {
      * POST /api/words/{id}/like
      */
     @PostMapping("/{id}/like")
-    public WordResponse likeWord(
+    public WordDto likeWord(
             @PathVariable Long id
     ) {
 
