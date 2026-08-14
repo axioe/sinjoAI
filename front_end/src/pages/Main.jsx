@@ -60,7 +60,7 @@ function Main() {
   const [todayError, setTodayError] = useState("");
 
   /* =======================================================
-     랭킹 데이터 가져오기
+     랭킹 데이터
   ======================================================= */
 
   useEffect(() => {
@@ -97,7 +97,7 @@ function Main() {
   }, []);
 
   /* =======================================================
-     전체 신조어 가져오기
+     전체 신조어
   ======================================================= */
 
   useEffect(() => {
@@ -136,12 +136,12 @@ function Main() {
   /* =======================================================
      오늘의 신조어
 
-     TodayWord.jsx와 동일한 결과가 나오도록
-     같은 seed / shuffle 방식을 사용한다.
+     getWords() → 날짜 기준으로 동일하게 섞음
+     → 오늘의 첫 번째 단어를 메인에 표시
   ======================================================= */
 
   const todayWords = useMemo(() => {
-    if (allWords.length === 0) {
+    if (!Array.isArray(allWords) || allWords.length === 0) {
       return [];
     }
 
@@ -149,10 +149,6 @@ function Main() {
   }, [allWords]);
 
   const today = todayWords[0] ?? null;
-
-  /* =======================================================
-     화면
-  ======================================================= */
 
   return (
     <main className="main">
@@ -199,7 +195,7 @@ function Main() {
 
       <section className="feature-grid">
         {/* ===================================================
-            신조어 인기 랭킹
+            랭킹
         =================================================== */}
 
         <div className="feature-card ranking-card">
@@ -212,8 +208,9 @@ function Main() {
               <h3>신조어 인기 랭킹</h3>
             </Link>
 
+            {/* 더보기 기능은 그대로 유지 */}
             <Link to="/ranking" className="more-link">
-              더보기
+              <span>더보기</span>
               <FaArrowRight />
             </Link>
           </div>
@@ -233,6 +230,7 @@ function Main() {
 
                     <span className="ranking-word">{item.word}</span>
 
+                    {/* 좋아요를 완전히 오른쪽으로 */}
                     <span className="ranking-likes-small">
                       ❤️ {item.likes ?? 0}
                     </span>
@@ -249,7 +247,7 @@ function Main() {
             오늘의 신조어
         =================================================== */}
 
-        <div className="feature-card today-card">
+        <div className="feature-card main-today-card">
           <div className="today-top">
             <div className="card-icon">
               <FaBook />
@@ -271,10 +269,10 @@ function Main() {
               <>
                 <span className="today-label">오늘 배워볼 표현</span>
 
-                {/* 오늘의 신조어 단어 */}
-                <h2>{today.word}</h2>
+                {/* 실제 getWords()에서 받은 today.word */}
+                <h2 className="today-word">{today.word}</h2>
 
-                {/* 뜻 */}
+                {/* 실제 getWords()에서 받은 today.meaning */}
                 <p className="today-meaning">{today.meaning}</p>
               </>
             ) : (
@@ -289,7 +287,7 @@ function Main() {
         </div>
 
         {/* ===================================================
-            신조어 게임
+            게임
         =================================================== */}
 
         <div className="feature-card">
@@ -314,7 +312,7 @@ function Main() {
         </div>
 
         {/* ===================================================
-            신조어 이해도 테스트
+            테스트
         =================================================== */}
 
         <div className="feature-card">

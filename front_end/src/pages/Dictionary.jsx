@@ -5,6 +5,29 @@ import { getWords, likeWord as likeWordApi } from "../api/wordApi";
 
 const CATEGORY_OPTIONS = ["일상", "인터넷", "게임", "SNS", "직장", "기타"];
 
+const INITIALS = [
+  "ㄱ",
+  "ㄲ",
+  "ㄴ",
+  "ㄷ",
+  "ㄸ",
+  "ㄹ",
+  "ㅁ",
+  "ㅂ",
+  "ㅃ",
+  "ㅅ",
+  "ㅆ",
+  "ㅇ",
+  "ㅈ",
+  "ㅉ",
+  "ㅊ",
+  "ㅋ",
+  "ㅌ",
+  "ㅍ",
+  "ㅎ",
+  "#",
+];
+
 function Dictionary() {
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +47,9 @@ function Dictionary() {
 
   // 현재 선택된 카테고리
   const [selectedCategory, setSelectedCategory] = useState("전체");
+
+  // 즐겨찾기만 보기
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -61,7 +87,7 @@ function Dictionary() {
     };
   }, []);
 
-  // URL의 검색어가 변경되면 input도 변경
+  // URL 검색어가 변경되면 input도 변경
   useEffect(() => {
     setKeyword(query);
   }, [query]);
@@ -71,16 +97,14 @@ function Dictionary() {
     localStorage.setItem("dictionaryFavorites", JSON.stringify(favoriteIds));
   }, [favoriteIds]);
 
-  /**
-   * 카테고리 목록
-   *
-   * 데이터에 category가 없는 경우
-   * "기타"로 분류한다.
-   */
+  // 카테고리 목록
   const categories = ["전체", ...CATEGORY_OPTIONS];
 
   /**
-   * 검색 + 카테고리 필터 + 가나다순 정렬
+   * 검색
+   * + 카테고리 필터
+   * + 즐겨찾기 필터
+   * + 가나다순 정렬
    */
   const result = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -94,8 +118,15 @@ function Dictionary() {
           return false;
         }
 
+        // 즐겨찾기 필터
+        if (showFavoritesOnly && !favoriteIds.includes(item.id)) {
+          return false;
+        }
+
         // 검색어
-        if (!q) return true;
+        if (!q) {
+          return true;
+        }
 
         return (
           item.word?.toLowerCase().includes(q) ||
@@ -108,52 +139,82 @@ function Dictionary() {
           sensitivity: "base",
         }),
       );
-  }, [words, query, selectedCategory]);
+  }, [words, query, selectedCategory, showFavoritesOnly, favoriteIds]);
 
   /**
-   * 카테고리별로 다시 그룹화
+   * 한글 단어의 초성 가져오기
    *
-   * 결과:
+   * 예:
+   * 가 → ㄱ
+   * 나 → ㄴ
+   * 다 → ㄷ
+   */
+  const getInitial = (word = "") => {
+    const first = word.trim().charAt(0);
+
+    if (!first) {
+      return "#";
+    }
+
+    const code = first.charCodeAt(0);
+
+    // 한글 완성형 범위
+    if (code >= 0xac00 && code <= 0xd7a3) {
+      const initialIndex = Math.floor((code - 0xac00) / 588);
+
+      return INITIALS[initialIndex] ?? "#";
+    }
+
+    // 한글이 아닌 경우
+    return "#";
+  };
+
+  /**
+   * 초성별 그룹화
    *
-   * 인터넷
-   *  - ㄱ...
-   *  - ㄴ...
-   *
-   * 게임
-   *  - ㄱ...
-   *  - ㄴ...
+   * ㄱ
+   * ㄴ
+   * ㄷ
+   * ...
    */
   const groupedWords = useMemo(() => {
     const groups = {};
 
     result.forEach((item) => {
-      const category = item.category?.trim() || "기타";
+      const initial = getInitial(item.word);
 
-      if (!groups[category]) {
-        groups[category] = [];
+      if (!groups[initial]) {
+        groups[initial] = [];
       }
 
-      groups[category].push(item);
+      groups[initial].push(item);
     });
 
-    // 카테고리 가나다순
-    return Object.entries(groups).sort(([a], [b]) => a.localeCompare(b, "ko"));
+    return INITIALS.filter((initial) => groups[initial]).map((initial) => [
+      initial,
+      groups[initial],
+    ]);
   }, [result]);
 
+  // 검색
   const searchWord = () => {
     const trimmed = keyword.trim();
 
     setSearchParams(trimmed ? { word: trimmed } : {}, { replace: true });
   };
 
+  // 검색 초기화
   const resetSearch = () => {
     setKeyword("");
+
     setSearchParams({}, { replace: true });
   };
 
   // 좋아요
   const likeWord = async (id) => {
-    if (likingId !== null) return;
+    if (likingId !== null) {
+      return;
+    }
 
     setLikingId(id);
 
@@ -174,7 +235,7 @@ function Dictionary() {
     }
   };
 
-  // 즐겨찾기 추가/삭제
+  // 즐겨찾기 추가 / 삭제
   const toggleFavorite = (id) => {
     setFavoriteIds((prev) => {
       if (prev.includes(id)) {
@@ -185,12 +246,22 @@ function Dictionary() {
     });
   };
 
-  const isFavorite = (id) => favoriteIds.includes(id);
+  // 즐겨찾기 여부
+  const isFavorite = (id) => {
+    return favoriteIds.includes(id);
+  };
 
+  // 즐겨찾기 전체 해제
+  const resetFavorites = () => {
+    setFavoriteIds([]);
+  };
+
+  // 로딩
   if (loading) {
     return (
       <div className="dictionary-page">
         <h1>📖 신조어 사전</h1>
+
         <p>신조어를 불러오는 중입니다...</p>
       </div>
     );
@@ -206,7 +277,10 @@ function Dictionary() {
 
       {error && <p className="no-result">{error}</p>}
 
-      {/* 검색 */}
+      {/* =========================
+          검색
+      ========================= */}
+
       <div className="dictionary-search">
         <input
           value={keyword}
@@ -225,50 +299,102 @@ function Dictionary() {
         </button>
 
         {query && (
-          <button type="button" onClick={resetSearch}>
+          <button type="button" onClick={resetSearch} className="reset-button">
             전체 보기
           </button>
         )}
       </div>
 
-      {/* 카테고리 */}
+      {/* =========================
+          카테고리
+      ========================= */}
+
       <div className="category-list">
         {categories.map((category) => (
           <button
             key={category}
             type="button"
             className={
-              selectedCategory === category
+              selectedCategory === category && !showFavoritesOnly
                 ? "category-button active"
                 : "category-button"
             }
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => {
+              setSelectedCategory(category);
+              setShowFavoritesOnly(false);
+            }}
           >
             {category}
           </button>
         ))}
       </div>
 
-      {/* 사전 */}
+      {/* =========================
+          즐겨찾기
+      ========================= */}
+
+      <div className="favorite-filter-area">
+        <button
+          type="button"
+          className={
+            showFavoritesOnly
+              ? "category-button favorite-filter active"
+              : "category-button favorite-filter"
+          }
+          onClick={() => setShowFavoritesOnly((prev) => !prev)}
+        >
+          ⭐ 즐겨찾기
+        </button>
+
+        {showFavoritesOnly && favoriteIds.length > 0 && (
+          <button
+            type="button"
+            className="favorite-reset-button"
+            onClick={resetFavorites}
+          >
+            즐겨찾기 전체 해제
+          </button>
+        )}
+      </div>
+
+      {/* 즐겨찾기 안내 */}
+      {showFavoritesOnly && (
+        <div className="favorite-info">
+          ⭐ 즐겨찾기한 신조어 <strong>{favoriteIds.length}개</strong>
+        </div>
+      )}
+
+      {/* =========================
+          사전
+      ========================= */}
+
       <div className="word-list">
         {groupedWords.length > 0 ? (
-          groupedWords.map(([category, categoryWords]) => (
-            <section className="category-section" key={category}>
+          groupedWords.map(([initial, initialWords]) => (
+            <section className="category-section" key={initial}>
+              {/* 초성 제목 */}
               <div className="category-title">
-                <h2>{category}</h2>
-                <span>{categoryWords.length}개</span>
+                <h2>{initial}</h2>
+
+                <span>{initialWords.length}개</span>
               </div>
 
+              {/* 단어 카드 */}
               <div className="category-word-list">
-                {categoryWords.map((item) => (
+                {initialWords.map((item) => (
                   <div className="word-card" key={item.id}>
+                    {/* 카드 상단 */}
                     <div className="word-card-header">
                       <div className="word-title-area">
-                        <span className="word-category">{category}</span>
+                        {/* 실제 카테고리 */}
+                        <span className="word-category">
+                          {item.category?.trim() || "기타"}
+                        </span>
 
                         <h2>{item.word}</h2>
                       </div>
 
+                      {/* 버튼 영역 */}
                       <div className="word-actions">
                         {/* 즐겨찾기 */}
                         <button
@@ -302,13 +428,17 @@ function Dictionary() {
                       </div>
                     </div>
 
+                    {/* 뜻 */}
                     <div className="meaning">
                       <b>뜻</b>
+
                       <p>{item.meaning}</p>
                     </div>
 
+                    {/* 예문 */}
                     <div className="example">
                       <b>예문</b>
+
                       <p>"{item.example}"</p>
                     </div>
                   </div>
@@ -318,9 +448,11 @@ function Dictionary() {
           ))
         ) : (
           <div className="no-result">
-            {words.length === 0
-              ? "아직 등록된 신조어가 없습니다."
-              : "검색 결과가 없습니다."}
+            {showFavoritesOnly
+              ? "즐겨찾기한 신조어가 없습니다."
+              : words.length === 0
+                ? "아직 등록된 신조어가 없습니다."
+                : "검색 결과가 없습니다."}
           </div>
         )}
       </div>
