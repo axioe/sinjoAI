@@ -18,6 +18,7 @@ public class WordDto {
 
     private Integer rank;
 
+    private String category;
 
     public WordDto(Word word) {
         this.id = word.getId();
@@ -25,8 +26,8 @@ public class WordDto {
         this.meaning = word.getMeaning();
         this.example = word.getExample();
         this.likes = word.getLikes();
+        this.category = word.getCategory();
     }
-
 
     public WordDto(
             Word word,
@@ -38,5 +39,6 @@ public class WordDto {
         this.example = word.getExample();
         this.likes = word.getLikes();
         this.rank = rank;
+        this.category = word.getCategory();
     }
 }

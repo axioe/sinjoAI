@@ -1,183 +1,1157 @@
-body {
-  background: #f5f4ff;
-}
+/* =========================================================
+   MAIN
+========================================================= */
 
 .main {
+  width: calc(100% - 40px);
   max-width: 1200px;
 
-  margin: auto;
+  margin: 0 auto;
+  padding: 28px 0 60px;
 
-  padding: 30px;
+  box-sizing: border-box;
 }
 
-/* HERO */
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero {
+  min-height: 420px;
+
   display: flex;
-
-  justify-content: space-between;
-
   align-items: center;
 
-  background: linear-gradient(135deg, #7257ff, #9a7dff);
+  gap: 50px;
 
-  color: white;
+  padding: 50px 60px;
 
-  border-radius: 30px;
+  box-sizing: border-box;
 
-  padding: 60px;
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(109, 74, 255, 0.18),
+      transparent 32%
+    ),
+    linear-gradient(135deg, #eee9ff 0%, #f6f3ff 52%, #e5deff 100%);
+
+  border: 1px solid #ded5ff;
+  border-radius: 28px;
 
   overflow: hidden;
 }
 
+/* =========================================================
+   HERO LEFT
+========================================================= */
+
 .hero-left {
-  width: 55%;
+  flex: 1;
+  max-width: 570px;
 }
 
 .badge {
-  background: white;
+  display: inline-flex;
+  align-items: center;
+
+  padding: 8px 14px;
+  margin-bottom: 18px;
+
+  background: rgba(255, 255, 255, 0.8);
+
+  border: 1px solid #e0d8ff;
+  border-radius: 20px;
 
   color: #6d4aff;
 
-  padding: 8px 18px;
-
-  border-radius: 30px;
-
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .hero h1 {
-  font-size: 50px;
+  margin: 0 0 18px;
 
-  margin: 25px 0;
+  color: #27233a;
+
+  font-size: 46px;
+  line-height: 1.3;
+
+  letter-spacing: -1.8px;
+
+  font-weight: 800;
 }
 
 .hero p {
-  font-size: 20px;
+  margin: 0 0 28px;
 
-  line-height: 1.8;
+  color: #777286;
+
+  font-size: 15px;
+  line-height: 1.75;
+
+  word-break: keep-all;
 }
 
-.hero img {
-  width: 380px;
-}
-
-/* 버튼 */
+/* =========================================================
+   HERO BUTTON
+========================================================= */
 
 .start {
-  margin-top: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  padding: 13px 21px;
+
+  background: #6d4aff;
+  color: #ffffff;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  box-shadow: 0 7px 18px rgba(109, 74, 255, 0.23);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.start:hover {
+  background: #5938dc;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 10px 22px rgba(109, 74, 255, 0.3);
+}
+
+.start svg {
+  font-size: 12px;
+}
+
+/* =========================================================
+   HERO RIGHT
+========================================================= */
+
+.hero-right {
+  flex: 0 0 390px;
 
   display: flex;
-
   align-items: center;
-
-  gap: 10px;
-
-  background: white;
-
-  color: #6d4aff;
-
-  border: none;
-
-  border-radius: 30px;
-
-  padding: 18px 35px;
-
-  font-size: 18px;
-
-  cursor: pointer;
-
-  font-weight: bold;
+  justify-content: center;
 }
 
-/* 카드 */
+.hero-right img {
+  display: block;
+
+  width: 100%;
+  max-width: 390px;
+  height: auto;
+
+  object-fit: contain;
+
+  transition: transform 0.3s ease;
+}
+
+.hero-right img:hover {
+  transform: scale(1.03);
+}
+
+/* =========================================================
+   FEATURE GRID
+========================================================= */
 
 .feature-grid {
+  width: 100%;
+
   display: grid;
 
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 25px;
+  grid-auto-rows: 270px;
 
-  margin-top: 40px;
+  gap: 18px;
+
+  margin-top: 22px;
+
+  align-items: stretch;
+
+  box-sizing: border-box;
 }
 
-.feature-card {
-  background: white;
+/* =========================================================
+   FEATURE CARD
+========================================================= */
 
+.feature-card {
+  width: 100%;
+  height: 270px;
+
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  margin: 0;
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #eeeaf8;
   border-radius: 20px;
 
-  padding: 30px;
+  box-shadow: 0 5px 16px rgba(60, 45, 120, 0.055);
 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 
-  transition: 0.3s;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .feature-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-4px);
+
+  border-color: #e1d9ff;
+
+  box-shadow: 0 10px 25px rgba(60, 45, 120, 0.1);
 }
 
-.icon {
-  font-size: 35px;
+/* =========================================================
+   CARD ICON
+========================================================= */
+
+.card-icon {
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 0 14px;
+
+  box-sizing: border-box;
+
+  background: #f1edff;
+
+  border-radius: 11px;
 
   color: #6d4aff;
+
+  font-size: 17px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.feature-card:hover .card-icon {
+  background: #e8e1ff;
+
+  color: #5938dc;
+
+  transform: scale(1.04);
+}
+
+.card-icon svg {
+  display: block;
+}
+
+/* =========================================================
+   CARD TITLE
+========================================================= */
+
+.card-title-row {
+  width: 100%;
+
+  height: 24px;
+  min-height: 24px;
+
+  flex: 0 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin: 0 0 14px;
+
+  box-sizing: border-box;
+}
+
+.card-title-row .card-link {
+  flex: 1;
+  min-width: 0;
 }
 
 .feature-card h3 {
-  margin-top: 20px;
+  width: 100%;
 
-  margin-bottom: 20px;
-}
+  margin: 0;
 
-.feature-card button {
-  margin-top: 20px;
+  color: #302b42;
 
-  background: #6d4aff;
+  font-size: 17px;
+  line-height: 24px;
 
-  color: white;
+  font-weight: 800;
 
-  border: none;
+  white-space: nowrap;
 
-  padding: 12px 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
-  border-radius: 15px;
-
-  cursor: pointer;
-}
-
-/* 최근 번역 */
-
-.history {
-  margin-top: 40px;
-}
-
-.history h2 {
-  color: #6d4aff;
-}
-
-.history-box {
-  background: white;
-
-  border-radius: 20px;
-
-  margin-top: 20px;
-
-  padding: 30px;
-
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: color 0.2s ease;
 }
 
 .card-link {
-  text-decoration: none;
+  display: block;
 
   color: inherit;
+
+  text-decoration: none;
 }
 
-.card-link:hover {
+.card-link:hover h3 {
   color: #6d4aff;
 }
 
-.card-link h3 {
-  transition: 0.3s;
+/* =========================================================
+   MORE LINK
+   보라색 버튼 스타일
+========================================================= */
+
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  height: 25px;
+
+  flex: 0 0 auto;
+
+  padding: 0 9px;
+
+  box-sizing: border-box;
+
+  background: #f1edff;
+
+  border: 1px solid #e4dcff;
+  border-radius: 7px;
+
+  color: #7658df;
+
+  text-decoration: none;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.more-link svg {
+  font-size: 8px;
+
+  transition: transform 0.2s ease;
+}
+
+.more-link:hover {
+  background: #6d4aff;
+
+  border-color: #6d4aff;
+
+  color: #ffffff;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 12px rgba(109, 74, 255, 0.22);
+}
+
+.more-link:hover svg {
+  transform: translateX(2px);
+}
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.card-content {
+  width: 100%;
+
+  flex: 1;
+
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-start;
+}
+
+/* =========================================================
+   RANKING CARD
+========================================================= */
+
+.ranking-content {
+  padding-top: 1px;
+}
+
+.ranking-list {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.ranking-list li {
+  width: 100%;
+
+  height: 30px;
+  min-height: 30px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  background: #f8f7fc;
+
+  border-radius: 8px;
+
+  color: #5d5772;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.ranking-list li:hover {
+  background: #f1edff;
+
+  transform: translateX(2px);
+}
+
+.ranking-number {
+  width: 30px;
+
+  flex-shrink: 0;
+
+  color: #aaa4b5;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.ranking-list li:first-child .ranking-number {
+  color: #6d4aff;
+}
+
+.ranking-word {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   TODAY CARD
+========================================================= */
+
+.today-card {
+  position: relative;
+
+  margin: 0;
+
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(109, 74, 255, 0.13),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #f5f1ff 0%, #ffffff 72%);
+
+  border-color: #e4dcff;
+}
+
+.today-card:hover {
+  border-color: #cfc2ff;
+}
+
+/* =========================================================
+   TODAY TOP
+========================================================= */
+
+.today-top {
+  width: 100%;
+
+  height: 38px;
+  min-height: 38px;
+
+  flex: 0 0 38px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin: 0 0 14px;
+
+  box-sizing: border-box;
+}
+
+.today-top .card-icon {
+  margin: 0;
+}
+
+/* =========================================================
+   TODAY BADGE
+========================================================= */
+
+.today-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 24px;
+
+  padding: 0 9px;
+
+  box-sizing: border-box;
+
+  background: rgba(109, 74, 255, 0.1);
+
+  border-radius: 20px;
+
+  color: #6d4aff;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+}
+
+/* =========================================================
+   TODAY TITLE
+========================================================= */
+
+.today-title {
+  width: 100%;
+
+  height: 24px;
+  min-height: 24px;
+
+  flex: 0 0 24px;
+
+  display: flex;
+  align-items: center;
+
+  margin: 0 0 14px;
+
+  box-sizing: border-box;
+}
+
+.today-title h3 {
+  margin: 0;
+
+  color: #302b42;
+
+  font-size: 17px;
+  line-height: 24px;
+
+  font-weight: 800;
+
+  cursor: default;
+  user-select: none;
+}
+
+/* =========================================================
+   TODAY CONTENT
+========================================================= */
+
+.today-content {
+  width: 100%;
+
+  flex: 1;
+
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-start;
+}
+
+.today-label {
+  display: block;
+
+  margin: 0 0 6px;
+
+  color: #9992aa;
+
+  font-size: 10px;
+  line-height: 1.4;
+
+  font-weight: 600;
+}
+
+.today-content h2 {
+  margin: 0 0 6px;
+
+  color: #6d4aff;
+
+  font-size: 27px;
+  line-height: 1.25;
+
+  font-weight: 900;
+
+  letter-spacing: -0.8px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.today-content p {
+  margin: 0;
+
+  color: #6f697c;
+
+  font-size: 12px;
+  line-height: 1.6;
+
+  word-break: keep-all;
+}
+
+/* =========================================================
+   CARD BUTTON
+========================================================= */
+
+.card-button,
+.today-button {
+  align-self: flex-start;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  height: 32px;
+
+  flex: 0 0 32px;
+
+  margin-top: auto;
+
+  padding: 0 13px;
+
+  box-sizing: border-box;
+
+  background: #6d4aff;
+  color: #ffffff;
+
+  border-radius: 9px;
+
+  text-decoration: none;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  box-shadow: 0 5px 13px rgba(109, 74, 255, 0.18);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card-button svg,
+.today-button svg {
+  font-size: 8px;
+}
+
+.card-button:hover,
+.today-button:hover {
+  background: #5938dc;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 8px 17px rgba(109, 74, 255, 0.24);
+}
+
+/* =========================================================
+   GENERAL CARD DESCRIPTION
+========================================================= */
+
+.card-description {
+  margin: 0;
+
+  color: #817b91;
+
+  font-size: 13px;
+  line-height: 1.7;
+
+  word-break: keep-all;
+}
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+.history {
+  width: 100%;
+
+  margin-top: 22px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 12px;
+}
+
+.history-header h2 {
+  margin: 0;
+
+  color: #302b42;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.history-more {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  color: #9992aa;
+
+  text-decoration: none;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.history-more svg {
+  font-size: 8px;
+}
+
+.history-more:hover {
+  color: #6d4aff;
+
+  transform: translateX(2px);
+}
+
+.history-box {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #eeeaf8;
+  border-radius: 18px;
+
+  box-shadow: 0 5px 16px rgba(60, 45, 120, 0.04);
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.history-label {
+  flex-shrink: 0;
+
+  padding: 5px 9px;
+
+  background: #f1edff;
+
+  border-radius: 7px;
+
+  color: #6d4aff;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.history-item p {
+  margin: 0;
+
+  color: #5d5772;
+
+  font-size: 13px;
+  line-height: 1.5;
+
+  word-break: keep-all;
+}
+
+/* =========================================================
+   800px 이하
+========================================================= */
+
+@media (max-width: 800px) {
+  .feature-grid {
+    grid-auto-rows: 270px;
+
+    gap: 14px;
+  }
+
+  .feature-card {
+    height: 270px;
+  }
+
+  .hero {
+    gap: 30px;
+
+    padding: 40px;
+  }
+
+  .hero-right {
+    flex: 0 0 320px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+  }
+}
+
+/* =========================================================
+   600px 이하
+========================================================= */
+
+@media (max-width: 600px) {
+  .main {
+    width: calc(100% - 28px);
+
+    padding-top: 18px;
+  }
+
+  .hero {
+    min-height: auto;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    padding: 35px 25px;
+  }
+
+  .hero-left {
+    max-width: none;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+
+    letter-spacing: -1.3px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .hero-right {
+    width: 100%;
+
+    flex: none;
+
+    justify-content: center;
+  }
+
+  .hero-right img {
+    max-width: 300px;
+  }
+
+  /* =====================================================
+     MOBILE CARDS
+  ===================================================== */
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+
+    grid-auto-rows: 255px;
+
+    gap: 14px;
+  }
+
+  .feature-card {
+    height: 255px;
+
+    padding: 21px;
+  }
+
+  .feature-card h3 {
+    font-size: 16px;
+  }
+
+  .ranking-list {
+    gap: 6px;
+  }
+
+  .ranking-list li {
+    height: 29px;
+    min-height: 29px;
+  }
+
+  .today-content h2 {
+    font-size: 24px;
+  }
+
+  /* =====================================================
+     MOBILE MORE BUTTON
+  ===================================================== */
+
+  .more-link {
+    height: 24px;
+
+    padding: 0 8px;
+
+    font-size: 9px;
+  }
+
+  .more-link svg {
+    font-size: 7px;
+  }
+
+  /* =====================================================
+     HISTORY
+  ===================================================== */
+
+  .history-box {
+    padding: 16px;
+  }
+
+  .history-item {
+    align-items: flex-start;
+  }
+}
+
+/* =========================================================
+   450px 이하
+========================================================= */
+
+@media (max-width: 450px) {
+  .main {
+    width: calc(100% - 24px);
+
+    padding-bottom: 40px;
+  }
+
+  .hero {
+    padding: 28px 20px;
+
+    border-radius: 22px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+  }
+
+  .hero p {
+    font-size: 13px;
+  }
+
+  .hero-description-break {
+    display: none;
+  }
+
+  .start {
+    padding: 12px 18px;
+
+    font-size: 13px;
+  }
+
+  /* =====================================================
+     MOBILE CARD
+  ===================================================== */
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+
+    grid-auto-rows: 245px;
+
+    gap: 14px;
+  }
+
+  .feature-card {
+    height: 245px;
+
+    padding: 19px;
+  }
+
+  .card-icon {
+    width: 35px;
+    height: 35px;
+
+    flex: 0 0 35px;
+
+    margin-bottom: 12px;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+  }
+
+  .card-title-row {
+    height: 22px;
+    min-height: 22px;
+
+    flex-basis: 22px;
+
+    margin-bottom: 10px;
+  }
+
+  .feature-card h3 {
+    font-size: 15px;
+
+    line-height: 22px;
+  }
+
+  /* =====================================================
+     MORE BUTTON
+  ===================================================== */
+
+  .more-link {
+    height: 22px;
+
+    padding: 0 7px;
+
+    gap: 4px;
+
+    border-radius: 6px;
+
+    font-size: 8px;
+  }
+
+  .more-link svg {
+    font-size: 6px;
+  }
+
+  /* =====================================================
+     RANKING
+  ===================================================== */
+
+  .ranking-list {
+    gap: 5px;
+  }
+
+  .ranking-list li {
+    height: 27px;
+    min-height: 27px;
+  }
+
+  /* =====================================================
+     TODAY
+  ===================================================== */
+
+  .today-top {
+    height: 35px;
+    min-height: 35px;
+
+    flex-basis: 35px;
+
+    margin-bottom: 12px;
+  }
+
+  .today-title {
+    height: 22px;
+    min-height: 22px;
+
+    flex-basis: 22px;
+
+    margin-bottom: 10px;
+  }
+
+  .today-title h3 {
+    font-size: 15px;
+
+    line-height: 22px;
+  }
+
+  .today-content h2 {
+    font-size: 22px;
+  }
+
+  .today-content p {
+    font-size: 11px;
+  }
+
+  /* =====================================================
+     HISTORY
+  ===================================================== */
+
+  .history-header h2 {
+    font-size: 18px;
+  }
+
+  .history-item {
+    flex-direction: column;
+
+    gap: 6px;
+  }
 }
