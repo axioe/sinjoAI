@@ -21,19 +21,15 @@
 
 .dictionary-search {
   margin-top: 30px;
-
   display: flex;
-
   gap: 15px;
 }
 
 .dictionary-search input {
   flex: 1;
-
   height: 55px;
 
   border: none;
-
   border-radius: 30px;
 
   padding: 0 25px;
@@ -51,11 +47,9 @@
   width: 120px;
 
   border: none;
-
   border-radius: 30px;
 
   background: #6d4aff;
-
   color: white;
 
   font-size: 16px;
@@ -67,7 +61,6 @@
 
 .dictionary-search button:hover {
   background: #5b3be0;
-
   transform: translateY(-2px);
 }
 
@@ -80,14 +73,12 @@
 }
 
 /* =========================
-   카테고리 / 필터
+   카테고리
 ========================= */
 
 .category-list {
   display: flex;
-
   flex-wrap: wrap;
-
   gap: 10px;
 
   margin-top: 30px;
@@ -95,13 +86,11 @@
 
 .category-button {
   border: 1px solid #e0dafd;
-
   border-radius: 25px;
 
   padding: 10px 18px;
 
   background: white;
-
   color: #6d4aff;
 
   font-size: 14px;
@@ -113,21 +102,80 @@
 
 .category-button:hover {
   background: #f2efff;
-
   transform: translateY(-2px);
 }
 
 .category-button.active {
   background: #6d4aff;
-
   color: white;
 
   border-color: #6d4aff;
 }
 
 /* =========================
+   초성 필터
+========================= */
+
+/* =========================
+   초성 필터
+========================= */
+
+.initial-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.initial-button {
+  min-width: 42px;
+  height: 38px;
+
+  padding: 0 10px;
+
+  border: 1px solid #e0dafd;
+  border-radius: 12px;
+
+  background: white;
+  color: #6d4aff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.initial-button:hover {
+  background: #eeeaff;
+  transform: translateY(-2px);
+}
+
+.initial-button.active {
+  background: #6d4aff;
+  color: white;
+
+  border-color: #6d4aff;
+
+  box-shadow: 0 4px 10px rgba(109, 74, 255, 0.25);
+}
+
+/* =========================
    즐겨찾기 필터
 ========================= */
+
+.favorite-filter-area {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 12px;
+}
 
 .favorite-filter {
   background: #fff8d6;
@@ -149,7 +197,9 @@
   border-color: #f5c928;
 }
 
-/* 즐겨찾기 전체 해제 */
+/* =========================
+   즐겨찾기 전체 해제
+========================= */
 
 .favorite-reset-button {
   border: 1px solid #ffd0d7;
@@ -173,10 +223,86 @@
   background: #ffe0e5;
 }
 
-/* 즐겨찾기 안내 */
+/* =========================
+   필터 초기화
+========================= */
+
+.filter-reset-button {
+  border: 1px solid #ddd;
+
+  border-radius: 25px;
+
+  padding: 10px 18px;
+
+  background: #f5f5f5;
+
+  color: #666;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.filter-reset-button:hover {
+  background: #e8e8e8;
+
+  transform: translateY(-2px);
+}
+
+/* =========================
+   필터 안내
+========================= */
+
+.filter-info {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 18px;
+
+  padding: 14px 18px;
+
+  border-radius: 15px;
+
+  background: #f3f1ff;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+.filter-info strong {
+  padding: 5px 10px;
+
+  border-radius: 12px;
+
+  background: white;
+
+  color: #6d4aff;
+
+  font-size: 13px;
+}
+
+.filter-count {
+  margin-left: auto;
+
+  color: #6d4aff;
+
+  font-weight: 700;
+}
+
+/* =========================
+   즐겨찾기 안내
+========================= */
 
 .favorite-info {
-  margin-top: 20px;
+  margin-top: 15px;
 
   padding: 15px 20px;
 
@@ -335,7 +461,6 @@
 
 .favorite-button {
   width: 38px;
-
   height: 38px;
 
   border: none;
@@ -478,6 +603,8 @@
     font-size: 16px;
   }
 
+  /* 검색 */
+
   .dictionary-search {
     flex-wrap: wrap;
   }
@@ -493,6 +620,23 @@
 
     width: auto;
   }
+
+  /* 초성 */
+
+  .initial-list {
+    gap: 6px;
+    margin-top: 15px;
+  }
+
+  .initial-button {
+    min-width: 36px;
+    height: 34px;
+    padding: 0 8px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  /* 카드 */
 
   .category-word-list {
     grid-template-columns: 1fr;
@@ -527,11 +671,18 @@
   .category-title h2 {
     font-size: 26px;
   }
-}
 
-.favorite-filter-area {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
+  /* 필터 안내 */
+
+  .filter-info {
+    gap: 6px;
+  }
+
+  .filter-count {
+    width: 100%;
+
+    margin-left: 0;
+
+    margin-top: 4px;
+  }
 }

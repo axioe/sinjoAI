@@ -48,6 +48,9 @@ function Dictionary() {
   // 현재 선택된 카테고리
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
+  // 현재 선택된 초성
+  const [selectedInitial, setSelectedInitial] = useState("전체");
+
   // 즐겨찾기만 보기
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
@@ -56,7 +59,34 @@ function Dictionary() {
   const query = searchParams.get("word") ?? "";
   const [keyword, setKeyword] = useState(query);
 
+  // =========================
+  // 한글 단어의 초성 가져오기
+  // =========================
+
+  const getInitial = (word = "") => {
+    const first = word.trim().charAt(0);
+
+    if (!first) {
+      return "#";
+    }
+
+    const code = first.charCodeAt(0);
+
+    // 한글 완성형 범위
+    if (code >= 0xac00 && code <= 0xd7a3) {
+      const initialIndex = Math.floor((code - 0xac00) / 588);
+
+      return INITIALS[initialIndex] ?? "#";
+    }
+
+    // 한글이 아닌 경우
+    return "#";
+  };
+
+  // =========================
   // 데이터 불러오기
+  // =========================
+
   useEffect(() => {
     let alive = true;
 
@@ -87,96 +117,106 @@ function Dictionary() {
     };
   }, []);
 
+  // =========================
   // URL 검색어가 변경되면 input도 변경
+  // =========================
+
   useEffect(() => {
     setKeyword(query);
   }, [query]);
 
+  // =========================
   // 즐겨찾기 변경 시 localStorage 저장
+  // =========================
+
   useEffect(() => {
     localStorage.setItem("dictionaryFavorites", JSON.stringify(favoriteIds));
   }, [favoriteIds]);
 
+  // =========================
   // 카테고리 목록
+  // =========================
+
   const categories = ["전체", ...CATEGORY_OPTIONS];
 
-  /**
-   * 검색
-   * + 카테고리 필터
-   * + 즐겨찾기 필터
-   * + 가나다순 정렬
-   */
+  // =========================
+  // 검색 + 카테고리
+  // + 초성 + 즐겨찾기 필터
+  // =========================
+
   const result = useMemo(() => {
     const q = query.trim().toLowerCase();
 
-    return words
-      .filter((item) => {
-        // 카테고리 필터
-        const itemCategory = item.category?.trim() || "기타";
+    return (
+      words
+        .filter((item) => {
+          // -------------------------
+          // 카테고리 필터
+          // -------------------------
 
-        if (selectedCategory !== "전체" && itemCategory !== selectedCategory) {
-          return false;
-        }
+          const itemCategory = item.category?.trim() || "기타";
 
-        // 즐겨찾기 필터
-        if (showFavoritesOnly && !favoriteIds.includes(item.id)) {
-          return false;
-        }
+          if (
+            selectedCategory !== "전체" &&
+            itemCategory !== selectedCategory
+          ) {
+            return false;
+          }
 
-        // 검색어
-        if (!q) {
-          return true;
-        }
+          // -------------------------
+          // 초성 필터
+          // -------------------------
 
-        return (
-          item.word?.toLowerCase().includes(q) ||
-          item.meaning?.toLowerCase().includes(q) ||
-          item.example?.toLowerCase().includes(q)
-        );
-      })
-      .sort((a, b) =>
-        (a.word ?? "").localeCompare(b.word ?? "", "ko", {
-          sensitivity: "base",
-        }),
-      );
-  }, [words, query, selectedCategory, showFavoritesOnly, favoriteIds]);
+          if (
+            selectedInitial !== "전체" &&
+            getInitial(item.word) !== selectedInitial
+          ) {
+            return false;
+          }
 
-  /**
-   * 한글 단어의 초성 가져오기
-   *
-   * 예:
-   * 가 → ㄱ
-   * 나 → ㄴ
-   * 다 → ㄷ
-   */
-  const getInitial = (word = "") => {
-    const first = word.trim().charAt(0);
+          // -------------------------
+          // 즐겨찾기 필터
+          // -------------------------
 
-    if (!first) {
-      return "#";
-    }
+          if (showFavoritesOnly && !favoriteIds.includes(item.id)) {
+            return false;
+          }
 
-    const code = first.charCodeAt(0);
+          // -------------------------
+          // 검색어
+          // -------------------------
 
-    // 한글 완성형 범위
-    if (code >= 0xac00 && code <= 0xd7a3) {
-      const initialIndex = Math.floor((code - 0xac00) / 588);
+          if (!q) {
+            return true;
+          }
 
-      return INITIALS[initialIndex] ?? "#";
-    }
+          return (
+            item.word?.toLowerCase().includes(q) ||
+            item.meaning?.toLowerCase().includes(q) ||
+            item.example?.toLowerCase().includes(q)
+          );
+        })
 
-    // 한글이 아닌 경우
-    return "#";
-  };
+        // 가나다순 정렬
+        .sort((a, b) =>
+          (a.word ?? "").localeCompare(b.word ?? "", "ko", {
+            sensitivity: "base",
+          }),
+        )
+    );
+  }, [
+    words,
+    query,
+    selectedCategory,
+    selectedInitial,
+    showFavoritesOnly,
+    favoriteIds,
+  ]);
 
-  /**
-   * 초성별 그룹화
-   *
-   * ㄱ
-   * ㄴ
-   * ㄷ
-   * ...
-   */
+  // =========================
+  // 초성별 그룹화
+  // =========================
+
   const groupedWords = useMemo(() => {
     const groups = {};
 
@@ -196,21 +236,30 @@ function Dictionary() {
     ]);
   }, [result]);
 
+  // =========================
   // 검색
+  // =========================
+
   const searchWord = () => {
     const trimmed = keyword.trim();
 
     setSearchParams(trimmed ? { word: trimmed } : {}, { replace: true });
   };
 
+  // =========================
   // 검색 초기화
+  // =========================
+
   const resetSearch = () => {
     setKeyword("");
 
     setSearchParams({}, { replace: true });
   };
 
+  // =========================
   // 좋아요
+  // =========================
+
   const likeWord = async (id) => {
     if (likingId !== null) {
       return;
@@ -235,7 +284,10 @@ function Dictionary() {
     }
   };
 
+  // =========================
   // 즐겨찾기 추가 / 삭제
+  // =========================
+
   const toggleFavorite = (id) => {
     setFavoriteIds((prev) => {
       if (prev.includes(id)) {
@@ -246,17 +298,36 @@ function Dictionary() {
     });
   };
 
+  // =========================
   // 즐겨찾기 여부
+  // =========================
+
   const isFavorite = (id) => {
     return favoriteIds.includes(id);
   };
 
+  // =========================
   // 즐겨찾기 전체 해제
+  // =========================
+
   const resetFavorites = () => {
     setFavoriteIds([]);
   };
 
+  // =========================
+  // 필터 초기화
+  // =========================
+
+  const resetFilters = () => {
+    setSelectedCategory("전체");
+    setSelectedInitial("전체");
+    setShowFavoritesOnly(false);
+  };
+
+  // =========================
   // 로딩
+  // =========================
+
   if (loading) {
     return (
       <div className="dictionary-page">
@@ -269,6 +340,10 @@ function Dictionary() {
 
   return (
     <div className="dictionary-page">
+      {/* =========================
+          제목
+      ========================= */}
+
       <h1>📖 신조어 사전</h1>
 
       <p className="dictionary-subtitle">
@@ -330,6 +405,27 @@ function Dictionary() {
       </div>
 
       {/* =========================
+          초성 필터
+      ========================= */}
+
+      <div className="initial-list">
+        {INITIALS.map((initial) => (
+          <button
+            key={initial}
+            type="button"
+            className={
+              selectedInitial === initial
+                ? "initial-button active"
+                : "initial-button"
+            }
+            onClick={() => setSelectedInitial(initial)}
+          >
+            {initial}
+          </button>
+        ))}
+      </div>
+
+      {/* =========================
           즐겨찾기
       ========================= */}
 
@@ -355,9 +451,44 @@ function Dictionary() {
             즐겨찾기 전체 해제
           </button>
         )}
+
+        {(selectedCategory !== "전체" ||
+          selectedInitial !== "전체" ||
+          showFavoritesOnly) && (
+          <button
+            type="button"
+            className="filter-reset-button"
+            onClick={resetFilters}
+          >
+            필터 초기화
+          </button>
+        )}
       </div>
 
-      {/* 즐겨찾기 안내 */}
+      {/* =========================
+          필터 상태 안내
+      ========================= */}
+
+      {(selectedCategory !== "전체" ||
+        selectedInitial !== "전체" ||
+        showFavoritesOnly) && (
+        <div className="filter-info">
+          <span>현재 필터</span>
+
+          {selectedCategory !== "전체" && <strong>{selectedCategory}</strong>}
+
+          {selectedInitial !== "전체" && <strong>{selectedInitial}</strong>}
+
+          {showFavoritesOnly && <strong>⭐ 즐겨찾기</strong>}
+
+          <span className="filter-count">{result.length}개</span>
+        </div>
+      )}
+
+      {/* =========================
+          즐겨찾기 안내
+      ========================= */}
+
       {showFavoritesOnly && (
         <div className="favorite-info">
           ⭐ 즐겨찾기한 신조어 <strong>{favoriteIds.length}개</strong>
@@ -373,6 +504,7 @@ function Dictionary() {
           groupedWords.map(([initial, initialWords]) => (
             <section className="category-section" key={initial}>
               {/* 초성 제목 */}
+
               <div className="category-title">
                 <h2>{initial}</h2>
 
@@ -380,13 +512,16 @@ function Dictionary() {
               </div>
 
               {/* 단어 카드 */}
+
               <div className="category-word-list">
                 {initialWords.map((item) => (
                   <div className="word-card" key={item.id}>
                     {/* 카드 상단 */}
+
                     <div className="word-card-header">
                       <div className="word-title-area">
                         {/* 실제 카테고리 */}
+
                         <span className="word-category">
                           {item.category?.trim() || "기타"}
                         </span>
@@ -395,8 +530,10 @@ function Dictionary() {
                       </div>
 
                       {/* 버튼 영역 */}
+
                       <div className="word-actions">
                         {/* 즐겨찾기 */}
+
                         <button
                           type="button"
                           className={
@@ -416,6 +553,7 @@ function Dictionary() {
                         </button>
 
                         {/* 좋아요 */}
+
                         <button
                           type="button"
                           className="like-button"
@@ -429,6 +567,7 @@ function Dictionary() {
                     </div>
 
                     {/* 뜻 */}
+
                     <div className="meaning">
                       <b>뜻</b>
 
@@ -436,6 +575,7 @@ function Dictionary() {
                     </div>
 
                     {/* 예문 */}
+
                     <div className="example">
                       <b>예문</b>
 
