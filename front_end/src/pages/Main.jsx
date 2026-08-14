@@ -199,20 +199,16 @@ function Main() {
         =================================================== */}
 
         <div className="feature-card ranking-card">
-          <div className="card-icon">
-            <FaFire />
+          <div className="card-top">
+            <div className="card-icon">
+              <FaFire />
+            </div>
+
+            <span className="card-badge">RANK</span>
           </div>
 
           <div className="card-title-row">
-            <Link to="/ranking" className="card-link">
-              <h3>신조어 인기 랭킹</h3>
-            </Link>
-
-            {/* 더보기 기능은 그대로 유지 */}
-            <Link to="/ranking" className="more-link">
-              <span>더보기</span>
-              <FaArrowRight />
-            </Link>
+            <h3>신조어 인기 랭킹</h3>
           </div>
 
           <div className="card-content ranking-content">
@@ -230,7 +226,6 @@ function Main() {
 
                     <span className="ranking-word">{item.word}</span>
 
-                    {/* 좋아요를 완전히 오른쪽으로 */}
                     <span className="ranking-likes-small">
                       ❤️ {item.likes ?? 0}
                     </span>
@@ -241,6 +236,11 @@ function Main() {
               <p className="data-message">등록된 신조어가 없습니다.</p>
             )}
           </div>
+
+          <Link to="/ranking" className="card-button">
+            랭킹 보러 가기
+            <FaArrowRight />
+          </Link>
         </div>
 
         {/* ===================================================
@@ -291,8 +291,12 @@ function Main() {
         =================================================== */}
 
         <div className="feature-card">
-          <div className="card-icon">
-            <FaGamepad />
+          <div className="card-top">
+            <div className="card-icon">
+              <FaGamepad />
+            </div>
+
+            <span className="card-badge">GAME</span>
           </div>
 
           <div className="card-title-row">
@@ -316,8 +320,12 @@ function Main() {
         =================================================== */}
 
         <div className="feature-card">
-          <div className="card-icon">
-            <FaBrain />
+          <div className="card-top">
+            <div className="card-icon">
+              <FaBrain />
+            </div>
+
+            <span className="card-badge">TEST</span>
           </div>
 
           <div className="card-title-row">
