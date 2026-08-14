@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { login as loginApi } from "../api/userApi";
 import "../css/Login.css";
+import SocialLogin from "../components/SocialLogin";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -86,7 +87,13 @@ function Login() {
           {submitting ? "로그인 중..." : "로그인"}
         </button>
 
+        <SocialLogin mode="login" />
+
         <p className="login-footer">
+           <Link to="/forgot-password">비밀번호를 잊으셨나요?</Link>
+           </p>
+
+           <p className="login-footer">
           아직 계정이 없으신가요? <Link to="/signup">회원가입</Link>
         </p>
       </form>

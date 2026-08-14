@@ -15,6 +15,8 @@ import Signup from "./pages/Signup";
 import MyPage from "./pages/MyPage";
 import AdminPage from "./pages/Admin/AdminPage";
 import NotFound from "./pages/NotFound";
+// 비밀번호 찾기 페이지 라우팅
+import ForgotPassword from "./pages/ForgotPassword";
 
 import QuizMain from "./pages/QuizMain";
 import MultipleChoiceQuiz from "./pages/MultipleChoiceQuiz";
@@ -55,6 +57,8 @@ function App() {
             </RequireAuth>
           }
         />
+        // 비밀번호 찾기 페이지 라우팅
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route
           path="/admin"

@@ -79,3 +79,11 @@
   font-weight: 700;
   text-decoration: none;
 }
+
+.login-submit {
+  cursor: pointer;   
+}
+
+.login-footer {
+  text-align: center; 
+}
