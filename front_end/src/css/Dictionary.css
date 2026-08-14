@@ -1,16 +1,23 @@
 .dictionary-page {
   max-width: 1200px;
-
   margin: auto;
-
   padding: 50px 30px;
 }
 
 .dictionary-page h1 {
   color: #6d4aff;
-
   font-size: 42px;
 }
+
+.dictionary-subtitle {
+  color: #777;
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+/* =========================
+   검색
+========================= */
 
 .dictionary-search {
   margin-top: 30px;
@@ -54,47 +61,102 @@
   font-size: 16px;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
+.dictionary-search button:hover {
+  background: #5b3be0;
 
-.word-card {
-  background: white;
+  transform: translateY(-2px);
+}
+
+.dictionary-search .reset-button {
+  background: #777;
+}
+
+.dictionary-search .reset-button:hover {
+  background: #666;
+}
+
+/* =========================
+   카테고리 / 필터
+========================= */
+
+.category-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 30px;
+}
+
+.category-button {
+  border: 1px solid #e0dafd;
 
   border-radius: 25px;
 
-  padding: 30px;
+  padding: 10px 18px;
 
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-
-  transition: 0.3s;
-}
-
-.word-card:hover {
-  transform: translateY(-7px);
-}
-
-.word-card-header {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin-bottom: 20px;
-}
-
-.word-card-header h2 {
-  margin: 0;
+  background: white;
 
   color: #6d4aff;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
 }
 
-.like-button {
-  border: none;
+.category-button:hover {
+  background: #f2efff;
 
-  border-radius: 20px;
+  transform: translateY(-2px);
+}
 
-  padding: 8px 14px;
+.category-button.active {
+  background: #6d4aff;
+
+  color: white;
+
+  border-color: #6d4aff;
+}
+
+/* =========================
+   즐겨찾기 필터
+========================= */
+
+.favorite-filter {
+  background: #fff8d6;
+
+  color: #d89b00;
+
+  border-color: #f3d66b;
+}
+
+.favorite-filter:hover {
+  background: #fff1b8;
+}
+
+.favorite-filter.active {
+  background: #f5c928;
+
+  color: white;
+
+  border-color: #f5c928;
+}
+
+/* 즐겨찾기 전체 해제 */
+
+.favorite-reset-button {
+  border: 1px solid #ffd0d7;
+
+  border-radius: 25px;
+
+  padding: 10px 18px;
 
   background: #fff0f2;
 
@@ -107,181 +169,123 @@
   transition: 0.2s;
 }
 
-.like-button:hover {
+.favorite-reset-button:hover {
   background: #ffe0e5;
-
-  transform: scale(1.05);
 }
 
-.word-card .meaning {
-  background: #f7f5ff;
+/* 즐겨찾기 안내 */
 
-  padding: 15px;
+.favorite-info {
+  margin-top: 20px;
+
+  padding: 15px 20px;
 
   border-radius: 15px;
-}
 
-.word-card .example {
-  margin-top: 15px;
+  background: #fff8d6;
 
-  color: #666;
+  color: #8d6d00;
 
   font-size: 15px;
 }
 
-.dictionary-subtitle {
-  color: #777;
-
-  margin-top: 15px;
-
-  font-size: 18px;
+.favorite-info strong {
+  color: #d89b00;
 }
 
-.word-card p {
-  margin-top: 10px;
+/* =========================
+   초성 영역
+========================= */
 
-  line-height: 1.6;
-}
-
-.no-result {
-  grid-column: 1 / -1;
-
-  background: white;
-
-  border-radius: 20px;
-
-  padding: 40px;
-
-  text-align: center;
-
-  color: #777;
-}
-
-.dictionary-page {
-  max-width: 1200px;
-  margin: auto;
-  padding: 50px 30px;
-}
-
-.dictionary-page h1 {
-  color: #6d4aff;
-  font-size: 42px;
-}
-
-.dictionary-subtitle {
-  color: #777;
-  margin-top: 15px;
-  font-size: 18px;
-}
-
-/* 검색 */
-.dictionary-search {
-  margin-top: 30px;
-  display: flex;
-  gap: 15px;
-}
-
-.dictionary-search input {
-  flex: 1;
-  height: 55px;
-  border: none;
-  border-radius: 30px;
-  padding: 0 25px;
-  font-size: 17px;
-  background: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  outline: none;
-}
-
-.dictionary-search button {
-  width: 120px;
-  border: none;
-  border-radius: 30px;
-  background: #6d4aff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* 카테고리 */
-.category-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 30px;
-}
-
-.category-button {
-  border: 1px solid #e0dafd;
-  border-radius: 25px;
-  padding: 10px 18px;
-  background: white;
-  color: #6d4aff;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.category-button:hover {
-  background: #f2efff;
-}
-
-.category-button.active {
-  background: #6d4aff;
-  color: white;
-  border-color: #6d4aff;
-}
-
-/* 카테고리 */
 .category-section {
   margin-top: 45px;
 }
 
 .category-title {
   display: flex;
+
   align-items: center;
+
   gap: 10px;
+
   margin-bottom: 20px;
+
+  padding-bottom: 10px;
+
+  border-bottom: 2px solid #eee;
 }
 
 .category-title h2 {
   margin: 0;
-  color: #333;
-  font-size: 25px;
+
+  color: #6d4aff;
+
+  font-size: 30px;
+
+  font-weight: 800;
 }
 
 .category-title span {
   padding: 5px 10px;
+
   border-radius: 15px;
+
   background: #f1eeff;
+
   color: #6d4aff;
+
   font-size: 13px;
 }
 
-/* 단어 카드 */
+/* =========================
+   단어 카드 목록
+========================= */
+
 .category-word-list {
   display: grid;
+
   grid-template-columns: repeat(3, 1fr);
+
   gap: 25px;
 }
 
+/* =========================
+   단어 카드
+========================= */
+
 .word-card {
   background: white;
+
   border-radius: 25px;
+
   padding: 30px;
+
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
   transition: 0.3s;
+
+  min-width: 0;
 }
 
 .word-card:hover {
   transform: translateY(-7px);
+
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
 }
+
+/* =========================
+   카드 상단
+========================= */
 
 .word-card-header {
   display: flex;
+
   justify-content: space-between;
+
   align-items: flex-start;
+
   gap: 15px;
+
   margin-bottom: 20px;
 }
 
@@ -291,40 +295,65 @@
 
 .word-title-area h2 {
   margin: 7px 0 0;
+
   color: #6d4aff;
+
+  word-break: keep-all;
 }
 
 .word-category {
   display: inline-block;
+
   padding: 4px 9px;
+
   border-radius: 10px;
+
   background: #f3f1ff;
+
   color: #6d4aff;
+
   font-size: 11px;
 }
 
-/* 버튼 영역 */
+/* =========================
+   버튼 영역
+========================= */
+
 .word-actions {
   display: flex;
+
   align-items: center;
+
   gap: 7px;
+
   flex-shrink: 0;
 }
 
-/* 즐겨찾기 */
+/* =========================
+   즐겨찾기 버튼
+========================= */
+
 .favorite-button {
   width: 38px;
+
   height: 38px;
+
   border: none;
+
   border-radius: 50%;
+
   background: #f5f5f5;
+
   font-size: 20px;
+
   cursor: pointer;
+
   transition: 0.2s;
 }
 
 .favorite-button:hover {
   background: #fff4c7;
+
   transform: scale(1.08);
 }
 
@@ -332,58 +361,104 @@
   background: #fff4c7;
 }
 
-/* 좋아요 */
+/* =========================
+   좋아요 버튼
+========================= */
+
 .like-button {
   border: none;
+
   border-radius: 20px;
+
   padding: 8px 14px;
+
   background: #fff0f2;
+
   color: #ff4d67;
+
   font-size: 14px;
+
   cursor: pointer;
+
   transition: 0.2s;
 }
 
 .like-button:hover {
   background: #ffe0e5;
+
   transform: scale(1.05);
 }
 
 .like-button:disabled {
   cursor: not-allowed;
+
   opacity: 0.6;
 }
 
-/* 뜻 */
+/* =========================
+   뜻
+========================= */
+
 .word-card .meaning {
   background: #f7f5ff;
+
   padding: 15px;
+
   border-radius: 15px;
+}
+
+.word-card .meaning b {
+  color: #6d4aff;
 }
 
 .word-card p {
   margin-top: 10px;
+
   line-height: 1.6;
+
+  word-break: keep-all;
 }
 
-/* 예문 */
+/* =========================
+   예문
+========================= */
+
 .word-card .example {
   margin-top: 15px;
+
   color: #666;
+
   font-size: 15px;
 }
 
-/* 결과 없음 */
-.no-result {
-  grid-column: 1 / -1;
-  background: white;
-  border-radius: 20px;
-  padding: 40px;
-  text-align: center;
-  color: #777;
+.word-card .example b {
+  color: #555;
 }
 
-/* 반응형 */
+/* =========================
+   결과 없음
+========================= */
+
+.no-result {
+  grid-column: 1 / -1;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 40px;
+
+  text-align: center;
+
+  color: #777;
+
+  margin-top: 30px;
+}
+
+/* =========================
+   반응형
+========================= */
+
 @media (max-width: 900px) {
   .category-word-list {
     grid-template-columns: repeat(2, 1fr);
@@ -399,17 +474,23 @@
     font-size: 32px;
   }
 
+  .dictionary-subtitle {
+    font-size: 16px;
+  }
+
   .dictionary-search {
     flex-wrap: wrap;
   }
 
   .dictionary-search input {
     width: 100%;
+
     flex-basis: 100%;
   }
 
   .dictionary-search button {
     flex: 1;
+
     width: auto;
   }
 
@@ -420,4 +501,37 @@
   .word-card {
     padding: 22px;
   }
+
+  .word-card-header {
+    gap: 10px;
+  }
+
+  .word-actions {
+    gap: 5px;
+  }
+
+  .favorite-button {
+    width: 35px;
+
+    height: 35px;
+
+    font-size: 18px;
+  }
+
+  .like-button {
+    padding: 7px 10px;
+
+    font-size: 13px;
+  }
+
+  .category-title h2 {
+    font-size: 26px;
+  }
+}
+
+.favorite-filter-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
 }

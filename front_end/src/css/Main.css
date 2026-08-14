@@ -175,11 +175,11 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  grid-auto-rows: 270px;
+  grid-auto-rows: 360px;
 
-  gap: 18px;
+  gap: 20px;
 
-  margin-top: 22px;
+  margin-top: 24px;
 
   align-items: stretch;
 
@@ -192,7 +192,7 @@
 
 .feature-card {
   width: 100%;
-  height: 270px;
+  height: 360px;
 
   min-width: 0;
   min-height: 0;
@@ -201,14 +201,14 @@
   flex-direction: column;
 
   margin: 0;
-  padding: 22px;
+  padding: 26px;
 
   box-sizing: border-box;
 
   background: #ffffff;
 
   border: 1px solid #eeeaf8;
-  border-radius: 20px;
+  border-radius: 22px;
 
   box-shadow: 0 5px 16px rgba(60, 45, 120, 0.055);
 
@@ -233,26 +233,26 @@
 ========================================================= */
 
 .card-icon {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
 
-  flex: 0 0 38px;
+  flex: 0 0 42px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin: 0 0 14px;
+  margin: 0 0 16px;
 
   box-sizing: border-box;
 
   background: #f1edff;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
   color: #6d4aff;
 
-  font-size: 17px;
+  font-size: 18px;
 
   transition:
     background 0.2s ease,
@@ -279,24 +279,25 @@
 .card-title-row {
   width: 100%;
 
-  height: 24px;
-  min-height: 24px;
+  height: 28px;
+  min-height: 28px;
 
-  flex: 0 0 24px;
+  flex: 0 0 28px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 10px;
+  gap: 12px;
 
-  margin: 0 0 14px;
+  margin: 0 0 18px;
 
   box-sizing: border-box;
 }
 
 .card-title-row .card-link {
   flex: 1;
+
   min-width: 0;
 }
 
@@ -307,8 +308,8 @@
 
   color: #302b42;
 
-  font-size: 17px;
-  line-height: 24px;
+  font-size: 19px;
+  line-height: 28px;
 
   font-weight: 800;
 
@@ -334,7 +335,6 @@
 
 /* =========================================================
    MORE LINK
-   보라색 버튼 스타일
 ========================================================= */
 
 .more-link {
@@ -344,25 +344,25 @@
 
   gap: 5px;
 
-  height: 25px;
+  height: auto;
 
   flex: 0 0 auto;
 
-  padding: 0 9px;
+  padding: 0;
 
   box-sizing: border-box;
 
-  background: #f1edff;
+  background: transparent;
 
-  border: 1px solid #e4dcff;
-  border-radius: 7px;
+  border: none;
+  border-radius: 0;
 
-  color: #7658df;
+  color: #9992aa;
 
   text-decoration: none;
 
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
 
   line-height: 1;
 
@@ -370,10 +370,7 @@
 
   transition:
     color 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.2s ease;
 }
 
 .more-link svg {
@@ -383,15 +380,15 @@
 }
 
 .more-link:hover {
-  background: #6d4aff;
+  background: transparent;
 
-  border-color: #6d4aff;
+  border-color: transparent;
 
-  color: #ffffff;
+  color: #6d4aff;
 
-  transform: translateY(-1px);
+  transform: translateX(2px);
 
-  box-shadow: 0 5px 12px rgba(109, 74, 255, 0.22);
+  box-shadow: none;
 }
 
 .more-link:hover svg {
@@ -420,7 +417,7 @@
 ========================================================= */
 
 .ranking-content {
-  padding-top: 1px;
+  padding-top: 2px;
 }
 
 .ranking-list {
@@ -429,7 +426,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 7px;
+  gap: 10px;
 
   margin: 0;
   padding: 0;
@@ -440,23 +437,23 @@
 .ranking-list li {
   width: 100%;
 
-  height: 30px;
-  min-height: 30px;
+  height: 42px;
+  min-height: 42px;
 
   display: flex;
   align-items: center;
 
-  padding: 0 11px;
+  padding: 0 15px;
 
   box-sizing: border-box;
 
   background: #f8f7fc;
 
-  border-radius: 8px;
+  border-radius: 10px;
 
   color: #5d5772;
 
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 
   white-space: nowrap;
@@ -474,20 +471,56 @@
   transform: translateX(2px);
 }
 
+/* =========================================================
+   RANKING NUMBER
+========================================================= */
+
 .ranking-number {
-  width: 30px;
+  width: 38px;
 
-  flex-shrink: 0;
+  flex: 0 0 38px;
 
-  color: #aaa4b5;
+  font-size: 12px;
+  font-weight: 900;
 
-  font-size: 10px;
-  font-weight: 800;
+  background: linear-gradient(135deg, #8f78ff 0%, #6d4aff 45%, #4b2ac7 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-clip: text;
 }
 
-.ranking-list li:first-child .ranking-number {
-  color: #6d4aff;
+.ranking-list li:nth-child(1) .ranking-number {
+  background: linear-gradient(135deg, #a896ff 0%, #6d4aff 45%, #4525c7 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-clip: text;
 }
+
+.ranking-list li:nth-child(2) .ranking-number {
+  background: linear-gradient(135deg, #b5a5ff 0%, #8066e8 50%, #5c43b8 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-clip: text;
+}
+
+.ranking-list li:nth-child(3) .ranking-number {
+  background: linear-gradient(135deg, #c8bdff 0%, #9582dc 50%, #6d5aab 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  background-clip: text;
+}
+
+/* =========================================================
+   RANKING WORD
+========================================================= */
 
 .ranking-word {
   min-width: 0;
@@ -498,26 +531,42 @@
 }
 
 /* =========================================================
-   TODAY CARD
+   RANKING LIKES
 ========================================================= */
 
-.today-card {
+.ranking-likes-small {
+  flex: 0 0 auto;
+
+  margin-left: auto;
+
+  padding-left: 14px;
+
+  color: #8c8699;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  text-align: right;
+}
+
+/* =========================================================
+   MAIN TODAY CARD
+   TodayWord.css의 .today-card와 충돌하지 않도록 분리
+========================================================= */
+
+.main-today-card {
   position: relative;
 
   margin: 0;
 
-  background:
-    radial-gradient(
-      circle at 90% 10%,
-      rgba(109, 74, 255, 0.13),
-      transparent 35%
-    ),
-    linear-gradient(135deg, #f5f1ff 0%, #ffffff 72%);
-
+  background: #ffffff;
+  
   border-color: #e4dcff;
 }
 
-.today-card:hover {
+.main-today-card:hover {
   border-color: #cfc2ff;
 }
 
@@ -528,16 +577,16 @@
 .today-top {
   width: 100%;
 
-  height: 38px;
-  min-height: 38px;
+  height: 36px;
+  min-height: 36px;
 
-  flex: 0 0 38px;
+  flex: 0 0 36px;
 
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 
-  margin: 0 0 14px;
+  margin: 0 0 10px;
 
   box-sizing: border-box;
 }
@@ -555,9 +604,9 @@
   align-items: center;
   justify-content: center;
 
-  height: 24px;
+  height: 27px;
 
-  padding: 0 9px;
+  padding: 0 11px;
 
   box-sizing: border-box;
 
@@ -567,7 +616,7 @@
 
   color: #6d4aff;
 
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
 
   letter-spacing: 0.7px;
@@ -575,20 +624,21 @@
 
 /* =========================================================
    TODAY TITLE
+   제목 자체는 왼쪽 정렬
 ========================================================= */
 
 .today-title {
   width: 100%;
 
-  height: 24px;
-  min-height: 24px;
+  height: 28px;
+  min-height: 28px;
 
-  flex: 0 0 24px;
+  flex: 0 0 28px;
 
   display: flex;
   align-items: center;
 
-  margin: 0 0 14px;
+  margin: 0 0 10px;
 
   box-sizing: border-box;
 }
@@ -598,10 +648,12 @@
 
   color: #302b42;
 
-  font-size: 17px;
-  line-height: 24px;
+  font-size: 19px;
+  line-height: 28px;
 
   font-weight: 800;
+
+  text-align: left;
 
   cursor: default;
   user-select: none;
@@ -609,45 +661,60 @@
 
 /* =========================================================
    TODAY CONTENT
+   카드 안의 오늘의 신조어 내용을 크게 표시
 ========================================================= */
 
 .today-content {
   width: 100%;
 
   flex: 1;
-
   min-height: 0;
 
   display: flex;
   flex-direction: column;
 
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 0 8px;
+
+  box-sizing: border-box;
 }
 
+/* 오늘 배워볼 표현 */
 .today-label {
   display: block;
 
-  margin: 0 0 6px;
+  margin: 0 0 12px;
 
-  color: #9992aa;
+  color: #8f889f;
 
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.4;
 
-  font-weight: 600;
+  font-weight: 700;
+
+  text-align: center;
 }
 
+/* 오늘의 신조어 */
 .today-content h2 {
-  margin: 0 0 6px;
+  width: 100%;
+
+  margin: 0 0 12px;
 
   color: #6d4aff;
 
-  font-size: 27px;
-  line-height: 1.25;
+  font-size: 42px;
+  line-height: 1.2;
 
   font-weight: 900;
 
-  letter-spacing: -0.8px;
+  letter-spacing: -1.5px;
+
+  text-align: center;
 
   white-space: nowrap;
 
@@ -656,15 +723,62 @@
   text-overflow: ellipsis;
 }
 
+/* 신조어 뜻 */
 .today-content p {
+  width: 100%;
+
   margin: 0;
 
-  color: #6f697c;
+  color: #625c70;
 
-  font-size: 12px;
+  font-size: 18px;
+  line-height: 1.6;
+
+  font-weight: 600;
+
+  word-break: keep-all;
+
+  text-align: center;
+}
+
+/* =========================================================
+   TODAY EXAMPLE
+========================================================= */
+
+.today-example {
+  margin-top: 8px !important;
+
+  color: #918b9d !important;
+
+  font-size: 12px !important;
+
+  line-height: 1.6 !important;
+
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   DATA MESSAGE
+========================================================= */
+
+.data-message {
+  margin: 0;
+
+  color: #9992aa;
+
+  font-size: 13px;
+
   line-height: 1.6;
 
   word-break: keep-all;
+}
+
+.data-message.error {
+  color: #e06a6a;
 }
 
 /* =========================================================
@@ -679,26 +793,26 @@
   align-items: center;
   justify-content: center;
 
-  gap: 6px;
+  gap: 7px;
 
-  height: 32px;
+  height: 36px;
 
-  flex: 0 0 32px;
+  flex: 0 0 36px;
 
   margin-top: auto;
 
-  padding: 0 13px;
+  padding: 0 15px;
 
   box-sizing: border-box;
 
   background: #6d4aff;
   color: #ffffff;
 
-  border-radius: 9px;
+  border-radius: 10px;
 
   text-decoration: none;
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 
   line-height: 1;
@@ -715,7 +829,7 @@
 
 .card-button svg,
 .today-button svg {
-  font-size: 8px;
+  font-size: 9px;
 }
 
 .card-button:hover,
@@ -736,7 +850,7 @@
 
   color: #817b91;
 
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.7;
 
   word-break: keep-all;
@@ -749,7 +863,7 @@
 .history {
   width: 100%;
 
-  margin-top: 22px;
+  margin-top: 24px;
 }
 
 .history-header {
@@ -854,13 +968,15 @@
 
 @media (max-width: 800px) {
   .feature-grid {
-    grid-auto-rows: 270px;
+    grid-auto-rows: 340px;
 
-    gap: 14px;
+    gap: 16px;
   }
 
   .feature-card {
-    height: 270px;
+    height: 340px;
+
+    padding: 23px;
   }
 
   .hero {
@@ -875,6 +991,11 @@
 
   .hero h1 {
     font-size: 40px;
+  }
+
+  .ranking-list li {
+    height: 40px;
+    min-height: 40px;
   }
 }
 
@@ -934,60 +1055,86 @@
   .feature-grid {
     grid-template-columns: 1fr;
 
-    grid-auto-rows: 255px;
+    grid-auto-rows: 280px;
 
     gap: 14px;
   }
 
   .feature-card {
-    height: 255px;
+    height: 280px;
 
     padding: 21px;
   }
 
   .feature-card h3 {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .ranking-list {
-    gap: 6px;
+    gap: 7px;
   }
 
   .ranking-list li {
-    height: 29px;
-    min-height: 29px;
+    height: 38px;
+    min-height: 38px;
+
+    padding: 0 12px;
+
+    font-size: 13px;
+  }
+
+  .ranking-number {
+    width: 32px;
+    flex-basis: 32px;
+  }
+
+  .ranking-likes-small {
+    font-size: 11px;
   }
 
   .today-content h2 {
-    font-size: 24px;
+    font-size: 27px;
+  }
+
+  .today-content p {
+    font-size: 13px;
   }
 
   /* =====================================================
-     MOBILE MORE BUTTON
+     MORE LINK
   ===================================================== */
 
   .more-link {
-    height: 24px;
+    height: auto;
 
-    padding: 0 8px;
+    padding: 0;
 
-    font-size: 9px;
+    gap: 5px;
+
+    background: transparent;
+
+    border: none;
+
+    font-size: 10px;
+  }
+
+  .more-link:hover {
+    background: transparent;
+
+    border-color: transparent;
   }
 
   .more-link svg {
     font-size: 7px;
   }
 
-  /* =====================================================
-     HISTORY
-  ===================================================== */
+  .card-button,
+  .today-button {
+    height: 34px;
 
-  .history-box {
-    padding: 16px;
-  }
+    flex-basis: 34px;
 
-  .history-item {
-    align-items: flex-start;
+    font-size: 11px;
   }
 }
 
@@ -1033,13 +1180,13 @@
   .feature-grid {
     grid-template-columns: 1fr;
 
-    grid-auto-rows: 245px;
+    grid-auto-rows: 270px;
 
     gap: 14px;
   }
 
   .feature-card {
-    height: 245px;
+    height: 270px;
 
     padding: 19px;
   }
@@ -1073,23 +1220,33 @@
   }
 
   /* =====================================================
-     MORE BUTTON
+     MORE LINK
   ===================================================== */
 
   .more-link {
-    height: 22px;
+    height: auto;
 
-    padding: 0 7px;
+    padding: 0;
 
     gap: 4px;
 
-    border-radius: 6px;
+    background: transparent;
 
-    font-size: 8px;
+    border: none;
+
+    border-radius: 0;
+
+    font-size: 9px;
   }
 
   .more-link svg {
     font-size: 6px;
+  }
+
+  .more-link:hover {
+    background: transparent;
+
+    border-color: transparent;
   }
 
   /* =====================================================
@@ -1097,12 +1254,29 @@
   ===================================================== */
 
   .ranking-list {
-    gap: 5px;
+    gap: 6px;
   }
 
   .ranking-list li {
-    height: 27px;
-    min-height: 27px;
+    height: 36px;
+    min-height: 36px;
+
+    padding: 0 10px;
+  }
+
+  .ranking-number {
+    width: 30px;
+    flex-basis: 30px;
+  }
+
+  .ranking-word {
+    font-size: 12px;
+  }
+
+  .ranking-likes-small {
+    padding-left: 8px;
+
+    font-size: 10px;
   }
 
   /* =====================================================
@@ -1115,7 +1289,7 @@
 
     flex-basis: 35px;
 
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .today-title {
@@ -1124,7 +1298,7 @@
 
     flex-basis: 22px;
 
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .today-title h3 {
@@ -1133,12 +1307,22 @@
     line-height: 22px;
   }
 
+  .today-label {
+    font-size: 10px;
+  }
+
   .today-content h2 {
-    font-size: 22px;
+    font-size: 24px;
+
+    margin-bottom: 6px;
   }
 
   .today-content p {
     font-size: 11px;
+  }
+
+  .today-example {
+    font-size: 10px !important;
   }
 
   /* =====================================================
