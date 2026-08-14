@@ -39,7 +39,9 @@
   color: var(--c-text-sub);
   font-size: 14px;
   text-align: left;
-  transition: background 120ms ease, color 120ms ease;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
 .admin-menu-item:hover {
@@ -95,9 +97,15 @@
   border-radius: 16px;
 }
 
-.admin-stat.purple { background: var(--c-primary-tint); }
-.admin-stat.mint   { background: #eafaf3; }
-.admin-stat.pink   { background: #fdeef4; }
+.admin-stat.purple {
+  background: var(--c-primary-tint);
+}
+.admin-stat.mint {
+  background: #eafaf3;
+}
+.admin-stat.pink {
+  background: #fdeef4;
+}
 
 .admin-stat-label {
   margin-bottom: 6px;
@@ -138,15 +146,19 @@
   font-size: 13px;
 }
 
-.admin-field input {
+.admin-field input,
+.admin-field select {
   width: 100%;
   padding: 12px 14px;
   background: var(--c-surface);
   border: 1px solid var(--c-border);
   border-radius: 12px;
+  font: inherit;
+  color: var(--c-text);
 }
 
-.admin-field input:focus {
+.admin-field input:focus,
+.admin-field select:focus {
   outline: none;
   border-color: var(--c-primary);
   box-shadow: 0 0 0 4px rgba(109, 74, 255, 0.12);

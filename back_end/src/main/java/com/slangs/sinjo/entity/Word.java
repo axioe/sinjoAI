@@ -26,26 +26,52 @@ public class Word {
     @Column(nullable = false)
     private Long likes = 0L;
 
-    @Column(length = 100)
+    @Column(nullable = false, length = 100)
     private String category;
 
     public Word(
             String word,
             String meaning,
-            String example
+            String example,
+            String category
     ) {
         this.word = word;
         this.meaning = meaning;
         this.example = example;
         this.likes = 0L;
+        this.category = category;
     }
 
+    /**
+     * 기존 3개 인자를 사용하는 코드가 있다면
+     * 기본 카테고리는 기타로 처리한다.
+     */
+    public Word(
+            String word,
+            String meaning,
+            String example
+    ) {
+        this(
+                word,
+                meaning,
+                example,
+                "기타"
+        );
+    }
 
-    /** 관리자 화면에서 용어를 수정할 때 쓴다. */
-    public void update(String word, String meaning, String example) {
+    /**
+     * 관리자 화면에서 용어를 수정할 때 쓴다.
+     */
+    public void update(
+            String word,
+            String meaning,
+            String example,
+            String category
+    ) {
         this.word = word;
         this.meaning = meaning;
         this.example = example;
+        this.category = category;
     }
 
     public void increaseLike() {
