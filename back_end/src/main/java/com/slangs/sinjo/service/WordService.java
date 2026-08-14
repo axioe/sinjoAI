@@ -1,6 +1,6 @@
 package com.slangs.sinjo.service;
 
-import com.slangs.sinjo.dto.WordResponse;
+import com.slangs.sinjo.dto.WordDto;
 import com.slangs.sinjo.entity.Word;
 import com.slangs.sinjo.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +21,11 @@ public class WordService {
      * 전체 신조어 조회
      */
     @Transactional(readOnly = true)
-    public List<WordResponse> getAllWords() {
+    public List<WordDto> getAllWords() {
 
         return wordRepository.findAll()
                 .stream()
-                .map(WordResponse::new)
+                .map(WordDto::new)
                 .toList();
     }
 
@@ -34,9 +34,9 @@ public class WordService {
      * 특정 신조어 조회
      */
     @Transactional(readOnly = true)
-    public WordResponse getWord(Long id) {
+    public WordDto getWord(Long id) {
 
-        return new WordResponse(findWordOrThrow(id));
+        return new WordDto(findWordOrThrow(id));
     }
 
 
@@ -48,7 +48,7 @@ public class WordService {
      * 두 사람이 동시에 누르면 한 번이 유실됐다.
      */
     @Transactional
-    public WordResponse likeWord(Long id) {
+    public WordDto likeWord(Long id) {
 
         int updated = wordRepository.increaseLike(id);
 
@@ -56,7 +56,7 @@ public class WordService {
             throw new IllegalArgumentException("신조어를 찾을 수 없습니다.");
         }
 
-        return new WordResponse(findWordOrThrow(id));
+        return new WordDto(findWordOrThrow(id));
     }
 
 
@@ -64,14 +64,14 @@ public class WordService {
      * 좋아요 기준 TOP 5
      */
     @Transactional(readOnly = true)
-    public List<WordResponse> getRankingWords() {
+    public List<WordDto> getRankingWords() {
 
         List<Word> words = wordRepository.findTop5ByOrderByLikesDescIdAsc();
 
         return IntStream
                 .range(0, words.size())
                 .mapToObj(index ->
-                        new WordResponse(
+                        new WordDto(
                                 words.get(index),
                                 index + 1
                         )

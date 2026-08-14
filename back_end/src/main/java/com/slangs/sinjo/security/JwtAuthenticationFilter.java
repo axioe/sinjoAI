@@ -1,11 +1,13 @@
 package com.slangs.sinjo.security;
 
+import com.slangs.sinjo.entity.Role;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +18,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private static final String HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
@@ -32,12 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && jwtProvider.isValid(token)) {
             Long userId = jwtProvider.getUserId(token);
 
-            // [수정] JwtProvider 가 이제 null 을 돌려줄 수 있으므로 확인한다.
-            // null 인 상태로 인증 객체를 만들면 컨트롤러에서 principal 이 null 이 되어
-            // 인증된 것처럼 보이는데 사용자 정보가 없는 이상한 상태가 된다.
             if (userId != null) {
+                Role role = jwtProvider.getRole(token);
+
+                // 권한 목록을 함께 넣어야 SecurityConfig 의 hasRole("ADMIN") 이 동작한다.
+                // 비워두면 토큰에 role 이 있어도 관리자 API 가 403 을 돌려준다.
                 var authentication = new UsernamePasswordAuthenticationToken(
-                        userId, null, List.of());
+                        userId,
+                        null,
+                        List.of(new SimpleGrantedAuthority(role.getAuthority()))
+                );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
@@ -49,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String resolveToken(HttpServletRequest request) {
         String header = request.getHeader(HEADER);
         if (header != null && header.startsWith(PREFIX)) {
-            // [수정] "Bearer " 뒤가 비어 있는 경우를 걸러낸다.
             String token = header.substring(PREFIX.length()).trim();
             return token.isEmpty() ? null : token;
         }

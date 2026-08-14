@@ -7,7 +7,7 @@ spring:
   # 증상이 없지만, 나중에 스타터를 켜는 순간 "키를 넣었는데 인식이 안 된다"가 된다.
   ai:
     openai:
-      api-key: ${OPENAI_API_KEY:dummy-key-not-used-yet}
+      api-key: ${OPENAI_API_KEY:}
 
   datasource:
     url: jdbc:postgresql://43.201.127.52:55432/sinjodb
@@ -44,18 +44,16 @@ server:
 
 app:
   jwt:
-    # 배포 시에는 반드시 환경변수 JWT_SECRET 으로 덮어쓸 것.
-    # UTF-8 기준 32바이트 이상이어야 한다. (JwtProvider 가 시작할 때 검사한다)
     secret: ${JWT_SECRET:sinjo-local-dev-secret-key-please-change-me-32bytes}
-    # 토큰 유효 시간(밀리초). 24시간.
     expiration: 86400000
-  cors:
-    # 프론트 개발 서버 주소. vite.config.js 의 port 와 일치해야 한다.
-    # [수정] Vite 기본 포트인 5173 도 함께 허용한다.
-    # 팀원이 vite.config.js 없이 실행하거나 포트가 이미 사용 중이면 5173 으로 뜨는데,
-    # 그때 CORS 오류가 나면서 "서버가 죽었다" 고 오해하기 쉽다.
-    allowed-origins: http://localhost:5555,http://localhost:5173
 
+  admin:
+    email: ${ADMIN_EMAIL:admin@slangs.com}
+    password: ${ADMIN_PASSWORD:admin1234!}
+    nickname: ${ADMIN_NICKNAME:관리자}
+
+  cors:
+    allowed-origins: http://localhost:5555,http://localhost:5173
 logging:
   level:
     org.hibernate.SQL: debug
