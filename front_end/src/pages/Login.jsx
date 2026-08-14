@@ -36,7 +36,7 @@ function Login() {
       // 서버가 { token, user } 를 돌려준다.
       const data = await loginApi({ email, password });
       login(data.token, data.user);
-      navigate("/mypage");
+      navigate("/");
     } catch (err) {
       setErrors({ form: err.message });
     } finally {
