@@ -53,6 +53,20 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(e.getMessage()));
     }
 
+    /** [추가] 관리자 화면에서 신조어를 중복 등록하려 한 경우 */
+    @ExceptionHandler(DuplicateWordException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateWord(DuplicateWordException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.of(e.getMessage()));
+    }
+
+    /** [추가] 없는 자원을 수정·삭제하려 한 경우 */
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.of(e.getMessage()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(ErrorResponse.of(e.getMessage()));

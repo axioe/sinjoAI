@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
 import RequireAuth from "./components/RequireAuth";
+import RequireAdmin from "./components/RequireAdmin";
 
 import Main from "./pages/Main";
 import Translate from "./pages/Translate";
@@ -12,6 +13,7 @@ import Test from "./pages/Test";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import MyPage from "./pages/MyPage";
+import AdminPage from "./pages/Admin/AdminPage";
 import NotFound from "./pages/NotFound";
 // 비밀번호 찾기 페이지 라우팅
 import ForgotPassword from "./pages/ForgotPassword";
@@ -57,6 +59,15 @@ function App() {
         />
         // 비밀번호 찾기 페이지 라우팅
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route
+          path="/admin"
+          element={
+            <RequireAdmin>
+              <AdminPage />
+            </RequireAdmin>
+          }
+        />
 
         {/* 게임: /game 에서 종류를 고르고 각 퀴즈로 이동한다 */}
         <Route path="/game" element={<QuizMain />} />
