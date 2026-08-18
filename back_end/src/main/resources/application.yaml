@@ -42,9 +42,6 @@ spring:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
-  app:
-    frontend-url: http://localhost:5555
-
 server:
   port: 8080
   servlet:
@@ -59,6 +56,8 @@ app:
   jwt:
     secret: ${JWT_SECRET:sinjo-local-dev-secret-key-please-change-me-32bytes}
     expiration: 86400000
+
+  frontend-url: http://localhost:5555
 
   admin:
     email: ${ADMIN_EMAIL:admin@slangs.com}
