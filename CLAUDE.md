@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 언어
 
 - 모든 응답, 설명, 질문은 **한국어**로 작성한다.
-- 코드, 변수명, 함수명, 커밋 메시지는 영어를 유지한다.
-- 코드 주석은 한국어로 작성한다.
+- 코드, 변수명, 함수명는 영어를 유지한다.
+- 코드 주석, 커밋 메시지은 한국어로 작성한다.
 
 ## Project overview
 
