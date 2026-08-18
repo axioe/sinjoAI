@@ -9,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
 
-@Component
+// [수정] @Component 를 붙이지 않는다. 붙이면 서블릿 컨테이너가 필터 빈을 자동 등록해
+// SecurityConfig 에서 new 로 체인에 등록한 것과 이중으로 걸린다.
+// SecurityConfig 에서 new 로 생성해 체인에만 등록한다.
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

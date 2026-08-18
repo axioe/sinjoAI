@@ -4,13 +4,13 @@ package com.slangs.sinjo.repository;
 import com.slangs.sinjo.entity.QuizWord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface QuizRepository extends JpaRepository<QuizWord, Long> {
 
-    // N개의 랜덤 데이터 가져오기 (MySQL/H2 기준)
-    @Query(value = "SELECT * FROM quiz_word ORDER BY RAND() LIMIT :count", nativeQuery = true)
-    List<QuizWord> findRandomQuizzes(@Param("count") int count);
+    // RAND() 는 MySQL 전용 함수라 PostgreSQL 에서 실패한다.
+    // id만 읽어 Java 에서 셔플하는 방식을 쓴다 (QuizService 참고).
+    @Query("SELECT q.id FROM QuizWord q")
+    List<Long> findAllIds();
 }

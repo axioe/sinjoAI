@@ -58,6 +58,15 @@ function Dictionary() {
 
   const query = searchParams.get("word") ?? "";
   const [keyword, setKeyword] = useState(query);
+  const [prevQuery, setPrevQuery] = useState(query);
+
+  // URL 검색어(query)가 바뀌면 input도 맞춰준다.
+  // useEffect 대신 렌더링 중에 처리해 불필요한 추가 렌더를 피한다.
+  // (https://react.dev/learn/you-might-not-need-an-effect#adjusting-state-when-a-prop-changes)
+  if (query !== prevQuery) {
+    setPrevQuery(query);
+    setKeyword(query);
+  }
 
   // =========================
   // 한글 단어의 초성 가져오기
@@ -116,14 +125,6 @@ function Dictionary() {
       alive = false;
     };
   }, []);
-
-  // =========================
-  // URL 검색어가 변경되면 input도 변경
-  // =========================
-
-  useEffect(() => {
-    setKeyword(query);
-  }, [query]);
 
   // =========================
   // 즐겨찾기 변경 시 localStorage 저장

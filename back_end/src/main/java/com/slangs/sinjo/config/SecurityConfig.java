@@ -1,6 +1,7 @@
 package com.slangs.sinjo.config;
 
 import com.slangs.sinjo.security.JwtAuthenticationFilter;
+import com.slangs.sinjo.security.JwtProvider;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtProvider jwtProvider;
 
     /** 하드코딩하지 않고 application.yaml 에서 읽는다. 배포 시 주소만 바꾸면 된다. */
     @Value("${app.cors.allowed-origins}")
@@ -71,7 +72,7 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
 
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();
