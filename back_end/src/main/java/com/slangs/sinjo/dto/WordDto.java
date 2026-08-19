@@ -16,6 +16,8 @@ public class WordDto {
 
     private Long likes;
 
+    private Long views;
+
     private Integer rank;
 
     private String category;
@@ -23,11 +25,13 @@ public class WordDto {
     private String era;
 
     public WordDto(Word word) {
+
         this.id = word.getId();
         this.word = word.getWord();
         this.meaning = word.getMeaning();
         this.example = word.getExample();
         this.likes = word.getLikes();
+        this.views = word.getViews();
         this.category = word.getCategory();
         this.era = word.getEra();
     }
@@ -36,11 +40,13 @@ public class WordDto {
             Word word,
             Integer rank
     ) {
+
         this.id = word.getId();
         this.word = word.getWord();
         this.meaning = word.getMeaning();
         this.example = word.getExample();
         this.likes = word.getLikes();
+        this.views = word.getViews();
         this.rank = rank;
         this.category = word.getCategory();
         this.era = word.getEra();

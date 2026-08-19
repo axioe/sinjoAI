@@ -23,6 +23,7 @@
   margin-top: 30px;
 
   display: flex;
+
   gap: 15px;
 }
 
@@ -67,6 +68,7 @@
 
 .dictionary-search button:hover {
   background: #5b3be0;
+
   transform: translateY(-2px);
 }
 
@@ -79,7 +81,7 @@
 }
 
 /* =========================
-   엑셀 다운로드
+   엑셀
 ========================= */
 
 .excel-download-area {
@@ -92,6 +94,7 @@
 
 .excel-download-button {
   border: 1px solid #b7dfc3;
+
   border-radius: 25px;
 
   padding: 10px 18px;
@@ -131,6 +134,7 @@
 
 .category-button {
   border: 1px solid #e0dafd;
+
   border-radius: 25px;
 
   padding: 10px 18px;
@@ -153,13 +157,14 @@
 
 .category-button.active {
   background: #6d4aff;
+
   color: white;
 
   border-color: #6d4aff;
 }
 
 /* =========================
-   초성 필터
+   초성
 ========================= */
 
 .initial-list {
@@ -179,6 +184,7 @@
   padding: 0 10px;
 
   border: 1px solid #e0dafd;
+
   border-radius: 12px;
 
   background: white;
@@ -200,6 +206,7 @@
 
 .initial-button.active {
   background: #6d4aff;
+
   color: white;
 
   border-color: #6d4aff;
@@ -208,7 +215,67 @@
 }
 
 /* =========================
-   즐겨찾기 필터
+   정렬
+========================= */
+
+.sort-area {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 22px;
+}
+
+.sort-label {
+  color: #777;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sort-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.sort-button {
+  border: 1px solid #e0dafd;
+
+  border-radius: 20px;
+
+  padding: 8px 14px;
+
+  background: white;
+  color: #777;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.sort-button:hover {
+  background: #f2efff;
+
+  color: #6d4aff;
+}
+
+.sort-button.active {
+  background: #6d4aff;
+
+  color: white;
+
+  border-color: #6d4aff;
+}
+
+/* =========================
+   즐겨찾기
 ========================= */
 
 .favorite-filter-area {
@@ -220,7 +287,7 @@
 
   gap: 10px;
 
-  margin-top: 12px;
+  margin-top: 15px;
 }
 
 .favorite-filter {
@@ -243,10 +310,6 @@
   border-color: #f5c928;
 }
 
-/* =========================
-   즐겨찾기 전체 해제
-========================= */
-
 .favorite-reset-button {
   border: 1px solid #ffd0d7;
 
@@ -268,10 +331,6 @@
 .favorite-reset-button:hover {
   background: #ffe0e5;
 }
-
-/* =========================
-   필터 초기화
-========================= */
 
 .filter-reset-button {
   border: 1px solid #ddd;
@@ -298,7 +357,7 @@
 }
 
 /* =========================
-   필터 안내
+   필터 정보
 ========================= */
 
 .filter-info {
@@ -343,10 +402,6 @@
   font-weight: 700;
 }
 
-/* =========================
-   즐겨찾기 안내
-========================= */
-
 .favorite-info {
   margin-top: 15px;
 
@@ -387,6 +442,7 @@
 
 .pagination-info strong {
   color: #6d4aff;
+
   font-weight: 700;
 }
 
@@ -397,12 +453,6 @@
 .word-list {
   margin-top: 20px;
 }
-
-/*
- * 페이지 단위로 보여주기 때문에
- * 여기서는 초성별 section을 만들지 않고
- * 현재 페이지의 10개를 바로 grid로 보여준다.
- */
 
 .category-word-list {
   display: grid;
@@ -417,103 +467,126 @@
 ========================= */
 
 .word-card {
-  background: white;
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 190px;
+
+  border: 1px solid transparent;
 
   border-radius: 25px;
 
   padding: 30px;
 
+  text-align: left;
+
+  color: #222;
+
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 
-  transition: 0.3s;
+  cursor: pointer;
 
-  min-width: 0;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    background-color 0.25s;
 
-  min-height: 250px;
+  font-family: inherit;
+
+  appearance: none;
 }
 
 .word-card:hover {
   transform: translateY(-7px);
 
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.13);
+}
+
+.word-card:focus-visible {
+  outline: 3px solid rgba(109, 74, 255, 0.35);
+  outline-offset: 3px;
+}
+
+.word-card-content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.word-card h2 {
+  margin: 0;
+
+  color: #6d4aff;
+
+  font-size: 27px;
+
+  word-break: keep-all;
+}
+
+.word-card p {
+  margin: 0;
+
+  color: #555;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+
+  word-break: keep-all;
+}
+
+.word-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.word-category {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: #f3f1ff;
+  color: #6d4aff;
+  font-size: 11px;
+}
+
+.word-era {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: #f0f7ff;
+  color: #3981c6;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 /* =========================
-   카드 상단
+   카드 헤더
 ========================= */
 
 .word-card-header {
   display: flex;
-
+  align-items: flex-start;
   justify-content: space-between;
 
-  align-items: flex-start;
-
   gap: 15px;
-
-  margin-bottom: 20px;
 }
 
 .word-title-area {
   min-width: 0;
 }
 
-/* =========================
-   카테고리 + 시대
-========================= */
-
-.word-meta {
-  display: flex;
-
-  align-items: center;
-
-  flex-wrap: wrap;
-
-  gap: 6px;
-}
-
-.word-category {
-  display: inline-block;
-
-  padding: 4px 9px;
-
-  border-radius: 10px;
-
-  background: #f3f1ff;
-
-  color: #6d4aff;
-
-  font-size: 11px;
-}
-
-.word-era {
-  display: inline-block;
-
-  padding: 4px 9px;
-
-  border-radius: 10px;
-
-  background: #f0f7ff;
-
-  color: #3981c6;
-
-  font-size: 11px;
-
-  font-weight: 600;
-}
-
 .word-title-area h2 {
-  margin: 8px 0 0;
-
-  color: #6d4aff;
-
-  word-break: keep-all;
-
-  font-size: 25px;
+  margin-top: 12px;
 }
 
+
 /* =========================
-   버튼 영역
+   카드 액션
 ========================= */
 
 .word-actions {
@@ -521,114 +594,156 @@
 
   align-items: center;
 
-  gap: 7px;
+  gap: 6px;
 
   flex-shrink: 0;
 }
 
-/* =========================
-   즐겨찾기 버튼
-========================= */
+.card-favorite-button,
+.card-like-button {
+  border: none;
 
-.favorite-button {
+  cursor: pointer;
+
+  transition: 0.2s;
+
+  font-family: inherit;
+}
+
+.card-favorite-button {
   width: 38px;
   height: 38px;
 
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  border-radius: 50%;
+  border-radius: 12px;
 
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.8);
 
-  font-size: 20px;
+  color: #d89b00;
 
-  cursor: pointer;
-
-  transition: 0.2s;
+  font-size: 18px;
 }
 
-.favorite-button:hover {
-  background: #fff4c7;
+.card-favorite-button:hover {
+  background: #fff8d6;
 
-  transform: scale(1.08);
+  transform: translateY(-2px);
 }
 
-.favorite-button.active {
-  background: #fff4c7;
+.card-favorite-button.active {
+  background: #fff3c4;
 }
 
-/* =========================
-   좋아요 버튼
-========================= */
 
-.like-button {
-  border: none;
+.card-like-button {
+  min-height: 38px;
 
-  border-radius: 20px;
+  padding: 0 11px;
 
-  padding: 8px 14px;
+  border-radius: 12px;
 
-  background: #fff0f2;
+  background: rgba(255, 240, 242, 0.9);
 
   color: #ff4d67;
 
-  font-size: 14px;
+  font-size: 13px;
 
-  cursor: pointer;
-
-  transition: 0.2s;
+  font-weight: 700;
 }
 
-.like-button:hover {
+.card-like-button:hover:not(:disabled) {
   background: #ffe0e5;
 
-  transform: scale(1.05);
+  transform: translateY(-2px);
 }
 
-.like-button:disabled {
+.card-like-button:disabled {
+  opacity: 0.55;
+
   cursor: not-allowed;
-
-  opacity: 0.6;
 }
+
 
 /* =========================
    뜻
 ========================= */
 
-.word-card .meaning {
-  background: #f7f5ff;
-
-  padding: 15px;
-
-  border-radius: 15px;
+.meaning {
+  margin-top: 20px;
 }
 
-.word-card .meaning b {
+.meaning b {
+  display: inline-block;
+
+  margin-bottom: 7px;
+
   color: #6d4aff;
+
+  font-size: 13px;
 }
 
-.word-card p {
-  margin-top: 10px;
+.meaning p {
+  margin: 0;
 
-  line-height: 1.6;
+  color: #555;
+
+  font-size: 16px;
+
+  line-height: 1.7;
 
   word-break: keep-all;
 }
 
+
 /* =========================
-   예문
+   조회수에 따른 카드 색상
 ========================= */
 
-.word-card .example {
-  margin-top: 15px;
-
-  color: #666;
-
-  font-size: 15px;
+.word-card.view-level-0 {
+  background: white;
 }
 
-.word-card .example b {
-  color: #555;
+.word-card.view-level-1 {
+  background: #fcfbff;
+}
+
+.word-card.view-level-2 {
+  background: #f7f4ff;
+}
+
+.word-card.view-level-3 {
+  background: #f0ebff;
+}
+
+.word-card.view-level-4 {
+  background: #e7dfff;
+}
+
+.word-card.view-level-5 {
+  background: #ddd2ff;
+}
+
+/* =========================
+   결과 없음
+========================= */
+
+.no-result {
+  grid-column: 1 / -1;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 40px;
+
+  text-align: center;
+
+  color: #777;
+
+  margin-top: 30px;
 }
 
 /* =========================
@@ -646,8 +761,6 @@
 
   margin-top: 45px;
 }
-
-/* < > << >> 버튼 */
 
 .pagination-button {
   display: flex;
@@ -693,17 +806,11 @@
   cursor: not-allowed;
 }
 
-/* << >> 버튼 */
-
 .pagination-button.group-button {
   font-size: 14px;
 
   letter-spacing: -1px;
 }
-
-/* =========================
-   페이지 번호
-========================= */
 
 .pagination-numbers {
   display: flex;
@@ -750,23 +857,57 @@
 }
 
 /* =========================
-   결과 없음
+   정렬 필터
 ========================= */
 
-.no-result {
-  grid-column: 1 / -1;
+.sort-filter-area {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 
-  background: white;
+  margin-top: 20px;
+}
 
-  border-radius: 20px;
-
-  padding: 40px;
-
-  text-align: center;
+.sort-label {
+  margin-right: 5px;
 
   color: #777;
 
-  margin-top: 30px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sort-button {
+  border: 1px solid #e0dafd;
+  border-radius: 20px;
+
+  padding: 9px 15px;
+
+  background: white;
+  color: #6d4aff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.sort-button:hover {
+  background: #f2efff;
+
+  transform: translateY(-2px);
+}
+
+.sort-button.active {
+  background: #6d4aff;
+  color: white;
+
+  border-color: #6d4aff;
+
+  box-shadow: 0 4px 10px rgba(109, 74, 255, 0.2);
 }
 
 /* =========================
@@ -796,8 +937,6 @@
     font-size: 16px;
   }
 
-  /* 검색 */
-
   .dictionary-search {
     flex-wrap: wrap;
   }
@@ -814,8 +953,6 @@
     width: auto;
   }
 
-  /* 엑셀 */
-
   .excel-download-area {
     justify-content: stretch;
   }
@@ -823,8 +960,6 @@
   .excel-download-button {
     width: 100%;
   }
-
-  /* 초성 */
 
   .initial-list {
     gap: 6px;
@@ -843,7 +978,35 @@
     border-radius: 10px;
   }
 
-  /* 카드 */
+  .sort-area {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .sort-list {
+    width: 100%;
+  }
+
+  .sort-button {
+    flex: 1;
+  }
+
+  .sort-filter-area {
+    gap: 6px;
+  }
+
+  .sort-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .sort-label {
+    width: 100%;
+    margin-bottom: 2px;
+  }
 
   .category-word-list {
     grid-template-columns: 1fr;
@@ -852,37 +1015,18 @@
   }
 
   .word-card {
+    min-height: 160px;
+
     padding: 22px;
-
-    min-height: auto;
   }
 
-  .word-card-header {
-    gap: 10px;
+  .word-card h2 {
+    font-size: 23px;
   }
 
-  .word-actions {
-    gap: 5px;
+  .word-card p {
+    font-size: 15px;
   }
-
-  .favorite-button {
-    width: 35px;
-    height: 35px;
-
-    font-size: 18px;
-  }
-
-  .like-button {
-    padding: 7px 10px;
-
-    font-size: 13px;
-  }
-
-  .word-title-area h2 {
-    font-size: 22px;
-  }
-
-  /* 필터 안내 */
 
   .filter-info {
     gap: 6px;
@@ -896,13 +1040,9 @@
     margin-top: 4px;
   }
 
-  /* 페이지 정보 */
-
   .pagination-info {
     margin-top: 25px;
   }
-
-  /* 페이지네이션 */
 
   .pagination {
     gap: 5px;
