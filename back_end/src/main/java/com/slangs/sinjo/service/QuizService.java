@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class QuizService {
 
     // 1. 객관식 퀴즈 목록 생성
     public List<QuizDto.MultipleChoice> getMultipleChoiceQuizzes() {
-        List<QuizWord> randomWords = quizRepository.findRandomQuizzes(DEFAULT_QUIZ_COUNT);
+        List<QuizWord> randomWords = findRandomQuizzes(DEFAULT_QUIZ_COUNT);
 
         return randomWords.stream().map(quiz -> {
             List<String> options = new ArrayList<>(
@@ -52,7 +55,7 @@ public class QuizService {
 
     // 2. 초성 퀴즈 목록 생성
     public List<QuizDto.InitialSound> getInitialSoundQuizzes() {
-        List<QuizWord> randomWords = quizRepository.findRandomQuizzes(DEFAULT_QUIZ_COUNT);
+        List<QuizWord> randomWords = findRandomQuizzes(DEFAULT_QUIZ_COUNT);
 
         return randomWords.stream().map(quiz -> {
             String initialSound = KoreanUtils.extractInitialSound(quiz.getWord());
@@ -70,7 +73,7 @@ public class QuizService {
 
     // 3. 주관식 퀴즈 목록 생성
     public List<QuizDto.Subjective> getSubjectiveQuizzes() {
-        List<QuizWord> randomWords = quizRepository.findRandomQuizzes(DEFAULT_QUIZ_COUNT);
+        List<QuizWord> randomWords = findRandomQuizzes(DEFAULT_QUIZ_COUNT);
 
         return randomWords.stream().map(quiz -> new QuizDto.Subjective(
                 quiz.getId(),
@@ -119,6 +122,24 @@ public class QuizService {
         }
 
         return new QuizDto.CheckResponse(correct, correctAnswer);
+    }
+
+    /**
+     * id 목록만 읽어 Java 에서 셔플한 뒤 필요한 개수만 조회한다.
+     * ORDER BY RAND() 는 MySQL 전용이라 PostgreSQL 에서 실패하기 때문에 쓰지 않는다.
+     */
+    private List<QuizWord> findRandomQuizzes(int count) {
+        List<Long> ids = new ArrayList<>(quizRepository.findAllIds());
+        Collections.shuffle(ids);
+        List<Long> selectedIds = ids.stream().limit(count).toList();
+
+        Map<Long, QuizWord> quizWordsById = quizRepository.findAllById(selectedIds).stream()
+                .collect(Collectors.toMap(QuizWord::getId, quizWord -> quizWord));
+
+        return selectedIds.stream()
+                .map(quizWordsById::get)
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     /** 공백 제거 + 소문자 통일. null 은 빈 문자열로 취급해 NPE 를 막는다. */

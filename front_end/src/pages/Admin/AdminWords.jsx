@@ -1,7 +1,19 @@
 import { useState, useEffect } from "react";
-import { getWords, createWord, updateWord, deleteWord } from "../../api/adminApi";
+import {
+  getWords,
+  createWord,
+  updateWord,
+  deleteWord,
+} from "../../api/adminApi";
 
-const EMPTY_FORM = { word: "", meaning: "", example: "" };
+const CATEGORY_OPTIONS = ["게임", "인터넷", "일상", "자기계발", "직장", "기타"];
+
+const EMPTY_FORM = {
+  word: "",
+  meaning: "",
+  example: "",
+  category: "기타",
+};
 
 /**
  * 용어 관리 (REQ-ADM-01)
@@ -31,9 +43,23 @@ function AdminWords() {
 
   const validate = () => {
     const found = {};
-    if (!form.word.trim()) found.word = "신조어를 입력해 주세요.";
-    if (!form.meaning.trim()) found.meaning = "뜻을 입력해 주세요.";
-    if (!form.example.trim()) found.example = "예문을 입력해 주세요.";
+
+    if (!form.word.trim()) {
+      found.word = "신조어를 입력해 주세요.";
+    }
+
+    if (!form.meaning.trim()) {
+      found.meaning = "뜻을 입력해 주세요.";
+    }
+
+    if (!form.example.trim()) {
+      found.example = "예문을 입력해 주세요.";
+    }
+
+    if (!form.category.trim()) {
+      found.category = "카테고리를 선택해 주세요.";
+    }
+
     return found;
   };
 
@@ -63,10 +89,20 @@ function AdminWords() {
 
   const handleEdit = (item) => {
     setEditingId(item.id);
-    setForm({ word: item.word, meaning: item.meaning, example: item.example });
+
+    setForm({
+      word: item.word,
+      meaning: item.meaning,
+      example: item.example,
+      category: item.category || "기타",
+    });
+
     setErrors({});
-    // 폼이 화면 위쪽에 있어 목록이 길면 안 보인다.
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const handleDelete = async (item) => {
@@ -118,7 +154,9 @@ function AdminWords() {
             onChange={setField("meaning")}
             placeholder="예: 부지런하고 계획적인 삶"
           />
-          {errors.meaning && <p className="admin-field-error">{errors.meaning}</p>}
+          {errors.meaning && (
+            <p className="admin-field-error">{errors.meaning}</p>
+          )}
         </div>
 
         <div className="admin-field">
@@ -129,11 +167,54 @@ function AdminWords() {
             onChange={setField("example")}
             placeholder="예: 요즘 운동하면서 갓생 살고 있어."
           />
-          {errors.example && <p className="admin-field-error">{errors.example}</p>}
+          {errors.example && (
+            <p className="admin-field-error">{errors.example}</p>
+          )}
+        </div>
+
+        {/* 카테고리 */}
+        <div className="admin-field">
+          <label htmlFor="category">카테고리</label>
+
+          <select
+            id="category"
+            value={form.category}
+            onChange={setField("category")}
+          >
+            {CATEGORY_OPTIONS.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+
+          {errors.category && (
+            <p className="admin-field-error">{errors.category}</p>
+          )}
         </div>
 
         <div className="admin-form-actions">
-          <button type="submit" className="admin-btn primary" disabled={submitting}>
+          <button
+            type="submit"
+            className="admin-btn primary"
+            disabled={submitting}
+          >
+            {submitting ? "처리 중..." : editingId ? "수정하기" : "등록하기"}
+          </button>
+
+          {editingId && (
+            <button type="button" className="admin-btn" onClick={resetForm}>
+              취소
+            </button>
+          )}
+        </div>
+
+        <div className="admin-form-actions">
+          <button
+            type="submit"
+            className="admin-btn primary"
+            disabled={submitting}
+          >
             {submitting ? "처리 중..." : editingId ? "수정하기" : "등록하기"}
           </button>
           {editingId && (
@@ -155,25 +236,46 @@ function AdminWords() {
               <tr>
                 <th>ID</th>
                 <th>신조어</th>
+                <th>카테고리</th>
                 <th>뜻</th>
                 <th>예문</th>
                 <th>좋아요</th>
                 <th>관리</th>
               </tr>
             </thead>
+
             <tbody>
               {words.map((item) => (
-                <tr key={item.id} className={editingId === item.id ? "editing" : ""}>
+                <tr
+                  key={item.id}
+                  className={editingId === item.id ? "editing" : ""}
+                >
                   <td>{item.id}</td>
+
                   <td className="admin-td-word">{item.word}</td>
+
+                  <td>{item.category?.trim() || "기타"}</td>
+
                   <td>{item.meaning}</td>
+
                   <td className="admin-td-example">{item.example}</td>
+
                   <td>{item.likes}</td>
+
                   <td className="admin-td-actions">
-                    <button type="button" className="admin-btn small" onClick={() => handleEdit(item)}>
+                    <button
+                      type="button"
+                      className="admin-btn small"
+                      onClick={() => handleEdit(item)}
+                    >
                       수정
                     </button>
-                    <button type="button" className="admin-btn small danger" onClick={() => handleDelete(item)}>
+
+                    <button
+                      type="button"
+                      className="admin-btn small danger"
+                      onClick={() => handleDelete(item)}
+                    >
                       삭제
                     </button>
                   </td>
