@@ -1,6 +1,7 @@
 import "../css/Dictionary.css";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import * as XLSX from "xlsx";
 import { getWords, likeWord as likeWordApi } from "../api/wordApi";
 
 const CATEGORY_OPTIONS = ["일상", "인터넷", "게임", "SNS", "직장", "기타"];
@@ -326,6 +327,51 @@ function Dictionary() {
   };
 
   // =========================
+  // 엑셀 다운로드
+  // =========================
+
+  const downloadExcel = () => {
+    if (words.length === 0) {
+      alert("다운로드할 신조어 데이터가 없습니다.");
+      return;
+    }
+
+    // 엑셀에 넣을 데이터 형태로 변환
+    const excelData = words.map((item, index) => ({
+      번호: index + 1,
+      단어: item.word ?? "",
+      뜻: item.meaning ?? "",
+      예문: item.example ?? "",
+      카테고리: item.category?.trim() || "기타",
+      좋아요: item.likes ?? 0,
+      즐겨찾기: isFavorite(item.id) ? "Y" : "N",
+    }));
+
+    // 워크시트 생성
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+    // 열 너비 설정
+    worksheet["!cols"] = [
+      { wch: 8 }, // 번호
+      { wch: 20 }, // 단어
+      { wch: 50 }, // 뜻
+      { wch: 60 }, // 예문
+      { wch: 15 }, // 카테고리
+      { wch: 10 }, // 좋아요
+      { wch: 12 }, // 즐겨찾기
+    ];
+
+    // 워크북 생성
+    const workbook = XLSX.utils.book_new();
+
+    // 워크시트를 "신조어 사전"이라는 이름으로 추가
+    XLSX.utils.book_append_sheet(workbook, worksheet, "신조어 사전");
+
+    // 파일 다운로드
+    XLSX.writeFile(workbook, "신조어_사전.xlsx");
+  };
+
+  // =========================
   // 로딩
   // =========================
 
@@ -379,6 +425,16 @@ function Dictionary() {
             전체 보기
           </button>
         )}
+      </div>
+
+      <div className="excel-download-area">
+        <button
+          type="button"
+          className="excel-download-button"
+          onClick={downloadExcel}
+        >
+          📥 엑셀 다운로드
+        </button>
       </div>
 
       {/* =========================
