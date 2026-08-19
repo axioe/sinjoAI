@@ -39,4 +39,12 @@ public interface WordRepository
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Word w SET w.likes = w.likes + 1 WHERE w.id = :id")
     int increaseLike(@Param("id") Long id);
+
+    @Query("""
+        select distinct w.category
+        from Word w
+        where w.category is not null
+        order by w.category
+    """)
+    List<String> findCategories();
 }

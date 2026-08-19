@@ -1,8 +1,15 @@
 package com.slangs.sinjo.controller;
 
+import com.slangs.sinjo.dto.WordAnswer;
 import com.slangs.sinjo.dto.WordDto;
+import com.slangs.sinjo.dto.WordSearchResponse;
+import com.slangs.sinjo.dto.WordRequest;
+import com.slangs.sinjo.entity.Word;
+import com.slangs.sinjo.service.WordIndexService;
+import com.slangs.sinjo.service.WordRagService;
 import com.slangs.sinjo.service.WordService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +31,8 @@ public class WordController {
 
     private final WordService wordService;
 
+    private final WordRagService wordRagService;
+    private final WordIndexService wordIndexService;
     /**
      * 인기 신조어 TOP 5
      * <p>
@@ -77,5 +86,48 @@ public class WordController {
     ) {
 
         return wordService.likeWord(id);
+    }
+
+    @PostMapping
+    public WordDto create(
+            @RequestBody WordRequest request
+    ) {
+        return wordService.create(request);
+    }
+
+    @PutMapping("/{id}")
+    public WordDto update(
+            @PathVariable Long id,
+            @RequestBody WordRequest request
+    ) {
+        return wordService.update(
+                id,
+                request
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id
+    ) {
+        wordService.delete(id);
+
+        return ResponseEntity.noContent()
+                .build();
+    }
+
+    @GetMapping("/ask")
+    public WordAnswer ask(@RequestParam String question) {
+        return wordRagService.ask(question);
+    }
+
+    @PostMapping("/index")
+    public void index() {
+        wordIndexService.indexAll();
+    }
+
+    @GetMapping("/search")
+    public WordSearchResponse search(@RequestParam String question) {
+        return wordRagService.search(question);
     }
 }
