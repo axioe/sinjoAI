@@ -29,17 +29,22 @@ public class Word {
     @Column(nullable = false, length = 100)
     private String category;
 
+    @Column(nullable = true, length = 20)
+    private String era;
+
     public Word(
             String word,
             String meaning,
             String example,
-            String category
+            String category,
+            String era
     ) {
         this.word = word;
         this.meaning = meaning;
         this.example = example;
         this.likes = 0L;
         this.category = category;
+        this.era = era;
     }
 
     /**
@@ -55,7 +60,8 @@ public class Word {
                 word,
                 meaning,
                 example,
-                "기타"
+                "기타",
+                null
         );
     }
 
@@ -66,12 +72,14 @@ public class Word {
             String word,
             String meaning,
             String example,
-            String category
+            String category,
+            String era
     ) {
         this.word = word;
         this.meaning = meaning;
         this.example = example;
         this.category = category;
+        this.era = era;
     }
 
     public void increaseLike() {

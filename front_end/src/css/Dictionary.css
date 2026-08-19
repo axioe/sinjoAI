@@ -1,7 +1,7 @@
 .dictionary-page {
   max-width: 1200px;
   margin: auto;
-  padding: 50px 30px;
+  padding: 50px 30px 80px;
 }
 
 .dictionary-page h1 {
@@ -21,12 +21,14 @@
 
 .dictionary-search {
   margin-top: 30px;
+
   display: flex;
   gap: 15px;
 }
 
 .dictionary-search input {
   flex: 1;
+
   height: 55px;
 
   border: none;
@@ -41,6 +43,10 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
   outline: none;
+}
+
+.dictionary-search input:focus {
+  box-shadow: 0 5px 20px rgba(109, 74, 255, 0.15);
 }
 
 .dictionary-search button {
@@ -73,12 +79,51 @@
 }
 
 /* =========================
+   엑셀 다운로드
+========================= */
+
+.excel-download-area {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-top: 15px;
+}
+
+.excel-download-button {
+  border: 1px solid #b7dfc3;
+  border-radius: 25px;
+
+  padding: 10px 18px;
+
+  background: #eaf8ee;
+  color: #16803c;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.excel-download-button:hover {
+  background: #d7f2df;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 5px 12px rgba(22, 128, 60, 0.12);
+}
+
+/* =========================
    카테고리
 ========================= */
 
 .category-list {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 10px;
 
   margin-top: 30px;
@@ -102,6 +147,7 @@
 
 .category-button:hover {
   background: #f2efff;
+
   transform: translateY(-2px);
 }
 
@@ -116,14 +162,13 @@
    초성 필터
 ========================= */
 
-/* =========================
-   초성 필터
-========================= */
-
 .initial-list {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 8px;
+
   margin-top: 20px;
 }
 
@@ -149,6 +194,7 @@
 
 .initial-button:hover {
   background: #eeeaff;
+
   transform: translateY(-2px);
 }
 
@@ -320,57 +366,48 @@
 }
 
 /* =========================
-   초성 영역
+   페이지 정보
 ========================= */
 
-.category-section {
-  margin-top: 45px;
-}
-
-.category-title {
+.pagination-info {
   display: flex;
 
   align-items: center;
 
-  gap: 10px;
+  gap: 7px;
 
-  margin-bottom: 20px;
+  margin-top: 30px;
 
-  padding-bottom: 10px;
+  margin-bottom: 10px;
 
-  border-bottom: 2px solid #eee;
+  color: #777;
+
+  font-size: 14px;
 }
 
-.category-title h2 {
-  margin: 0;
-
+.pagination-info strong {
   color: #6d4aff;
-
-  font-size: 30px;
-
-  font-weight: 800;
-}
-
-.category-title span {
-  padding: 5px 10px;
-
-  border-radius: 15px;
-
-  background: #f1eeff;
-
-  color: #6d4aff;
-
-  font-size: 13px;
+  font-weight: 700;
 }
 
 /* =========================
-   단어 카드 목록
+   단어 목록
 ========================= */
+
+.word-list {
+  margin-top: 20px;
+}
+
+/*
+ * 페이지 단위로 보여주기 때문에
+ * 여기서는 초성별 section을 만들지 않고
+ * 현재 페이지의 10개를 바로 grid로 보여준다.
+ */
 
 .category-word-list {
   display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 25px;
 }
@@ -391,6 +428,8 @@
   transition: 0.3s;
 
   min-width: 0;
+
+  min-height: 250px;
 }
 
 .word-card:hover {
@@ -419,12 +458,18 @@
   min-width: 0;
 }
 
-.word-title-area h2 {
-  margin: 7px 0 0;
+/* =========================
+   카테고리 + 시대
+========================= */
 
-  color: #6d4aff;
+.word-meta {
+  display: flex;
 
-  word-break: keep-all;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
 }
 
 .word-category {
@@ -439,6 +484,32 @@
   color: #6d4aff;
 
   font-size: 11px;
+}
+
+.word-era {
+  display: inline-block;
+
+  padding: 4px 9px;
+
+  border-radius: 10px;
+
+  background: #f0f7ff;
+
+  color: #3981c6;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.word-title-area h2 {
+  margin: 8px 0 0;
+
+  color: #6d4aff;
+
+  word-break: keep-all;
+
+  font-size: 25px;
 }
 
 /* =========================
@@ -561,6 +632,124 @@
 }
 
 /* =========================
+   페이지네이션
+========================= */
+
+.pagination {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 45px;
+}
+
+/* < > << >> 버튼 */
+
+.pagination-button {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid #e0dafd;
+
+  border-radius: 12px;
+
+  background: white;
+
+  color: #6d4aff;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: #eeeaff;
+
+  border-color: #6d4aff;
+
+  transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+  color: #c9c5d8;
+
+  background: #f7f7f8;
+
+  border-color: #eeeeee;
+
+  cursor: not-allowed;
+}
+
+/* << >> 버튼 */
+
+.pagination-button.group-button {
+  font-size: 14px;
+
+  letter-spacing: -1px;
+}
+
+/* =========================
+   페이지 번호
+========================= */
+
+.pagination-numbers {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.pagination-number {
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid #e0dafd;
+
+  border-radius: 12px;
+
+  background: white;
+
+  color: #6d4aff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.pagination-number:hover {
+  background: #eeeaff;
+
+  transform: translateY(-2px);
+}
+
+.pagination-number.active {
+  background: #6d4aff;
+
+  color: white;
+
+  border-color: #6d4aff;
+
+  box-shadow: 0 4px 10px rgba(109, 74, 255, 0.25);
+}
+
+/* =========================
    결과 없음
 ========================= */
 
@@ -586,13 +775,17 @@
 
 @media (max-width: 900px) {
   .category-word-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
+/* =========================
+   모바일
+========================= */
+
 @media (max-width: 600px) {
   .dictionary-page {
-    padding: 30px 15px;
+    padding: 30px 15px 60px;
   }
 
   .dictionary-page h1 {
@@ -621,18 +814,32 @@
     width: auto;
   }
 
+  /* 엑셀 */
+
+  .excel-download-area {
+    justify-content: stretch;
+  }
+
+  .excel-download-button {
+    width: 100%;
+  }
+
   /* 초성 */
 
   .initial-list {
     gap: 6px;
+
     margin-top: 15px;
   }
 
   .initial-button {
     min-width: 36px;
     height: 34px;
+
     padding: 0 8px;
+
     font-size: 13px;
+
     border-radius: 10px;
   }
 
@@ -640,10 +847,14 @@
 
   .category-word-list {
     grid-template-columns: 1fr;
+
+    gap: 18px;
   }
 
   .word-card {
     padding: 22px;
+
+    min-height: auto;
   }
 
   .word-card-header {
@@ -656,7 +867,6 @@
 
   .favorite-button {
     width: 35px;
-
     height: 35px;
 
     font-size: 18px;
@@ -668,8 +878,8 @@
     font-size: 13px;
   }
 
-  .category-title h2 {
-    font-size: 26px;
+  .word-title-area h2 {
+    font-size: 22px;
   }
 
   /* 필터 안내 */
@@ -685,49 +895,44 @@
 
     margin-top: 4px;
   }
-}
 
-/* =========================
-   엑셀 다운로드
-========================= */
+  /* 페이지 정보 */
 
-.excel-download-area {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
-}
-
-.excel-download-button {
-  border: 1px solid #b7dfc3;
-  border-radius: 25px;
-
-  padding: 10px 18px;
-
-  background: #eaf8ee;
-  color: #16803c;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.excel-download-button:hover {
-  background: #d7f2df;
-
-  transform: translateY(-2px);
-
-  box-shadow: 0 5px 12px rgba(22, 128, 60, 0.12);
-}
-
-@media (max-width: 600px) {
-  .excel-download-area {
-    justify-content: stretch;
+  .pagination-info {
+    margin-top: 25px;
   }
 
-  .excel-download-button {
-    width: 100%;
+  /* 페이지네이션 */
+
+  .pagination {
+    gap: 5px;
+
+    margin-top: 35px;
+  }
+
+  .pagination-button {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+  }
+
+  .pagination-button.group-button {
+    font-size: 12px;
+  }
+
+  .pagination-numbers {
+    gap: 4px;
+  }
+
+  .pagination-number {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
   }
 }
