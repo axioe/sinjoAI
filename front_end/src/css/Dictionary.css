@@ -686,3 +686,48 @@
     margin-top: 4px;
   }
 }
+
+/* =========================
+   엑셀 다운로드
+========================= */
+
+.excel-download-area {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.excel-download-button {
+  border: 1px solid #b7dfc3;
+  border-radius: 25px;
+
+  padding: 10px 18px;
+
+  background: #eaf8ee;
+  color: #16803c;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.excel-download-button:hover {
+  background: #d7f2df;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 5px 12px rgba(22, 128, 60, 0.12);
+}
+
+@media (max-width: 600px) {
+  .excel-download-area {
+    justify-content: stretch;
+  }
+
+  .excel-download-button {
+    width: 100%;
+  }
+}
