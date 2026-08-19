@@ -1,6 +1,9 @@
 import "../css/Dictionary.css";
+
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import * as XLSX from "xlsx";
+
 import { getWords, likeWord as likeWordApi } from "../api/wordApi";
 
 const CATEGORY_OPTIONS = ["일상", "인터넷", "게임", "SNS", "직장", "기타"];
@@ -28,16 +31,23 @@ const INITIALS = [
   "#",
 ];
 
+const ITEMS_PER_PAGE = 10;
+const PAGE_GROUP_SIZE = 5;
+
 function Dictionary() {
+  const navigate = useNavigate();
+
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [likingId, setLikingId] = useState(null);
 
-  // 즐겨찾기
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [favoriteIds, setFavoriteIds] = useState(() => {
     try {
       const saved = localStorage.getItem("dictionaryFavorites");
+
       return saved ? JSON.parse(saved) : [];
     } catch (err) {
       console.error(err);
@@ -45,33 +55,35 @@ function Dictionary() {
     }
   });
 
-  // 현재 선택된 카테고리
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
-  // 현재 선택된 초성
   const [selectedInitial, setSelectedInitial] = useState("전체");
 
-  // 즐겨찾기만 보기
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+
+  /**
+   * 정렬
+   *
+   * latest : 가나다순
+   * likes  : 좋아요순
+   * views  : 조회순
+   */
+  const [sortType, setSortType] = useState("latest");
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const query = searchParams.get("word") ?? "";
+
   const [keyword, setKeyword] = useState(query);
-  const [prevQuery, setPrevQuery] = useState(query);
 
-  // URL 검색어(query)가 바뀌면 input도 맞춰준다.
-  // useEffect 대신 렌더링 중에 처리해 불필요한 추가 렌더를 피한다.
-  // (https://react.dev/learn/you-might-not-need-an-effect#adjusting-state-when-a-prop-changes)
-  if (query !== prevQuery) {
-    setPrevQuery(query);
+  useEffect(() => {
     setKeyword(query);
-  }
+    setCurrentPage(1);
+  }, [query]);
 
-  // =========================
-  // 한글 단어의 초성 가져오기
-  // =========================
-
+  /**
+   * 한글 초성
+   */
   const getInitial = (word = "") => {
     const first = word.trim().charAt(0);
 
@@ -81,21 +93,18 @@ function Dictionary() {
 
     const code = first.charCodeAt(0);
 
-    // 한글 완성형 범위
     if (code >= 0xac00 && code <= 0xd7a3) {
       const initialIndex = Math.floor((code - 0xac00) / 588);
 
       return INITIALS[initialIndex] ?? "#";
     }
 
-    // 한글이 아닌 경우
     return "#";
   };
 
-  // =========================
-  // 데이터 불러오기
-  // =========================
-
+  /**
+   * 데이터 불러오기
+   */
   useEffect(() => {
     let alive = true;
 
@@ -126,85 +135,98 @@ function Dictionary() {
     };
   }, []);
 
-  // =========================
-  // 즐겨찾기 변경 시 localStorage 저장
-  // =========================
-
+  /**
+   * 즐겨찾기 저장
+   */
   useEffect(() => {
     localStorage.setItem("dictionaryFavorites", JSON.stringify(favoriteIds));
   }, [favoriteIds]);
 
-  // =========================
-  // 카테고리 목록
-  // =========================
-
   const categories = ["전체", ...CATEGORY_OPTIONS];
 
-  // =========================
-  // 검색 + 카테고리
-  // + 초성 + 즐겨찾기 필터
-  // =========================
-
+  /**
+   * 검색 + 필터 + 정렬
+   *
+   * 검색어가 있으면 검색어 조건을 먼저 만족시키고
+   * 그 결과에 초성/카테고리/즐겨찾기를 적용한다.
+   */
   const result = useMemo(() => {
     const q = query.trim().toLowerCase();
 
-    return (
-      words
-        .filter((item) => {
-          // -------------------------
-          // 카테고리 필터
-          // -------------------------
+    const filtered = words.filter((item) => {
+      /**
+       * 검색어 우선
+       */
+      if (q) {
+        const matchesSearch =
+          item.word?.toLowerCase().includes(q) ||
+          item.meaning?.toLowerCase().includes(q) ||
+          item.example?.toLowerCase().includes(q) ||
+          item.category?.toLowerCase().includes(q) ||
+          item.era?.toLowerCase().includes(q);
 
-          const itemCategory = item.category?.trim() || "기타";
+        if (!matchesSearch) {
+          return false;
+        }
+      }
 
-          if (
-            selectedCategory !== "전체" &&
-            itemCategory !== selectedCategory
-          ) {
-            return false;
-          }
+      /**
+       * 카테고리
+       */
+      const itemCategory = item.category?.trim() || "기타";
 
-          // -------------------------
-          // 초성 필터
-          // -------------------------
+      if (selectedCategory !== "전체" && itemCategory !== selectedCategory) {
+        return false;
+      }
 
-          if (
-            selectedInitial !== "전체" &&
-            getInitial(item.word) !== selectedInitial
-          ) {
-            return false;
-          }
+      /**
+       * 초성
+       */
+      if (
+        selectedInitial !== "전체" &&
+        getInitial(item.word) !== selectedInitial
+      ) {
+        return false;
+      }
 
-          // -------------------------
-          // 즐겨찾기 필터
-          // -------------------------
+      /**
+       * 즐겨찾기
+       */
+      if (showFavoritesOnly && !favoriteIds.includes(item.id)) {
+        return false;
+      }
 
-          if (showFavoritesOnly && !favoriteIds.includes(item.id)) {
-            return false;
-          }
+      return true;
+    });
 
-          // -------------------------
-          // 검색어
-          // -------------------------
+    /**
+     * 정렬
+     */
+    return filtered.sort((a, b) => {
+      if (sortType === "likes") {
+        const likesDiff = (b.likes ?? 0) - (a.likes ?? 0);
 
-          if (!q) {
-            return true;
-          }
+        if (likesDiff !== 0) {
+          return likesDiff;
+        }
 
-          return (
-            item.word?.toLowerCase().includes(q) ||
-            item.meaning?.toLowerCase().includes(q) ||
-            item.example?.toLowerCase().includes(q)
-          );
-        })
+        return (a.word ?? "").localeCompare(b.word ?? "", "ko");
+      }
 
-        // 가나다순 정렬
-        .sort((a, b) =>
-          (a.word ?? "").localeCompare(b.word ?? "", "ko", {
-            sensitivity: "base",
-          }),
-        )
-    );
+      if (sortType === "views") {
+        const viewsDiff = (b.views ?? 0) - (a.views ?? 0);
+
+        if (viewsDiff !== 0) {
+          return viewsDiff;
+        }
+
+        return (a.word ?? "").localeCompare(b.word ?? "", "ko");
+      }
+
+      return (a.word ?? "").localeCompare(b.word ?? "", "ko", {
+        sensitivity: "base",
+      });
+    });
   }, [
     words,
     query,
@@ -212,55 +234,137 @@ function Dictionary() {
     selectedInitial,
     showFavoritesOnly,
     favoriteIds,
+    sortType,
   ]);
 
-  // =========================
-  // 초성별 그룹화
-  // =========================
+  const totalPages = Math.max(1, Math.ceil(result.length / ITEMS_PER_PAGE));
 
-  const groupedWords = useMemo(() => {
-    const groups = {};
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
-    result.forEach((item) => {
-      const initial = getInitial(item.word);
+  const paginatedWords = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
 
-      if (!groups[initial]) {
-        groups[initial] = [];
-      }
+    return result.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [result, currentPage]);
 
-      groups[initial].push(item);
+  const currentPageGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+
+  const startPage = (currentPageGroup - 1) * PAGE_GROUP_SIZE + 1;
+
+  const endPage = Math.min(startPage + PAGE_GROUP_SIZE - 1, totalPages);
+
+  const pageNumbers = Array.from(
+    {
+      length: endPage - startPage + 1,
+    },
+    (_, index) => startPage + index,
+  );
+
+  /**
+   * 조회수에 따라 카드 색상을 결정
+   *
+   * 글자색이 아니라 카드 배경색이 진해진다.
+   */
+  const getViewLevel = (views = 0) => {
+    if (views >= 1000) {
+      return 5;
+    }
+
+    if (views >= 500) {
+      return 4;
+    }
+
+    if (views >= 200) {
+      return 3;
+    }
+
+    if (views >= 50) {
+      return 2;
+    }
+
+    if (views > 0) {
+      return 1;
+    }
+
+    return 0;
+  };
+
+  const goToPage = (page) => {
+    const safePage = Math.min(Math.max(page, 1), totalPages);
+
+    setCurrentPage(safePage);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
     });
+  };
 
-    return INITIALS.filter((initial) => groups[initial]).map((initial) => [
-      initial,
-      groups[initial],
-    ]);
-  }, [result]);
+  const goPreviousPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
+  };
 
-  // =========================
-  // 검색
-  // =========================
+  const goNextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
 
+  const goPreviousGroup = () => {
+    if (currentPageGroup > 1) {
+      const previousGroupFirstPage =
+        (currentPageGroup - 2) * PAGE_GROUP_SIZE + 1;
+
+      goToPage(previousGroupFirstPage);
+    }
+  };
+
+  const goNextGroup = () => {
+    const nextGroupFirstPage = currentPageGroup * PAGE_GROUP_SIZE + 1;
+
+    if (nextGroupFirstPage <= totalPages) {
+      goToPage(nextGroupFirstPage);
+    }
+  };
+
+  /**
+   * 검색
+   */
   const searchWord = () => {
     const trimmed = keyword.trim();
 
-    setSearchParams(trimmed ? { word: trimmed } : {}, { replace: true });
+    setSearchParams(trimmed ? { word: trimmed } : {}, {
+      replace: true,
+    });
+
+    setCurrentPage(1);
   };
 
-  // =========================
-  // 검색 초기화
-  // =========================
-
+  /**
+   * 검색 초기화
+   */
   const resetSearch = () => {
     setKeyword("");
 
-    setSearchParams({}, { replace: true });
+    setSearchParams(
+      {},
+      {
+        replace: true,
+      },
+    );
+
+    setCurrentPage(1);
   };
 
-  // =========================
-  // 좋아요
-  // =========================
-
+  /**
+   * 좋아요
+   */
   const likeWord = async (id) => {
     if (likingId !== null) {
       return;
@@ -273,7 +377,12 @@ function Dictionary() {
 
       setWords((prev) =>
         prev.map((item) =>
-          item.id === updated.id ? { ...item, ...updated } : item,
+          item.id === updated.id
+            ? {
+                ...item,
+                ...updated,
+              }
+            : item,
         ),
       );
     } catch (err) {
@@ -285,10 +394,9 @@ function Dictionary() {
     }
   };
 
-  // =========================
-  // 즐겨찾기 추가 / 삭제
-  // =========================
-
+  /**
+   * 즐겨찾기
+   */
   const toggleFavorite = (id) => {
     setFavoriteIds((prev) => {
       if (prev.includes(id)) {
@@ -299,35 +407,90 @@ function Dictionary() {
     });
   };
 
-  // =========================
-  // 즐겨찾기 여부
-  // =========================
-
-  const isFavorite = (id) => {
-    return favoriteIds.includes(id);
-  };
-
-  // =========================
-  // 즐겨찾기 전체 해제
-  // =========================
+  const isFavorite = (id) => favoriteIds.includes(id);
 
   const resetFavorites = () => {
     setFavoriteIds([]);
+    setCurrentPage(1);
   };
-
-  // =========================
-  // 필터 초기화
-  // =========================
 
   const resetFilters = () => {
     setSelectedCategory("전체");
     setSelectedInitial("전체");
     setShowFavoritesOnly(false);
+    setSortType("latest");
+    setCurrentPage(1);
   };
 
-  // =========================
-  // 로딩
-  // =========================
+  const changeCategory = (category) => {
+    setSelectedCategory(category);
+
+    setShowFavoritesOnly(false);
+
+    setCurrentPage(1);
+  };
+
+  const changeInitial = (initial) => {
+    setSelectedInitial(initial);
+
+    setCurrentPage(1);
+  };
+
+  const toggleFavoritesOnly = () => {
+    setShowFavoritesOnly((prev) => !prev);
+
+    setCurrentPage(1);
+  };
+
+  /**
+   * 엑셀 다운로드
+   */
+  const downloadExcel = () => {
+    if (words.length === 0) {
+      alert("다운로드할 신조어 데이터가 없습니다.");
+
+      return;
+    }
+
+    const excelData = words.map((item, index) => ({
+      번호: index + 1,
+      단어: item.word ?? "",
+      뜻: item.meaning ?? "",
+      예문: item.example ?? "",
+      카테고리: item.category?.trim() || "기타",
+      시대: item.era ?? "",
+      좋아요: item.likes ?? 0,
+      조회수: item.views ?? 0,
+      즐겨찾기: isFavorite(item.id) ? "Y" : "N",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+    worksheet["!cols"] = [
+      { wch: 8 },
+      { wch: 20 },
+      { wch: 50 },
+      { wch: 60 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 10 },
+      { wch: 10 },
+      { wch: 12 },
+    ];
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "신조어 사전");
+
+    XLSX.writeFile(workbook, "신조어_사전.xlsx");
+  };
+
+  /**
+   * 카드 클릭
+   */
+  const openWordDetail = (id) => {
+    navigate(`/dictionary/${id}`);
+  };
 
   if (loading) {
     return (
@@ -341,10 +504,6 @@ function Dictionary() {
 
   return (
     <div className="dictionary-page">
-      {/* =========================
-          제목
-      ========================= */}
-
       <h1>📖 신조어 사전</h1>
 
       <p className="dictionary-subtitle">
@@ -353,9 +512,7 @@ function Dictionary() {
 
       {error && <p className="no-result">{error}</p>}
 
-      {/* =========================
-          검색
-      ========================= */}
+      {/* 검색 */}
 
       <div className="dictionary-search">
         <input
@@ -381,9 +538,19 @@ function Dictionary() {
         )}
       </div>
 
-      {/* =========================
-          카테고리
-      ========================= */}
+      {/* 엑셀 */}
+
+      <div className="excel-download-area">
+        <button
+          type="button"
+          className="excel-download-button"
+          onClick={downloadExcel}
+        >
+          📥 엑셀 다운로드
+        </button>
+      </div>
+
+      {/* 카테고리 */}
 
       <div className="category-list">
         {categories.map((category) => (
@@ -395,21 +562,28 @@ function Dictionary() {
                 ? "category-button active"
                 : "category-button"
             }
-            onClick={() => {
-              setSelectedCategory(category);
-              setShowFavoritesOnly(false);
-            }}
+            onClick={() => changeCategory(category)}
           >
             {category}
           </button>
         ))}
       </div>
 
-      {/* =========================
-          초성 필터
-      ========================= */}
+      {/* 초성 */}
 
       <div className="initial-list">
+        <button
+          type="button"
+          className={
+            selectedInitial === "전체"
+              ? "initial-button active"
+              : "initial-button"
+          }
+          onClick={() => changeInitial("전체")}
+        >
+          전체
+        </button>
+
         {INITIALS.map((initial) => (
           <button
             key={initial}
@@ -419,16 +593,59 @@ function Dictionary() {
                 ? "initial-button active"
                 : "initial-button"
             }
-            onClick={() => setSelectedInitial(initial)}
+            onClick={() => changeInitial(initial)}
           >
             {initial}
           </button>
         ))}
       </div>
 
-      {/* =========================
-          즐겨찾기
-      ========================= */}
+      {/* 정렬 */}
+
+      <div className="sort-filter-area">
+        <span className="sort-label">정렬</span>
+
+        <button
+          type="button"
+          className={
+            sortType === "latest" ? "sort-button active" : "sort-button"
+          }
+          onClick={() => {
+            setSortType("latest");
+            setCurrentPage(1);
+          }}
+        >
+          가나다순
+        </button>
+
+        <button
+          type="button"
+          className={
+            sortType === "likes" ? "sort-button active" : "sort-button"
+          }
+          onClick={() => {
+            setSortType("likes");
+            setCurrentPage(1);
+          }}
+        >
+          ❤️ 좋아요순
+        </button>
+
+        <button
+          type="button"
+          className={
+            sortType === "views" ? "sort-button active" : "sort-button"
+          }
+          onClick={() => {
+            setSortType("views");
+            setCurrentPage(1);
+          }}
+        >
+          👀 조회순
+        </button>
+      </div>
+
+      {/* 즐겨찾기 */}
 
       <div className="favorite-filter-area">
         <button
@@ -438,7 +655,7 @@ function Dictionary() {
               ? "category-button favorite-filter active"
               : "category-button favorite-filter"
           }
-          onClick={() => setShowFavoritesOnly((prev) => !prev)}
+          onClick={toggleFavoritesOnly}
         >
           ⭐ 즐겨찾기
         </button>
@@ -455,7 +672,8 @@ function Dictionary() {
 
         {(selectedCategory !== "전체" ||
           selectedInitial !== "전체" ||
-          showFavoritesOnly) && (
+          showFavoritesOnly ||
+          sortType !== "latest") && (
           <button
             type="button"
             className="filter-reset-button"
@@ -466,13 +684,12 @@ function Dictionary() {
         )}
       </div>
 
-      {/* =========================
-          필터 상태 안내
-      ========================= */}
+      {/* 필터 상태 */}
 
       {(selectedCategory !== "전체" ||
         selectedInitial !== "전체" ||
-        showFavoritesOnly) && (
+        showFavoritesOnly ||
+        sortType !== "latest") && (
         <div className="filter-info">
           <span>현재 필터</span>
 
@@ -482,13 +699,13 @@ function Dictionary() {
 
           {showFavoritesOnly && <strong>⭐ 즐겨찾기</strong>}
 
+          {sortType === "likes" && <strong>❤️ 좋아요순</strong>}
+
+          {sortType === "views" && <strong>👁 조회순</strong>}
+
           <span className="filter-count">{result.length}개</span>
         </div>
       )}
-
-      {/* =========================
-          즐겨찾기 안내
-      ========================= */}
 
       {showFavoritesOnly && (
         <div className="favorite-info">
@@ -496,97 +713,88 @@ function Dictionary() {
         </div>
       )}
 
-      {/* =========================
-          사전
-      ========================= */}
+      {result.length > 0 && (
+        <div className="pagination-info">
+          전체 <strong>{result.length}</strong>개<span>·</span>
+          <strong>{currentPage}</strong> / {totalPages} 페이지
+        </div>
+      )}
+
+      {/* 사전 */}
 
       <div className="word-list">
-        {groupedWords.length > 0 ? (
-          groupedWords.map(([initial, initialWords]) => (
-            <section className="category-section" key={initial}>
-              {/* 초성 제목 */}
+        {paginatedWords.length > 0 ? (
+          <div className="category-word-list">
+            {paginatedWords.map((item) => {
+              const viewLevel = getViewLevel(item.views ?? 0);
 
-              <div className="category-title">
-                <h2>{initial}</h2>
-
-                <span>{initialWords.length}개</span>
-              </div>
-
-              {/* 단어 카드 */}
-
-              <div className="category-word-list">
-                {initialWords.map((item) => (
-                  <div className="word-card" key={item.id}>
-                    {/* 카드 상단 */}
-
-                    <div className="word-card-header">
-                      <div className="word-title-area">
-                        {/* 실제 카테고리 */}
-
+              return (
+                <div
+                  className={`word-card view-level-${viewLevel}`}
+                  key={item.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openWordDetail(item.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openWordDetail(item.id);
+                    }
+                  }}
+                >
+                  <div className="word-card-header">
+                    <div className="word-title-area">
+                      <div className="word-meta">
                         <span className="word-category">
                           {item.category?.trim() || "기타"}
                         </span>
 
-                        <h2>{item.word}</h2>
+                        {item.era?.trim() && (
+                          <span className="word-era">{item.era}</span>
+                        )}
                       </div>
 
-                      {/* 버튼 영역 */}
-
-                      <div className="word-actions">
-                        {/* 즐겨찾기 */}
-
-                        <button
-                          type="button"
-                          className={
-                            isFavorite(item.id)
-                              ? "favorite-button active"
-                              : "favorite-button"
-                          }
-                          onClick={() => toggleFavorite(item.id)}
-                          aria-label={`${item.word} 즐겨찾기`}
-                          title={
-                            isFavorite(item.id)
-                              ? "즐겨찾기 해제"
-                              : "즐겨찾기 추가"
-                          }
-                        >
-                          {isFavorite(item.id) ? "⭐" : "☆"}
-                        </button>
-
-                        {/* 좋아요 */}
-
-                        <button
-                          type="button"
-                          className="like-button"
-                          onClick={() => likeWord(item.id)}
-                          disabled={likingId !== null}
-                          aria-label={`${item.word} 좋아요`}
-                        >
-                          ❤️ {item.likes ?? 0}
-                        </button>
-                      </div>
+                      <h2>{item.word}</h2>
                     </div>
 
-                    {/* 뜻 */}
+                    <div className="word-actions">
+                      <button
+                        type="button"
+                        className={
+                          isFavorite(item.id)
+                            ? "card-favorite-button active"
+                            : "card-favorite-button"
+                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFavorite(item.id);
+                        }}
+                      >
+                        {isFavorite(item.id) ? "⭐" : "☆"}
+                      </button>
 
-                    <div className="meaning">
-                      <b>뜻</b>
-
-                      <p>{item.meaning}</p>
-                    </div>
-
-                    {/* 예문 */}
-
-                    <div className="example">
-                      <b>예문</b>
-
-                      <p>"{item.example}"</p>
+                      <button
+                        type="button"
+                        className="card-like-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          likeWord(item.id);
+                        }}
+                        disabled={likingId === item.id}
+                      >
+                        ❤️ {item.likes ?? 0}
+                      </button>
                     </div>
                   </div>
-                ))}
-              </div>
-            </section>
-          ))
+
+                  <div className="meaning">
+                    <b>뜻</b>
+                    <p>{item.meaning}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         ) : (
           <div className="no-result">
             {showFavoritesOnly
@@ -597,6 +805,65 @@ function Dictionary() {
           </div>
         )}
       </div>
+
+      {/* 페이지네이션 */}
+
+      {result.length > 0 && totalPages > 1 && (
+        <nav className="pagination" aria-label="신조어 페이지 이동">
+          <button
+            type="button"
+            className="pagination-button group-button"
+            onClick={goPreviousGroup}
+            disabled={currentPageGroup === 1}
+          >
+            {"<<"}
+          </button>
+
+          <button
+            type="button"
+            className="pagination-button"
+            onClick={goPreviousPage}
+            disabled={currentPage === 1}
+          >
+            {"<"}
+          </button>
+
+          <div className="pagination-numbers">
+            {pageNumbers.map((page) => (
+              <button
+                key={page}
+                type="button"
+                className={
+                  currentPage === page
+                    ? "pagination-number active"
+                    : "pagination-number"
+                }
+                onClick={() => goToPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="pagination-button"
+            onClick={goNextPage}
+            disabled={currentPage === totalPages}
+          >
+            {">"}
+          </button>
+
+          <button
+            type="button"
+            className="pagination-button group-button"
+            onClick={goNextGroup}
+            disabled={currentPageGroup * PAGE_GROUP_SIZE >= totalPages}
+          >
+            {">>"}
+          </button>
+        </nav>
+      )}
     </div>
   );
 }

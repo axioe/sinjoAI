@@ -4,6 +4,7 @@ import com.slangs.sinjo.document.WordDocumentConverter;
 import com.slangs.sinjo.dto.WordDto;
 import com.slangs.sinjo.dto.WordRequest;
 import com.slangs.sinjo.entity.Word;
+import com.slangs.sinjo.exception.NotFoundException;
 import com.slangs.sinjo.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
@@ -35,23 +36,29 @@ public class WordService {
                 .toList();
     }
 
-
     /**
      * 특정 신조어 조회
+     * <p>
+     * 상세 페이지에 들어갈 때마다 조회수 +1
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public WordDto getWord(Long id) {
 
-        return new WordDto(findWordOrThrow(id));
-    }
+        int updated = wordRepository.increaseView(id);
 
+        if (updated == 0) {
+            throw new NotFoundException(
+                    "신조어를 찾을 수 없습니다."
+            );
+        }
+
+        Word word = findWordOrThrow(id);
+
+        return new WordDto(word);
+    }
 
     /**
      * 좋아요 증가
-     *
-     * [수정] DB 에서 직접 증가시킨 뒤 다시 읽어 반환한다.
-     * 기존 코드는 엔티티를 읽어 자바에서 +1 했기 때문에
-     * 두 사람이 동시에 누르면 한 번이 유실됐다.
      */
     @Transactional
     public WordDto likeWord(Long id) {
@@ -59,12 +66,13 @@ public class WordService {
         int updated = wordRepository.increaseLike(id);
 
         if (updated == 0) {
-            throw new IllegalArgumentException("신조어를 찾을 수 없습니다.");
+            throw new IllegalArgumentException(
+                    "신조어를 찾을 수 없습니다."
+            );
         }
 
         return new WordDto(findWordOrThrow(id));
     }
-
 
     /**
      * 좋아요 기준 TOP 5
@@ -72,7 +80,8 @@ public class WordService {
     @Transactional(readOnly = true)
     public List<WordDto> getRankingWords() {
 
-        List<Word> words = wordRepository.findTop5ByOrderByLikesDescIdAsc();
+        List<Word> words =
+                wordRepository.findTop5ByOrderByLikesDescIdAsc();
 
         return IntStream
                 .range(0, words.size())
@@ -85,12 +94,11 @@ public class WordService {
                 .toList();
     }
 
-
     private Word findWordOrThrow(Long id) {
 
         return wordRepository.findById(id)
                 .orElseThrow(() ->
-                        new IllegalArgumentException(
+                        new NotFoundException(
                                 "신조어를 찾을 수 없습니다."
                         )
                 );

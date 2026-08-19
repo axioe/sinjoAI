@@ -1,7 +1,7 @@
 .dictionary-page {
   max-width: 1200px;
   margin: auto;
-  padding: 50px 30px;
+  padding: 50px 30px 80px;
 }
 
 .dictionary-page h1 {
@@ -21,12 +21,15 @@
 
 .dictionary-search {
   margin-top: 30px;
+
   display: flex;
+
   gap: 15px;
 }
 
 .dictionary-search input {
   flex: 1;
+
   height: 55px;
 
   border: none;
@@ -41,6 +44,10 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 
   outline: none;
+}
+
+.dictionary-search input:focus {
+  box-shadow: 0 5px 20px rgba(109, 74, 255, 0.15);
 }
 
 .dictionary-search button {
@@ -61,6 +68,7 @@
 
 .dictionary-search button:hover {
   background: #5b3be0;
+
   transform: translateY(-2px);
 }
 
@@ -73,12 +81,52 @@
 }
 
 /* =========================
+   엑셀
+========================= */
+
+.excel-download-area {
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-top: 15px;
+}
+
+.excel-download-button {
+  border: 1px solid #b7dfc3;
+
+  border-radius: 25px;
+
+  padding: 10px 18px;
+
+  background: #eaf8ee;
+  color: #16803c;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.excel-download-button:hover {
+  background: #d7f2df;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 5px 12px rgba(22, 128, 60, 0.12);
+}
+
+/* =========================
    카테고리
 ========================= */
 
 .category-list {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 10px;
 
   margin-top: 30px;
@@ -86,6 +134,7 @@
 
 .category-button {
   border: 1px solid #e0dafd;
+
   border-radius: 25px;
 
   padding: 10px 18px;
@@ -102,28 +151,29 @@
 
 .category-button:hover {
   background: #f2efff;
+
   transform: translateY(-2px);
 }
 
 .category-button.active {
   background: #6d4aff;
+
   color: white;
 
   border-color: #6d4aff;
 }
 
 /* =========================
-   초성 필터
-========================= */
-
-/* =========================
-   초성 필터
+   초성
 ========================= */
 
 .initial-list {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 8px;
+
   margin-top: 20px;
 }
 
@@ -134,6 +184,7 @@
   padding: 0 10px;
 
   border: 1px solid #e0dafd;
+
   border-radius: 12px;
 
   background: white;
@@ -149,11 +200,13 @@
 
 .initial-button:hover {
   background: #eeeaff;
+
   transform: translateY(-2px);
 }
 
 .initial-button.active {
   background: #6d4aff;
+
   color: white;
 
   border-color: #6d4aff;
@@ -162,7 +215,67 @@
 }
 
 /* =========================
-   즐겨찾기 필터
+   정렬
+========================= */
+
+.sort-area {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 22px;
+}
+
+.sort-label {
+  color: #777;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sort-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.sort-button {
+  border: 1px solid #e0dafd;
+
+  border-radius: 20px;
+
+  padding: 8px 14px;
+
+  background: white;
+  color: #777;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.sort-button:hover {
+  background: #f2efff;
+
+  color: #6d4aff;
+}
+
+.sort-button.active {
+  background: #6d4aff;
+
+  color: white;
+
+  border-color: #6d4aff;
+}
+
+/* =========================
+   즐겨찾기
 ========================= */
 
 .favorite-filter-area {
@@ -174,7 +287,7 @@
 
   gap: 10px;
 
-  margin-top: 12px;
+  margin-top: 15px;
 }
 
 .favorite-filter {
@@ -197,10 +310,6 @@
   border-color: #f5c928;
 }
 
-/* =========================
-   즐겨찾기 전체 해제
-========================= */
-
 .favorite-reset-button {
   border: 1px solid #ffd0d7;
 
@@ -222,10 +331,6 @@
 .favorite-reset-button:hover {
   background: #ffe0e5;
 }
-
-/* =========================
-   필터 초기화
-========================= */
 
 .filter-reset-button {
   border: 1px solid #ddd;
@@ -252,7 +357,7 @@
 }
 
 /* =========================
-   필터 안내
+   필터 정보
 ========================= */
 
 .filter-info {
@@ -297,10 +402,6 @@
   font-weight: 700;
 }
 
-/* =========================
-   즐겨찾기 안내
-========================= */
-
 .favorite-info {
   margin-top: 15px;
 
@@ -320,57 +421,43 @@
 }
 
 /* =========================
-   초성 영역
+   페이지 정보
 ========================= */
 
-.category-section {
-  margin-top: 45px;
-}
-
-.category-title {
+.pagination-info {
   display: flex;
 
   align-items: center;
 
-  gap: 10px;
+  gap: 7px;
 
-  margin-bottom: 20px;
+  margin-top: 30px;
 
-  padding-bottom: 10px;
+  margin-bottom: 10px;
 
-  border-bottom: 2px solid #eee;
+  color: #777;
+
+  font-size: 14px;
 }
 
-.category-title h2 {
-  margin: 0;
-
+.pagination-info strong {
   color: #6d4aff;
 
-  font-size: 30px;
-
-  font-weight: 800;
-}
-
-.category-title span {
-  padding: 5px 10px;
-
-  border-radius: 15px;
-
-  background: #f1eeff;
-
-  color: #6d4aff;
-
-  font-size: 13px;
+  font-weight: 700;
 }
 
 /* =========================
-   단어 카드 목록
+   단어 목록
 ========================= */
+
+.word-list {
+  margin-top: 20px;
+}
 
 .category-word-list {
   display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 25px;
 }
@@ -380,39 +467,113 @@
 ========================= */
 
 .word-card {
-  background: white;
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: 190px;
+
+  border: 1px solid transparent;
 
   border-radius: 25px;
 
   padding: 30px;
 
+  text-align: left;
+
+  color: #222;
+
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 
-  transition: 0.3s;
+  cursor: pointer;
 
-  min-width: 0;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    background-color 0.25s;
+
+  font-family: inherit;
+
+  appearance: none;
 }
 
 .word-card:hover {
   transform: translateY(-7px);
 
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.13);
+}
+
+.word-card:focus-visible {
+  outline: 3px solid rgba(109, 74, 255, 0.35);
+  outline-offset: 3px;
+}
+
+.word-card-content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.word-card h2 {
+  margin: 0;
+
+  color: #6d4aff;
+
+  font-size: 27px;
+
+  word-break: keep-all;
+}
+
+.word-card p {
+  margin: 0;
+
+  color: #555;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+
+  word-break: keep-all;
+}
+
+.word-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.word-category {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: #f3f1ff;
+  color: #6d4aff;
+  font-size: 11px;
+}
+
+.word-era {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: #f0f7ff;
+  color: #3981c6;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 /* =========================
-   카드 상단
+   카드 헤더
 ========================= */
 
 .word-card-header {
   display: flex;
-
+  align-items: flex-start;
   justify-content: space-between;
 
-  align-items: flex-start;
-
   gap: 15px;
-
-  margin-bottom: 20px;
 }
 
 .word-title-area {
@@ -420,29 +581,12 @@
 }
 
 .word-title-area h2 {
-  margin: 7px 0 0;
-
-  color: #6d4aff;
-
-  word-break: keep-all;
+  margin-top: 12px;
 }
 
-.word-category {
-  display: inline-block;
-
-  padding: 4px 9px;
-
-  border-radius: 10px;
-
-  background: #f3f1ff;
-
-  color: #6d4aff;
-
-  font-size: 11px;
-}
 
 /* =========================
-   버튼 영역
+   카드 액션
 ========================= */
 
 .word-actions {
@@ -450,114 +594,136 @@
 
   align-items: center;
 
-  gap: 7px;
+  gap: 6px;
 
   flex-shrink: 0;
 }
 
-/* =========================
-   즐겨찾기 버튼
-========================= */
+.card-favorite-button,
+.card-like-button {
+  border: none;
 
-.favorite-button {
+  cursor: pointer;
+
+  transition: 0.2s;
+
+  font-family: inherit;
+}
+
+.card-favorite-button {
   width: 38px;
   height: 38px;
 
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  border-radius: 50%;
+  border-radius: 12px;
 
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.8);
 
-  font-size: 20px;
+  color: #d89b00;
 
-  cursor: pointer;
-
-  transition: 0.2s;
+  font-size: 18px;
 }
 
-.favorite-button:hover {
-  background: #fff4c7;
+.card-favorite-button:hover {
+  background: #fff8d6;
 
-  transform: scale(1.08);
+  transform: translateY(-2px);
 }
 
-.favorite-button.active {
-  background: #fff4c7;
+.card-favorite-button.active {
+  background: #fff3c4;
 }
 
-/* =========================
-   좋아요 버튼
-========================= */
 
-.like-button {
-  border: none;
+.card-like-button {
+  min-height: 38px;
 
-  border-radius: 20px;
+  padding: 0 11px;
 
-  padding: 8px 14px;
+  border-radius: 12px;
 
-  background: #fff0f2;
+  background: rgba(255, 240, 242, 0.9);
 
   color: #ff4d67;
 
-  font-size: 14px;
+  font-size: 13px;
 
-  cursor: pointer;
-
-  transition: 0.2s;
+  font-weight: 700;
 }
 
-.like-button:hover {
+.card-like-button:hover:not(:disabled) {
   background: #ffe0e5;
 
-  transform: scale(1.05);
+  transform: translateY(-2px);
 }
 
-.like-button:disabled {
+.card-like-button:disabled {
+  opacity: 0.55;
+
   cursor: not-allowed;
-
-  opacity: 0.6;
 }
+
 
 /* =========================
    뜻
 ========================= */
 
-.word-card .meaning {
-  background: #f7f5ff;
-
-  padding: 15px;
-
-  border-radius: 15px;
+.meaning {
+  margin-top: 20px;
 }
 
-.word-card .meaning b {
+.meaning b {
+  display: inline-block;
+
+  margin-bottom: 7px;
+
   color: #6d4aff;
+
+  font-size: 13px;
 }
 
-.word-card p {
-  margin-top: 10px;
+.meaning p {
+  margin: 0;
 
-  line-height: 1.6;
+  color: #555;
+
+  font-size: 16px;
+
+  line-height: 1.7;
 
   word-break: keep-all;
 }
 
+
 /* =========================
-   예문
+   조회수에 따른 카드 색상
 ========================= */
 
-.word-card .example {
-  margin-top: 15px;
-
-  color: #666;
-
-  font-size: 15px;
+.word-card.view-level-0 {
+  background: white;
 }
 
-.word-card .example b {
-  color: #555;
+.word-card.view-level-1 {
+  background: #fcfbff;
+}
+
+.word-card.view-level-2 {
+  background: #f7f4ff;
+}
+
+.word-card.view-level-3 {
+  background: #f0ebff;
+}
+
+.word-card.view-level-4 {
+  background: #e7dfff;
+}
+
+.word-card.view-level-5 {
+  background: #ddd2ff;
 }
 
 /* =========================
@@ -581,18 +747,186 @@
 }
 
 /* =========================
+   페이지네이션
+========================= */
+
+.pagination {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 45px;
+}
+
+.pagination-button {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid #e0dafd;
+
+  border-radius: 12px;
+
+  background: white;
+
+  color: #6d4aff;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: #eeeaff;
+
+  border-color: #6d4aff;
+
+  transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+  color: #c9c5d8;
+
+  background: #f7f7f8;
+
+  border-color: #eeeeee;
+
+  cursor: not-allowed;
+}
+
+.pagination-button.group-button {
+  font-size: 14px;
+
+  letter-spacing: -1px;
+}
+
+.pagination-numbers {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.pagination-number {
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid #e0dafd;
+
+  border-radius: 12px;
+
+  background: white;
+
+  color: #6d4aff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.pagination-number:hover {
+  background: #eeeaff;
+
+  transform: translateY(-2px);
+}
+
+.pagination-number.active {
+  background: #6d4aff;
+
+  color: white;
+
+  border-color: #6d4aff;
+
+  box-shadow: 0 4px 10px rgba(109, 74, 255, 0.25);
+}
+
+/* =========================
+   정렬 필터
+========================= */
+
+.sort-filter-area {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-top: 20px;
+}
+
+.sort-label {
+  margin-right: 5px;
+
+  color: #777;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sort-button {
+  border: 1px solid #e0dafd;
+  border-radius: 20px;
+
+  padding: 9px 15px;
+
+  background: white;
+  color: #6d4aff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.sort-button:hover {
+  background: #f2efff;
+
+  transform: translateY(-2px);
+}
+
+.sort-button.active {
+  background: #6d4aff;
+  color: white;
+
+  border-color: #6d4aff;
+
+  box-shadow: 0 4px 10px rgba(109, 74, 255, 0.2);
+}
+
+/* =========================
    반응형
 ========================= */
 
 @media (max-width: 900px) {
   .category-word-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
+/* =========================
+   모바일
+========================= */
+
 @media (max-width: 600px) {
   .dictionary-page {
-    padding: 30px 15px;
+    padding: 30px 15px 60px;
   }
 
   .dictionary-page h1 {
@@ -602,8 +936,6 @@
   .dictionary-subtitle {
     font-size: 16px;
   }
-
-  /* 검색 */
 
   .dictionary-search {
     flex-wrap: wrap;
@@ -621,58 +953,80 @@
     width: auto;
   }
 
-  /* 초성 */
+  .excel-download-area {
+    justify-content: stretch;
+  }
+
+  .excel-download-button {
+    width: 100%;
+  }
 
   .initial-list {
     gap: 6px;
+
     margin-top: 15px;
   }
 
   .initial-button {
     min-width: 36px;
     height: 34px;
+
     padding: 0 8px;
+
     font-size: 13px;
+
     border-radius: 10px;
   }
 
-  /* 카드 */
+  .sort-area {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .sort-list {
+    width: 100%;
+  }
+
+  .sort-button {
+    flex: 1;
+  }
+
+  .sort-filter-area {
+    gap: 6px;
+  }
+
+  .sort-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .sort-label {
+    width: 100%;
+    margin-bottom: 2px;
+  }
 
   .category-word-list {
     grid-template-columns: 1fr;
+
+    gap: 18px;
   }
 
   .word-card {
+    min-height: 160px;
+
     padding: 22px;
   }
 
-  .word-card-header {
-    gap: 10px;
+  .word-card h2 {
+    font-size: 23px;
   }
 
-  .word-actions {
-    gap: 5px;
+  .word-card p {
+    font-size: 15px;
   }
-
-  .favorite-button {
-    width: 35px;
-
-    height: 35px;
-
-    font-size: 18px;
-  }
-
-  .like-button {
-    padding: 7px 10px;
-
-    font-size: 13px;
-  }
-
-  .category-title h2 {
-    font-size: 26px;
-  }
-
-  /* 필터 안내 */
 
   .filter-info {
     gap: 6px;
@@ -684,5 +1038,41 @@
     margin-left: 0;
 
     margin-top: 4px;
+  }
+
+  .pagination-info {
+    margin-top: 25px;
+  }
+
+  .pagination {
+    gap: 5px;
+
+    margin-top: 35px;
+  }
+
+  .pagination-button {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+  }
+
+  .pagination-button.group-button {
+    font-size: 12px;
+  }
+
+  .pagination-numbers {
+    gap: 4px;
+  }
+
+  .pagination-number {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
   }
 }
