@@ -20,6 +20,8 @@ public class WordDto {
 
     private String category;
 
+    private String era;
+
     public WordDto(Word word) {
         this.id = word.getId();
         this.word = word.getWord();
@@ -27,6 +29,7 @@ public class WordDto {
         this.example = word.getExample();
         this.likes = word.getLikes();
         this.category = word.getCategory();
+        this.era = word.getEra();
     }
 
     public WordDto(
@@ -40,5 +43,6 @@ public class WordDto {
         this.likes = word.getLikes();
         this.rank = rank;
         this.category = word.getCategory();
+        this.era = word.getEra();
     }
 }

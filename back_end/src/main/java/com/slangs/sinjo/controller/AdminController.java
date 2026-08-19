@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * 관리자 전용 API (REQ-ADM-01)
- *
+ * <p>
  * 이 컨트롤러에는 권한 확인 코드가 한 줄도 없다.
  * SecurityConfig 에서 /api/admin/** 를 ADMIN 만 통과하도록 막아두었기 때문이다.
  * 한 곳에서 막으면 새 메서드를 추가할 때 확인을 빠뜨릴 일이 없다.

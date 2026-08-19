@@ -62,17 +62,23 @@ public class AdminService {
                 word,
                 request.meaning().trim(),
                 request.example().trim(),
-                request.category().trim()
+                category,
+                request.era() == null ? null : request.era().trim()
         ));
 
         return new WordDto(saved);
     }
 
     @Transactional
-    public WordDto updateWord(Long id, AdminDto.WordRequest request) {
+    public WordDto updateWord(
+            Long id,
+            AdminDto.WordRequest request
+    ) {
         Word target = wordRepository.findById(id)
                 .orElseThrow(() ->
-                        new NotFoundException("해당 신조어를 찾을 수 없습니다.")
+                        new NotFoundException(
+                                "해당 신조어를 찾을 수 없습니다."
+                        )
                 );
 
         String word = request.word().trim();
@@ -86,12 +92,14 @@ public class AdminService {
                 word,
                 request.meaning().trim(),
                 request.example().trim(),
-                request.category().trim()
+                category,
+                request.era() == null
+                        ? null
+                        : request.era().trim()
         );
 
         return new WordDto(target);
     }
-
 
     @Transactional
     public void deleteWord(Long id) {
