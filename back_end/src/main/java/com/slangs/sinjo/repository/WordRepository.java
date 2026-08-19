@@ -42,6 +42,13 @@ public interface WordRepository
             """)
     int increaseLike(@Param("id") Long id);
 
+    @Query("""
+        select distinct w.category
+        from Word w
+        where w.category is not null
+        order by w.category
+    """)
+    List<String> findCategories();
     /**
      * 조회수 +1
      * <p>

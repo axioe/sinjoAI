@@ -7,7 +7,15 @@ spring:
   # 증상이 없지만, 나중에 스타터를 켜는 순간 "키를 넣었는데 인식이 안 된다"가 된다.
   ai:
     openai:
-      api-key: ${OPENAI_API_KEY:}
+      api-key: ${OPENAI_API_KEY}
+      embedding:
+        options:
+          model: text-embedding-3-small
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
 
   datasource:
     url: jdbc:postgresql://43.201.127.52:55432/sinjodb
