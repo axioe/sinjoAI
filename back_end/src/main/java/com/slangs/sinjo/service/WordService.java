@@ -37,8 +37,6 @@ public class WordService {
     @Transactional
     public WordDto getWord(Long id) {
 
-        Word word = findWordOrThrow(id);
-
         int updated = wordRepository.increaseView(id);
 
         if (updated == 0) {
@@ -47,12 +45,9 @@ public class WordService {
             );
         }
 
-        /**
-         * 조회수가 증가한 최신 데이터를 다시 가져온다.
-         */
-        Word updatedWord = findWordOrThrow(id);
+        Word word = findWordOrThrow(id);
 
-        return new WordDto(updatedWord);
+        return new WordDto(word);
     }
 
     /**
