@@ -26,6 +26,12 @@ public class Word {
     @Column(nullable = false)
     private Long likes = 0L;
 
+    /**
+     * 단어 상세 페이지 조회수
+     */
+    @Column(nullable = false)
+    private Long views = 0L;
+
     @Column(nullable = false, length = 100)
     private String category;
 
@@ -43,14 +49,11 @@ public class Word {
         this.meaning = meaning;
         this.example = example;
         this.likes = 0L;
+        this.views = 0L;
         this.category = category;
         this.era = era;
     }
 
-    /**
-     * 기존 3개 인자를 사용하는 코드가 있다면
-     * 기본 카테고리는 기타로 처리한다.
-     */
     public Word(
             String word,
             String meaning,
@@ -65,9 +68,6 @@ public class Word {
         );
     }
 
-    /**
-     * 관리자 화면에서 용어를 수정할 때 쓴다.
-     */
     public void update(
             String word,
             String meaning,
