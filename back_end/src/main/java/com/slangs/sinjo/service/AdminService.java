@@ -27,7 +27,9 @@ public class AdminService {
     private final UserRepository userRepository;
     private final QuizRepository quizRepository;
 
-    /** 관리자 페이지 첫 화면의 요약 숫자 */
+    /**
+     * 관리자 페이지 첫 화면의 요약 숫자
+     */
     @Transactional(readOnly = true)
     public AdminDto.Summary getSummary() {
         return new AdminDto.Summary(
@@ -50,6 +52,7 @@ public class AdminService {
     @Transactional
     public WordDto createWord(AdminDto.WordRequest request) {
         String word = request.word().trim();
+        String category = request.category().trim();
 
         if (wordRepository.existsByWord(word)) {
             throw new DuplicateWordException(word);
@@ -58,26 +61,43 @@ public class AdminService {
         Word saved = wordRepository.save(new Word(
                 word,
                 request.meaning().trim(),
-                request.example().trim()
+                request.example().trim(),
+                category,
+                request.era() == null ? null : request.era().trim()
         ));
 
         return new WordDto(saved);
     }
 
     @Transactional
-    public WordDto updateWord(Long id, AdminDto.WordRequest request) {
+    public WordDto updateWord(
+            Long id,
+            AdminDto.WordRequest request
+    ) {
         Word target = wordRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 신조어를 찾을 수 없습니다."));
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                "해당 신조어를 찾을 수 없습니다."
+                        )
+                );
 
         String word = request.word().trim();
+        String category = request.category().trim();
 
-        // 자기 자신은 중복 검사에서 빼야 한다.
-        // 빼지 않으면 뜻만 고치려 해도 "이미 등록된 신조어" 라고 막힌다.
         if (wordRepository.existsByWordAndIdNot(word, id)) {
             throw new DuplicateWordException(word);
         }
 
-        target.update(word, request.meaning().trim(), request.example().trim());
+        target.update(
+                word,
+                request.meaning().trim(),
+                request.example().trim(),
+                category,
+                request.era() == null
+                        ? null
+                        : request.era().trim()
+        );
+
         return new WordDto(target);
     }
 
