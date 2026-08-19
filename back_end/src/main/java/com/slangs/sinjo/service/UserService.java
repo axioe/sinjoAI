@@ -101,5 +101,5 @@ public class UserService {
             mail.setText("아래 링크에서 새 비밀번호를 설정하세요. 30분간 유효합니다.\n\n" + link);
             mailSender.send(mail);
         });
-        };
+        }
     }

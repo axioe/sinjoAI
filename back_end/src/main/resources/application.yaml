@@ -59,6 +59,12 @@ app:
 
   frontend-url: http://localhost:5555
 
+#  네이버 소셜 로그인
+  naver:
+    client-id: ${NAVER_CLIENT_ID:}
+    client-secret: ${NAVER_CLIENT_SECRET:}
+    redirect-uri: http://localhost:8080/api/auth/naver/callback
+
   admin:
     email: ${ADMIN_EMAIL:admin@slangs.com}
     password: ${ADMIN_PASSWORD:admin1234!}

@@ -90,7 +90,7 @@ function Login() {
         <SocialLogin mode="login" />
 
         <p className="login-footer">
-           <Link to="/forgot-password">비밀번호를 잊으셨나요?</Link>
+           <Link to="/find-password">비밀번호를 잊으셨나요?</Link>
            </p>
 
            <p className="login-footer">

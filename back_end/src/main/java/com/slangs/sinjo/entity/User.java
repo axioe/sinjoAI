@@ -21,8 +21,14 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    @Column
+    private String password; // 소셜 가입자는 비밀번호 없음
+
+    //    소셜 로그인
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Provider provider = Provider.LOCAL;
+    private String providerId;
 
     @Column(nullable = false)
     private String nickname;
