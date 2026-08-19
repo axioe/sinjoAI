@@ -3,8 +3,8 @@ import "../css/SocialLogin.css"
 function SocialLogin({mode = "login"}) {
   const text = mode === "login" ? "로그인" : "시작하기"
 
-  const handleKakao = () => {
-    alert("카카오 로그인 준비 중 입니다.")
+  const handleNaver = () => {
+    window.location.href = "http://localhost:8080/api/auth/naver"
   }
 
   const handleGoogle = () => {
@@ -17,8 +17,8 @@ function SocialLogin({mode = "login"}) {
         <span>또는</span>
       </div>
 
-      <button type="button" className="social-btn kakao" onClick={handleKakao}>
-      카카오로 {text}
+      <button type="button" className="social-btn naver" onClick={handleNaver}>
+      네이버로 {text}
       </button>
 
       <button type="button" className="social-btn google" onClick={handleGoogle}>

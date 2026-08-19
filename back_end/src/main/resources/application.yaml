@@ -40,6 +40,16 @@ spring:
         # dialect 는 드라이버를 보고 자동 판별된다. 직접 지정하지 않는다.
         # PostgreSQLDialect 가 남아 있으면 MySQL 에 맞지 않는 SQL 이 생성된다.
 
+  # 비밀번호 찾기 메일 설정
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 server:
   port: 8080
   servlet:
@@ -54,6 +64,14 @@ app:
   jwt:
     secret: ${JWT_SECRET:sinjo-local-dev-secret-key-please-change-me-32bytes}
     expiration: 86400000
+
+  frontend-url: http://localhost:5555
+
+#  네이버 소셜 로그인
+  naver:
+    client-id: ${NAVER_CLIENT_ID:}
+    client-secret: ${NAVER_CLIENT_SECRET:}
+    redirect-uri: http://localhost:8080/api/auth/naver/callback
 
   admin:
     email: ${ADMIN_EMAIL:admin@slangs.com}

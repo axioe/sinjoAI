@@ -15,8 +15,10 @@ import Signup from "./pages/Signup";
 import MyPage from "./pages/MyPage";
 import AdminPage from "./pages/Admin/AdminPage";
 import NotFound from "./pages/NotFound";
-import ForgotPassword from "./pages/ForgotPassword";
-import WordDetail from "./pages/WordDetail";
+// 비밀번호 찾기 페이지 라우팅
+import FindPassword from "./pages/FindPassword";
+// 네이버 소셜 로그인
+import OAuthCallback from "./pages/OAuthCallback";
 
 import QuizMain from "./pages/QuizMain";
 import MultipleChoiceQuiz from "./pages/MultipleChoiceQuiz";
@@ -61,9 +63,10 @@ function App() {
             </RequireAuth>
           }
         />
-
         {/* 비밀번호 찾기 */}
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/find-password" element={<FindPassword />} />
+        {/* 네이버 소셜 로그인 */}
+        <Route path="/oauth/callback" element={<OAuthCallback />} />
 
         {/* 관리자 */}
         <Route

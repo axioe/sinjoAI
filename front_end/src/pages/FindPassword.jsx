@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../css/Login.css";
 
-function ForgotPassword() {
+function FindPassword() {
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState("");
   const [sent, setSent] = useState(false);
@@ -66,4 +66,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default FindPassword;

@@ -1,15 +1,24 @@
 package com.slangs.sinjo.service;
 
 import com.slangs.sinjo.dto.UserDto;
+import com.slangs.sinjo.entity.PasswordResetToken;
 import com.slangs.sinjo.entity.User;
 import com.slangs.sinjo.exception.DuplicateEmailException;
 import com.slangs.sinjo.exception.InvalidCredentialsException;
+import com.slangs.sinjo.repository.PasswordResetTokenRepository;
 import com.slangs.sinjo.repository.UserRepository;
 import com.slangs.sinjo.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +27,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final PasswordResetTokenRepository tokenRepository;
+    private final JavaMailSender mailSender;
+
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     @Transactional
     public UserDto.Response signup(UserDto.SignupRequest request) {
@@ -68,4 +82,24 @@ public class UserService {
     private String normalizeEmail(String email) {
         return email.trim().toLowerCase();
     }
-}
+
+    //    비밀번호 찾기
+    @Transactional
+    public void requestPasswordReset(String email) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            String token = UUID.randomUUID().toString();
+
+            tokenRepository.save(new PasswordResetToken(
+                    token, user.getId(), LocalDateTime.now().plusMinutes(30)
+            ));
+
+            String link = frontendUrl + "/reset-password?token=" + token;
+
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setTo(email);
+            mail.setSubject("[신세대 번역기] 비밀번호 재설정");
+            mail.setText("아래 링크에서 새 비밀번호를 설정하세요. 30분간 유효합니다.\n\n" + link);
+            mailSender.send(mail);
+        });
+        }
+    }

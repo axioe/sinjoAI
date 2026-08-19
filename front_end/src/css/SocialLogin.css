@@ -33,13 +33,13 @@
   cursor: pointer;
 }
 
-.social-btn.kakao {
-  background: #fee500;
+.social-btn.naver {
+  background: #40c53b;
   color: #191600;
 }
 
-.social-btn.kakao:hover {
-  background: #f0d900;
+.social-btn.naver:hover {
+  background: #37aa33;
 }
 
 .social-btn.google {
