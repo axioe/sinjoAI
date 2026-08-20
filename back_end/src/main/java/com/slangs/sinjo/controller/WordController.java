@@ -23,11 +23,12 @@ public class WordController {
 
     private final WordRagService wordRagService;
     private final WordIndexService wordIndexService;
+
     /**
      * 인기 신조어 TOP 5
      * <p>
      * GET /api/words/ranking
-     *
+     * <p>
      * [주의] 이 메서드는 반드시 getWord(@PathVariable id) 보다 위에 두는 것이 안전하다.
      * 스프링은 고정 경로("/ranking")를 변수 경로("/{id}")보다 우선하므로 지금도 동작하지만,
      * 읽는 사람이 헷갈리지 않도록 순서를 맞춰 둔다.

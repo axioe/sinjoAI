@@ -142,7 +142,7 @@ public class WordService {
         deleteVector(wordId);
     }
 
-    private void deleteVector(Long wordId){
+    private void deleteVector(Long wordId) {
         FilterExpressionBuilder builder = new FilterExpressionBuilder();
 
         vectorStore.delete(
@@ -178,7 +178,7 @@ public class WordService {
         deleteVector(wordId);
 
         // 4. 수정된 Word로 새로운 Document 생성
-        Document document =documentConverter.convert(updatedWord);
+        Document document = documentConverter.convert(updatedWord);
 
         // 5. 새로운 embedding 생성 + PGVector 저장
         vectorStore.add(List.of(document)
