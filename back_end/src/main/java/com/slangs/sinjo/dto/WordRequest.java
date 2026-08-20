@@ -1,8 +1,10 @@
 package com.slangs.sinjo.dto;
 
 public record WordRequest(
-       String word,
-       String category,
-       String meaning,
-       String example) {
+        String word,
+        String meaning,
+        String example,
+        String category,
+        String era
+) {
 }

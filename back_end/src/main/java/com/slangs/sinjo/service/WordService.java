@@ -29,7 +29,6 @@ public class WordService {
      */
     @Transactional(readOnly = true)
     public List<WordDto> getAllWords() {
-
         return wordRepository.findAll()
                 .stream()
                 .map(WordDto::new)
@@ -38,7 +37,6 @@ public class WordService {
 
     /**
      * 특정 신조어 조회
-     * <p>
      * 상세 페이지에 들어갈 때마다 조회수 +1
      */
     @Transactional
@@ -66,7 +64,7 @@ public class WordService {
         int updated = wordRepository.increaseLike(id);
 
         if (updated == 0) {
-            throw new IllegalArgumentException(
+            throw new NotFoundException(
                     "신조어를 찾을 수 없습니다."
             );
         }
@@ -94,28 +92,21 @@ public class WordService {
                 .toList();
     }
 
-    private Word findWordOrThrow(Long id) {
-
-        return wordRepository.findById(id)
-                .orElseThrow(() ->
-                        new NotFoundException(
-                                "신조어를 찾을 수 없습니다."
-                        )
-                );
-    }
-
+    /**
+     * 신조어 생성
+     */
     @Transactional
     public WordDto create(WordRequest request) {
 
         Word word = new Word(
                 request.word(),
-                request.category(),
                 request.meaning(),
-                request.example()
+                request.example(),
+                request.category(),
+                request.era()
         );
 
-        Word savedWord =
-                wordRepository.save(word);
+        Word savedWord = wordRepository.save(word);
 
         Document document =
                 documentConverter.convert(savedWord);
@@ -127,23 +118,32 @@ public class WordService {
         return new WordDto(savedWord);
     }
 
+    /**
+     * 신조어 삭제
+     */
     @Transactional
     public void delete(Long wordId) {
 
         Word word = wordRepository.findById(wordId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Word not found: " + wordId
+                        new NotFoundException(
+                                "신조어를 찾을 수 없습니다."
                         )
                 );
 
         wordRepository.delete(word);
 
+        // DB 삭제 후 VectorStore에서도 삭제
         deleteVector(wordId);
     }
 
+    /**
+     * VectorStore에서 해당 단어 삭제
+     */
     private void deleteVector(Long wordId) {
-        FilterExpressionBuilder builder = new FilterExpressionBuilder();
+
+        FilterExpressionBuilder builder =
+                new FilterExpressionBuilder();
 
         vectorStore.delete(
                 builder
@@ -152,38 +152,59 @@ public class WordService {
         );
     }
 
-
+    /**
+     * 신조어 수정
+     */
     @Transactional
-    public WordDto update(Long wordId, WordRequest request) {
+    public WordDto update(
+            Long wordId,
+            WordRequest request
+    ) {
 
-        // 1. 기존 Word 조회
         Word word = wordRepository.findById(wordId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Word not found: " + wordId
+                        new NotFoundException(
+                                "신조어를 찾을 수 없습니다."
                         )
                 );
 
-        // 2. 원본 데이터 수정
+        // DB 데이터 수정
         word.update(
                 request.word(),
-                request.category(),
                 request.meaning(),
-                request.example()
+                request.example(),
+                request.category(),
+                request.era()
         );
 
-        Word updatedWord = wordRepository.save(word);
+        Word updatedWord =
+                wordRepository.save(word);
 
         // 기존 Vector 삭제
         deleteVector(wordId);
 
-        // 4. 수정된 Word로 새로운 Document 생성
-        Document document = documentConverter.convert(updatedWord);
+        // 수정된 데이터로 새로운 Document 생성
+        Document document =
+                documentConverter.convert(updatedWord);
 
-        // 5. 새로운 embedding 생성 + PGVector 저장
-        vectorStore.add(List.of(document)
+        // 새로운 embedding 생성 후 저장
+        vectorStore.add(
+                List.of(document)
         );
 
         return new WordDto(updatedWord);
+    }
+
+    /**
+     * ID로 Word 조회
+     */
+    private Word findWordOrThrow(Long id) {
+
+        return wordRepository.findById(id)
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                "신조어를 찾을 수 없습니다."
+                        )
+                );
     }
 }
