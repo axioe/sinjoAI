@@ -10,11 +10,13 @@ import com.slangs.sinjo.repository.QuizRepository;
 import com.slangs.sinjo.repository.UserRepository;
 import com.slangs.sinjo.repository.WordRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-
+import com.slangs.sinjo.document.WordDocumentConverter;
 /**
  * 관리자 기능 (REQ-ADM-01)
  * 화면구조 가이드라인 7장: 용어 관리, 회원 관리
@@ -26,7 +28,8 @@ public class AdminService {
     private final WordRepository wordRepository;
     private final UserRepository userRepository;
     private final QuizRepository quizRepository;
-
+    private final VectorStore vectorStore;
+    private final WordDocumentConverter documentConverter;
     /**
      * 관리자 페이지 첫 화면의 요약 숫자
      */
@@ -66,7 +69,21 @@ public class AdminService {
                 request.era() == null ? null : request.era().trim()
         ));
 
+        Document document = documentConverter.convert(saved);
+
+        vectorStore.add(List.of(document));
+
         return new WordDto(saved);
+    }
+
+    private void deleteVector(Long wordId){
+        FilterExpressionBuilder builder = new FilterExpressionBuilder();
+
+        vectorStore.delete(
+                builder
+                        .eq("wordId", String.valueOf(wordId))
+                        .build()
+        );
     }
 
     @Transactional
@@ -98,6 +115,15 @@ public class AdminService {
                         : request.era().trim()
         );
 
+        // 기존 Vector 삭제
+        deleteVector(id);
+
+        // 4. 수정된 Word로 새로운 Document 생성
+        Document document = documentConverter.convert(target);
+
+        // 5. 새로운 embedding 생성 + PGVector 저장
+        vectorStore.add(List.of(document));
+
         return new WordDto(target);
     }
 
@@ -107,6 +133,8 @@ public class AdminService {
             throw new NotFoundException("해당 신조어를 찾을 수 없습니다.");
         }
         wordRepository.deleteById(id);
+
+        deleteVector(id);
     }
 
     // ---- 회원 관리 --------------------------------------------------------
